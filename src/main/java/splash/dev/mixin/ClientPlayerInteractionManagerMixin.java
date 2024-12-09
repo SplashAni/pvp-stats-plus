@@ -18,8 +18,8 @@ public class ClientPlayerInteractionManagerMixin {
     @Inject(at = @At("HEAD"), method = "interactItem")
     private void interact(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
         if (player == mc.player) {
-            ItemStack stack = hand == Hand.OFF_HAND ? mc.player.getOffHandStack() : mc.player.getMainHandStack();
-            BetterCpvp.getInstance().getItemInteractData().updateItem(stack.getItem());
+ /*           ItemStack stack = hand == Hand.OFF_HAND ? mc.player.getOffHandStack() : mc.player.getMainHandStack();
+            BetterCpvp.getInstance().getItemInteractData().updateItem(stack.getItem());*/
         }
     }
 }
