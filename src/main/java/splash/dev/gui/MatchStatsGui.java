@@ -128,7 +128,6 @@ public class MatchStatsGui {
 
         renderText(context, "Match ID: ", matchId, x, currentY, width);
 
-        renderHeading(context, "test", x, currentY, width);
 
     }
 
