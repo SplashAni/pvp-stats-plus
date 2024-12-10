@@ -1,7 +1,7 @@
 package splash.dev.recording;
 
 import splash.dev.data.Category;
-import splash.dev.data.MatchData;
+import splash.dev.data.StoredMatchData;
 import splash.dev.data.MatchInfo;
 
 import java.util.ArrayList;
@@ -24,8 +24,9 @@ public class Recorder {
 
     public void stopRecording() {
         recording = false;
-        MatchData.addInfo(new MatchInfo(Category.Cartpvp,
-                new MatchOutline("test", usedItems, time)));
+        StoredMatchData.addInfo(new MatchInfo(Category.Cartpvp,
+                new MatchOutline("test", usedItems, time, StoredMatchData.getMatches().size() + 1),
+                itemUsed));
     }
 
     public boolean isRecording() {
@@ -57,7 +58,7 @@ public class Recorder {
             }
 
         if (!found) {
-            ItemUsed newItem = new ItemUsed(mc.player.getMainHandStack(), 0);
+            ItemUsed newItem = new ItemUsed(mc.player.getMainHandStack(), 1);
             itemUsed.add(newItem);
         }
     }

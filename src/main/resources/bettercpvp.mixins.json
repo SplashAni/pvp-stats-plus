@@ -11,7 +11,8 @@
     "defaultRequire": 1
   },
   "client": [
+    "DrawContextMixin",
     "InGameHudMixin",
     "KeyboardMixin"
-	]
+  ]
 }

@@ -16,10 +16,6 @@ public class MainGui extends Screen {
     int activeTabIndex = 0;
     MatchsDataRenderer renderContent;
 
-    public int getActiveTabIndex() {
-        return activeTabIndex;
-    }
-
     public MainGui() {
         super(Text.literal("Main GUI"));
     }
@@ -110,6 +106,12 @@ public class MainGui extends Screen {
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         renderContent.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        renderContent.mouseRelease(button, (int) mouseX, (int) mouseY);
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     protected boolean renderTabTooltipIfHovered(DrawContext context, Category category, int mouseX, int mouseY, int tabX, int tabY) {

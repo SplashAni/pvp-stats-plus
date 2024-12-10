@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.Objects;
 
-public final class ItemUsed {
+public class ItemUsed {
     private final ItemStack item;
     private int count;
 

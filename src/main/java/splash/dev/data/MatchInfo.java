@@ -3,19 +3,31 @@ package splash.dev.data;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.text.Text;
+import splash.dev.recording.ItemUsed;
 import splash.dev.recording.MatchOutline;
 
 import java.awt.*;
+import java.util.List;
 
 import static splash.dev.BetterCpvp.mc;
 
 public class MatchInfo {
     Category category;
     MatchOutline matchOutline;
+    List<ItemUsed> itemUsed;
 
-    public MatchInfo(Category category, MatchOutline matchOutline) {
+    public MatchInfo(Category category, MatchOutline matchOutline, java.util.List<ItemUsed> itemUsed) {
         this.category = category;
         this.matchOutline = matchOutline;
+        this.itemUsed = itemUsed;
+    }
+
+    public java.util.List<ItemUsed> getItemUsed() {
+        return itemUsed;
+    }
+
+    public MatchOutline getMatchOutline() {
+        return matchOutline;
     }
 
     public void render(DrawContext context, int y, int w, int mouseX, int mouseY) {

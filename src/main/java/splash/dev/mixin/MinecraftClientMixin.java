@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import splash.dev.BetterCpvp;
-import splash.dev.recording.Recorder;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
