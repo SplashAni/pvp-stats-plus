@@ -8,7 +8,7 @@ import net.minecraft.item.Items;
 public enum Category {
     Cpvp(Items.END_CRYSTAL),
     
-    Cartpvp(Items.MINECART),
+    Cartpvp(Items.TNT_MINECART),
             
     Nethpot(Items.NETHERITE_HELMET),
             
@@ -24,7 +24,7 @@ public enum Category {
             
     Sword(Items.DIAMOND_SWORD);
             
-    Item itemStack;
+    final Item itemStack;
     Category(Item itemStack){
         this.itemStack = itemStack;
     }

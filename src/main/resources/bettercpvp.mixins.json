@@ -1,16 +1,17 @@
 {
-	"required": true,
-	"package": "splash.dev.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"ClientPlayerInteractionManagerMixin",
-		"PlayerEntityMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	},
-	"client": [
-		"InGameHudMixin",
-		"KeyboardMixin"
+  "required": true,
+  "package": "splash.dev.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ClientPlayerInteractionManagerMixin",
+    "MinecraftClientMixin",
+    "PlayerEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "InGameHudMixin",
+    "KeyboardMixin"
 	]
 }

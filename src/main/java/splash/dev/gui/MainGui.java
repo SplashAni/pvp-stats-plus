@@ -7,15 +7,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import splash.dev.data.Category;
-import splash.dev.gui.comp.CategoryWindow;
-import splash.dev.gui.comp.RenderContent;
+import splash.dev.data.MatchsDataRenderer;
 
 public class MainGui extends Screen {
     private static final Identifier BACKGROUND_TEXTURE = Identifier.ofVanilla("social_interactions/background");
     int tabWidth, tabHeight, tabOffset;
     int boxX, boxY, boxWidth, boxHeight;
     int activeTabIndex = 0;
+    MatchsDataRenderer renderContent;
 
+    public int getActiveTabIndex() {
+        return activeTabIndex;
+    }
 
     public MainGui() {
         super(Text.literal("Main GUI"));
@@ -94,11 +97,19 @@ public class MainGui extends Screen {
         int contentX = boxX + 7;
         int contentY = boxY + 7;
 
-        RenderContent content1 = new CategoryWindow().renderCategory(activeCategory);
-        content1.setCoords(contentX,contentY);
-        content1.setBounds(boxWidth-15,boxHeight-15);
 
-        content1.render(context, mouseX, mouseY);
+        if (renderContent == null) {
+            renderContent = new MatchsDataRenderer(activeCategory);
+        }
+        renderContent.setBounds(boxWidth-15,boxHeight-15,contentX, contentY);
+
+        renderContent.render(context,mouseX, mouseY);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        renderContent.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     protected boolean renderTabTooltipIfHovered(DrawContext context, Category category, int mouseX, int mouseY, int tabX, int tabY) {
@@ -142,9 +153,10 @@ public class MainGui extends Screen {
             if (mouseX >= xPosition && mouseX <= xPosition + tabWidth &&
                     mouseY >= yPosition && mouseY <= yPosition + tabHeight) {
                 activeTabIndex = i;
-                System.out.println("Tab " + categories[i].name() + " got cliped");
+                renderContent = null;
                 break;
             }
         }
     }
+
 }

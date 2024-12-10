@@ -14,6 +14,8 @@ public abstract class PlayerEntityMixin {
 
     @Inject(method = "setScreen", at = @At("HEAD"))
     public void onDeath(Screen screen, CallbackInfo ci) {
-//        if (screen instanceof DeathScreen) BetterCpvp.getInstance().setItemInteractData(new ItemInteractData());
+        if (screen instanceof DeathScreen && BetterCpvp.getRecorder() != null) {
+            if (BetterCpvp.recorder.isRecording()) BetterCpvp.getRecorder().stopRecording();
+        }
     }
 }
