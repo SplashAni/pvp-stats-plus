@@ -41,7 +41,6 @@ public class MatchsDataRenderer {
         if (renderingMatchStats) {
             if (matchStatsGui != null) {
                 matchStatsGui.render(context, mouseX, mouseY);
-                ///matchStatsGui.updateY(offset);
             }
         } else {
             for (MatchInfo matchInfo : Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(category))) {
@@ -72,6 +71,9 @@ public class MatchsDataRenderer {
             scrollOffset = 0;
         } else if (scrollOffset < -maxScroll) {
             scrollOffset = -maxScroll;
+        }
+        if(matchStatsGui != null){
+            matchStatsGui.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
         }
 
     }

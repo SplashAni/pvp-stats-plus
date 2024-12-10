@@ -26,7 +26,7 @@ public class Recorder {
         recording = false;
         StoredMatchData.addInfo(new MatchInfo(Category.Cartpvp,
                 new MatchOutline("test", usedItems, time, StoredMatchData.getMatches().size() + 1),
-                itemUsed));
+                itemUsed,new DamageInfo(1,1),new AttackInfo(1,1,1)));
     }
 
     public boolean isRecording() {

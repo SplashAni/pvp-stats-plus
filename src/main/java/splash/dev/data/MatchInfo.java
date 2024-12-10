@@ -3,6 +3,8 @@ package splash.dev.data;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.text.Text;
+import splash.dev.recording.AttackInfo;
+import splash.dev.recording.DamageInfo;
 import splash.dev.recording.ItemUsed;
 import splash.dev.recording.MatchOutline;
 
@@ -15,11 +17,15 @@ public class MatchInfo {
     Category category;
     MatchOutline matchOutline;
     List<ItemUsed> itemUsed;
+    DamageInfo damageInfo;
+    AttackInfo attackInfo;
 
-    public MatchInfo(Category category, MatchOutline matchOutline, java.util.List<ItemUsed> itemUsed) {
+    public MatchInfo(Category category, MatchOutline matchOutline, List<ItemUsed> itemUsed, DamageInfo damageInfo, AttackInfo attackInfo) {
         this.category = category;
         this.matchOutline = matchOutline;
         this.itemUsed = itemUsed;
+        this.damageInfo = damageInfo;
+        this.attackInfo = attackInfo;
     }
 
     public java.util.List<ItemUsed> getItemUsed() {
@@ -76,4 +82,15 @@ public class MatchInfo {
         context.drawText(mc.textRenderer, "Lost", textX, textY, new Color(255, 100, 100).getRGB(), true);
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public DamageInfo getDamageInfo() {
+        return damageInfo;
+    }
+
+    public AttackInfo getAttackInfo() {
+        return attackInfo;
+    }
 }
