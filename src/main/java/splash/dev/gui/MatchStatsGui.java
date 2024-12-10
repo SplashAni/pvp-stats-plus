@@ -90,14 +90,14 @@ public class MatchStatsGui {
 
         String dealtDamage = String.valueOf(match.getDamageInfo().getDealtDamage());
 
-        String healing = String.valueOf(match.getDamageInfo().getTotalHealing());
+        String damageTaken = String.valueOf(match.getDamageInfo().getDamageTaken());
 
         currentY += mc.textRenderer.fontHeight + topMargin;
 
-        renderText(context, "Dealt Damage: ", dealtDamage, x, currentY, width);
+        renderText(context, "Damage Dealt: ", dealtDamage, x, currentY, width);
         currentY += mc.textRenderer.fontHeight + topMargin;
 
-        renderText(context, "Healing: ", healing, x, currentY, width);
+        renderText(context, "Damage Taken: ", damageTaken, x, currentY, width);
         currentY += topMargin;
 
         renderHeading(context, "Attack", x, currentY, width);
@@ -119,16 +119,20 @@ public class MatchStatsGui {
 
         renderHeading(context, "Match", x, currentY, width);
 
-        String time = String.valueOf(match.getMatchOutline().getTime());
+        String formattedTime = getMinutes(match.getMatchOutline().getTime());
+
         String matchId = String.valueOf(match.getMatchOutline().getId());
         currentY += mc.textRenderer.fontHeight + topMargin;
 
-        renderText(context, "Time: ", time, x, currentY, width);
+        renderText(context, "Time: ", formattedTime, x, currentY, width);
         currentY += mc.textRenderer.fontHeight + topMargin;
 
         renderText(context, "Match ID: ", matchId, x, currentY, width);
+    }
 
-
+    public String getMinutes(float seconds) {
+        double minutes = seconds / 60.0;
+        return String.format("%.1f minutes", minutes);
     }
 
     public void mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {

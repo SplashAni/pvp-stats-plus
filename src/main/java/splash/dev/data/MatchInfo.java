@@ -82,6 +82,8 @@ public class MatchInfo {
         context.drawText(mc.textRenderer, "Lost", textX, textY, new Color(255, 100, 100).getRGB(), true);
     }
 
+
+
     public Category getCategory() {
         return category;
     }

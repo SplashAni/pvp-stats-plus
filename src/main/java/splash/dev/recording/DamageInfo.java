@@ -2,18 +2,18 @@ package splash.dev.recording;
 
 public class DamageInfo {
     int dealtDamage;
-    int totalHealing;
+    int damageTaken;
 
-    public DamageInfo(int totalDamage, int dealtDamage) {
+    public DamageInfo(int totalDamage, int damageTaken) {
         this.dealtDamage = totalDamage;
-        this.totalHealing = dealtDamage;
+        this.damageTaken = damageTaken;
     }
 
     public int getDealtDamage() {
         return dealtDamage;
     }
 
-    public int getTotalHealing() {
-        return totalHealing;
+    public int getDamageTaken() {
+        return damageTaken;
     }
 }
