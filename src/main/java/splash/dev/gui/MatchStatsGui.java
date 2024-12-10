@@ -127,6 +127,9 @@ public class MatchStatsGui {
         currentY += mc.textRenderer.fontHeight + topMargin;
 
         renderText(context, "Match ID: ", matchId, x, currentY, width);
+
+        renderHeading(context, "test", x, currentY, width);
+
     }
 
     public void mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
