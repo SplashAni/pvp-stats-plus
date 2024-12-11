@@ -128,6 +128,13 @@ public class MatchStatsGui {
         currentY += mc.textRenderer.fontHeight + topMargin;
 
         renderText(context, "Match ID: ", matchId, x, currentY, width);
+        currentY += mc.textRenderer.fontHeight + topMargin;
+
+        renderHeading(context, "Aim accurecy", x, currentY, width);
+
+        Renderer2D.renderLineGraph(context, x + 7, currentY + 15, width - 20, new int[]{2, 15, 20, 25, 1, 10});
+
+
     }
 
     public String getMinutes(float seconds) {

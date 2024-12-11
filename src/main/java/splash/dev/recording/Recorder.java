@@ -77,7 +77,7 @@ public class Recorder {
             mc.getNetworkHandler().sendChatMessage("messed up the combo cuz of missing");
 
             mises++;
-            currentCombo = 0;  
+            currentCombo = 0;
         }
     }
 

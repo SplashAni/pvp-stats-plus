@@ -8,6 +8,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import splash.dev.data.Category;
 import splash.dev.data.MatchsDataRenderer;
+import splash.dev.util.Renderer2D;
 
 public class MainGui extends Screen {
     private static final Identifier BACKGROUND_TEXTURE = Identifier.ofVanilla("social_interactions/background");
@@ -37,6 +38,8 @@ public class MainGui extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+
+
         super.renderBackground(context, mouseX, mouseY, delta);
         boxX = (this.width - boxWidth) / 2;
         boxY = (this.height - boxHeight) / 2;
