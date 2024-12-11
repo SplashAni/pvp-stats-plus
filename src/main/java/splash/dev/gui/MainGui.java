@@ -6,19 +6,20 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import splash.dev.BetterCpvp;
 import splash.dev.data.Category;
-import splash.dev.data.MatchsDataRenderer;
-import splash.dev.util.Renderer2D;
+import splash.dev.data.MenuRenderer;
 
 public class MainGui extends Screen {
     private static final Identifier BACKGROUND_TEXTURE = Identifier.ofVanilla("social_interactions/background");
     int tabWidth, tabHeight, tabOffset;
     int boxX, boxY, boxWidth, boxHeight;
     int activeTabIndex = 0;
-    MatchsDataRenderer renderContent;
+    MenuRenderer renderContent;
 
     public MainGui() {
         super(Text.literal("Main GUI"));
+        BetterCpvp.setGui(this);
     }
 
     @Override
@@ -38,8 +39,6 @@ public class MainGui extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-
-
         super.renderBackground(context, mouseX, mouseY, delta);
         boxX = (this.width - boxWidth) / 2;
         boxY = (this.height - boxHeight) / 2;
@@ -98,11 +97,11 @@ public class MainGui extends Screen {
 
 
         if (renderContent == null) {
-            renderContent = new MatchsDataRenderer(activeCategory);
+            renderContent = new MenuRenderer(activeCategory);
         }
-        renderContent.setBounds(boxWidth-15,boxHeight-15,contentX, contentY);
+        renderContent.setBounds(boxWidth - 15, boxHeight - 15, contentX, contentY);
 
-        renderContent.render(context,mouseX, mouseY);
+        renderContent.render(context, mouseX, mouseY);
     }
 
     @Override

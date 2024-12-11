@@ -34,7 +34,7 @@ public class KeyboardMixin {
 
         Recorder recorder = BetterCpvp.getRecorder();
         if (recorder.isRecording()) {
-            recorder.stopRecording();
+            recorder.stopRecording(true);
         } else {
             recorder.startRecording();
         }

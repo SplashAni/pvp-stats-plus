@@ -4,23 +4,18 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.Screen;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import splash.dev.BetterCpvp;
 
-import javax.swing.text.html.parser.Entity;
-import java.util.ArrayList;
-import java.util.List;
-
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
     @Inject(method = "setScreen", at = @At("HEAD"))
     public void onDeath(Screen screen, CallbackInfo ci) {
         if (screen instanceof DeathScreen && BetterCpvp.getRecorder() != null) {
-            if (BetterCpvp.recorder.isRecording()) BetterCpvp.getRecorder().stopRecording();
+            if (BetterCpvp.recorder.isRecording()) BetterCpvp.getRecorder().stopRecording(false);
         }
 
     }

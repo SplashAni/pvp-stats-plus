@@ -1,9 +1,11 @@
 package splash.dev.recording;
 
+import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import splash.dev.data.Category;
-import splash.dev.data.MatchInfo;
+import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
 
 import java.util.ArrayList;
@@ -29,16 +31,17 @@ public class Recorder {
         System.out.println("Recording started.");
     }
 
-    public void stopRecording() {
+    public void stopRecording(boolean won) {
         recording = false;
-        StoredMatchData.addInfo(new MatchInfo(
+        StoredMatchData.addInfo(new MatchStatsMenu(
                 Category.Cartpvp,
-                new MatchOutline("test", true,usedItems, time,
+                new MatchOutline("test", won,usedItems, time,
                         StoredMatchData.getMatches().size() + 1),
                 itemUsed,
                 new DamageInfo(damageDealt, damageTaken),
                 new AttackInfo(maxCombo, mises, crits)
         ));
+
     }
 
     public boolean isRecording() {

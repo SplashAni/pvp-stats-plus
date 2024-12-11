@@ -4,31 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StoredMatchData {
-    private static final List<MatchInfo> matches;
+    private static final List<MatchStatsMenu> matches;
     static {
         matches = new ArrayList<>();
     }
-    public static List<MatchInfo> getMatchDataInCategory(Category category) {
-        List<MatchInfo> info = new ArrayList<>();
-        matches.forEach(matchInfo -> {
-            if(matchInfo.category == category) info.add(matchInfo);
+    public static List<MatchStatsMenu> getMatchDataInCategory(Category category) {
+        List<MatchStatsMenu> info = new ArrayList<>();
+        matches.forEach(matchStatsMenu -> {
+            if(matchStatsMenu.category == category) info.add(matchStatsMenu);
         });
         return info;
     }
 
-    public static MatchInfo getMatchId(int id) {
-        for (MatchInfo matchInfo : matches) {
-            if (matchInfo.matchOutline.getId() == id) return matchInfo;
+    public static MatchStatsMenu getMatchId(int id) {
+        for (MatchStatsMenu matchStatsMenu : matches) {
+            if (matchStatsMenu.matchOutline.getId() == id) return matchStatsMenu;
         }
         return null;
     }
 
 
-    public static List<MatchInfo> getMatches() {
+    public static List<MatchStatsMenu> getMatches() {
         return matches;
     }
 
-    public static void addInfo(MatchInfo matchInfo){
-        matches.add(matchInfo);
+    public static void addInfo(MatchStatsMenu matchStatsMenu){
+        matches.add(matchStatsMenu);
     }
 }

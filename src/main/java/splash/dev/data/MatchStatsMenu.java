@@ -13,7 +13,7 @@ import java.util.List;
 
 import static splash.dev.BetterCpvp.mc;
 
-public class MatchInfo {
+public class MatchStatsMenu {
     Category category;
     MatchOutline matchOutline;
     List<ItemUsed> itemUsed;
@@ -21,7 +21,7 @@ public class MatchInfo {
     AttackInfo attackInfo;
     boolean headHovered;
 
-    public MatchInfo(Category category, MatchOutline matchOutline, List<ItemUsed> itemUsed, DamageInfo damageInfo, AttackInfo attackInfo) {
+    public MatchStatsMenu(Category category, MatchOutline matchOutline, List<ItemUsed> itemUsed, DamageInfo damageInfo, AttackInfo attackInfo) {
         this.category = category;
         this.matchOutline = matchOutline;
         this.itemUsed = itemUsed;
@@ -77,7 +77,7 @@ public class MatchInfo {
 
         headHovered = mouseX >= skinX && mouseX <= skinX + skinWidth && mouseY >= centerY && mouseY <= centerY + skinWidth;
         if (headHovered) {
-            context.drawTooltip(mc.textRenderer, Text.of("Duration: " + String.format("%.2f", matchOutline.getTime()) + "s"), mouseX, mouseY);
+            context.drawTooltip(mc.textRenderer, Text.of("Click to view player"), mouseX, mouseY);
         }
 
         textX = centerX + width - 50;

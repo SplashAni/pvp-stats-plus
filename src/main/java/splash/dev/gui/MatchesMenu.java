@@ -1,9 +1,10 @@
 package splash.dev.gui;
 
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import splash.dev.data.MatchInfo;
+import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.recording.ItemUsed;
 import splash.dev.util.Renderer2D;
@@ -12,12 +13,12 @@ import java.awt.*;
 
 import static splash.dev.BetterCpvp.mc;
 
-public class MatchStatsGui {
+public class MatchesMenu {
     int id, y, width, height;
-    MatchInfo match;
+    MatchStatsMenu match;
     private int scrollOffset;
 
-    public MatchStatsGui(int id, int y, int width, int height) {
+    public MatchesMenu(int id, int y, int width, int height) {
         this.id = id;
         this.y = y;
         this.width = width;
@@ -58,7 +59,7 @@ public class MatchStatsGui {
         context.drawText(mc.textRenderer, headingText, centeredX, y, Color.WHITE.getRGB(), false);
     }
 
-    public void render(DrawContext context, int mouseX, int mouseY) {
+    public void render(DrawContext context) {
         int y = this.y - scrollOffset;
         int x = (context.getScaledWindowWidth() - width) / 2;
         int topMargin = 9;
@@ -130,10 +131,6 @@ public class MatchStatsGui {
         renderText(context, "Match ID: ", matchId, x, currentY, width);
         currentY += mc.textRenderer.fontHeight + topMargin;
 
-        renderHeading(context, "Aim accurecy", x, currentY, width);
-
-        Renderer2D.renderLineGraph(context, x + 7, currentY + 15, width - 20, new int[]{2, 15, 20, 25, 1, 10});
-
 
     }
 
@@ -142,8 +139,27 @@ public class MatchStatsGui {
         return String.format("%.1f minutes", minutes);
     }
 
-    public void mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+    public void mouseScrolled(double verticalAmount) {
+        int contentHeight = calculateContentHeight();
+
         scrollOffset -= (int) (verticalAmount * 10);
         scrollOffset = Math.max(0, scrollOffset);
+        scrollOffset = Math.min(scrollOffset, contentHeight - height);
     }
+
+    private int calculateContentHeight() {
+        int contentHeight = 0;
+        int topMargin = 9;
+
+        if (match != null) {
+            int itemCount = match.getItemUsed().size();
+            contentHeight += (mc.textRenderer.fontHeight + topMargin) * (itemCount + 1);
+            contentHeight += mc.textRenderer.fontHeight * 3 + topMargin * 4;
+            contentHeight += mc.textRenderer.fontHeight * 4 + topMargin * 5;
+            contentHeight += mc.textRenderer.fontHeight * 2 + topMargin * 3;
+        }
+
+        return contentHeight-15;
+    }
+
 }
