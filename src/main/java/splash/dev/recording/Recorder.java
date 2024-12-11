@@ -33,7 +33,8 @@ public class Recorder {
         recording = false;
         StoredMatchData.addInfo(new MatchInfo(
                 Category.Cartpvp,
-                new MatchOutline("test", usedItems, time, StoredMatchData.getMatches().size() + 1),
+                new MatchOutline("test", true,usedItems, time,
+                        StoredMatchData.getMatches().size() + 1),
                 itemUsed,
                 new DamageInfo(damageDealt, damageTaken),
                 new AttackInfo(maxCombo, mises, crits)
@@ -86,7 +87,7 @@ public class Recorder {
         boolean found = false;
 
         for (ItemUsed used : itemUsed) {
-            if (used.item() == mc.player.getMainHandStack()) {
+            if (used.item().getItem()== mc.player.getMainHandStack().getItem()) {
                 used.increment();
                 found = true;
                 break;

@@ -14,13 +14,19 @@ public class ItemUsed {
     }
 
     public ItemStack item() {
+        if (item.getMaxDamage() > 0) {
+            ItemStack stack = this.item.copy();
+            stack.setDamage(count);
+            return item;
+        }
         return item;
     }
 
     public int count() {
         return count;
     }
-    public void increment(){
+
+    public void increment() {
         count++;
     }
 

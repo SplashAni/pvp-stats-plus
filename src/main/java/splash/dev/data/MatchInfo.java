@@ -19,6 +19,7 @@ public class MatchInfo {
     List<ItemUsed> itemUsed;
     DamageInfo damageInfo;
     AttackInfo attackInfo;
+    boolean headHovered;
 
     public MatchInfo(Category category, MatchOutline matchOutline, List<ItemUsed> itemUsed, DamageInfo damageInfo, AttackInfo attackInfo) {
         this.category = category;
@@ -74,14 +75,15 @@ public class MatchInfo {
         context.drawText(mc.textRenderer, totalDamage, textX, textY, new Color(200, 200, 200).getRGB(), false);
 
 
-        if (mouseX >= skinX && mouseX <= skinX + skinWidth && mouseY >= centerY && mouseY <= centerY + skinWidth) {
+        headHovered = mouseX >= skinX && mouseX <= skinX + skinWidth && mouseY >= centerY && mouseY <= centerY + skinWidth;
+        if (headHovered) {
             context.drawTooltip(mc.textRenderer, Text.of("Duration: " + String.format("%.2f", matchOutline.getTime()) + "s"), mouseX, mouseY);
         }
 
         textX = centerX + width - 50;
-        context.drawText(mc.textRenderer, "Lost", textX, textY, new Color(255, 100, 100).getRGB(), true);
+        context.drawText(mc.textRenderer, matchOutline.isWon() ? "Won" : "Lost",
+                textX, textY, matchOutline.isWon() ? new Color(64, 187, 86, 255).getRGB() : new Color(255, 100, 100).getRGB(), true);
     }
-
 
 
     public Category getCategory() {
@@ -94,5 +96,9 @@ public class MatchInfo {
 
     public AttackInfo getAttackInfo() {
         return attackInfo;
+    }
+
+    public boolean isHeadHover() {
+        return headHovered;
     }
 }

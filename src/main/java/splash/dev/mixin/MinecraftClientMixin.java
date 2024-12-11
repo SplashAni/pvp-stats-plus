@@ -11,6 +11,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import splash.dev.BetterCpvp;
 
+import javax.swing.text.html.parser.Entity;
+import java.util.ArrayList;
+import java.util.List;
+
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
     @Inject(method = "setScreen", at = @At("HEAD"))
@@ -18,8 +22,8 @@ public abstract class MinecraftClientMixin {
         if (screen instanceof DeathScreen && BetterCpvp.getRecorder() != null) {
             if (BetterCpvp.recorder.isRecording()) BetterCpvp.getRecorder().stopRecording();
         }
+
     }
-    @Shadow protected abstract void render(boolean tick);
 
     @Inject(method = "doItemUse",at = @At("HEAD"))
     public void doItemUse(CallbackInfo ci){

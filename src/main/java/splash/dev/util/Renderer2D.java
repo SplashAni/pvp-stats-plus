@@ -48,7 +48,7 @@ public class Renderer2D {
 
         matrices.multiply(RotationAxis.POSITIVE_Z.rotation(radians));
 
-        context.fill(0, 0, length, 1, -1); 
+        context.fill(0, 0, length, 1, -1);
 
         matrices.pop();
     }
