@@ -1,7 +1,6 @@
 package splash.dev.gui;
 
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import splash.dev.data.MatchStatsMenu;
@@ -11,7 +10,7 @@ import splash.dev.util.Renderer2D;
 
 import java.awt.*;
 
-import static splash.dev.BetterCpvp.mc;
+import static splash.dev.PVPStatsPlus.mc;
 
 public class MatchesMenu {
     int id, y, width, height;

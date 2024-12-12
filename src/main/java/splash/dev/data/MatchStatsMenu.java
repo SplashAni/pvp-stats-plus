@@ -11,7 +11,7 @@ import splash.dev.recording.MatchOutline;
 import java.awt.*;
 import java.util.List;
 
-import static splash.dev.BetterCpvp.mc;
+import static splash.dev.PVPStatsPlus.mc;
 
 public class MatchStatsMenu {
     Category category;
@@ -64,12 +64,15 @@ public class MatchStatsMenu {
         int skinWidth = 20;
 
         assert mc.player != null;
-        PlayerSkinDrawer.draw(context, mc.player.getSkinTextures(), skinX, centerY, skinWidth);
+
+
+
+        PlayerSkinDrawer.draw(context, getMatchOutline().getTarget().getSkinTextures(), skinX, centerY, skinWidth);
         int textX = skinX + skinWidth + 5;
         int textY = centerY + 5;
-        String playerName = matchOutline.getName();
-        context.drawText(mc.textRenderer, playerName, textX, textY, -1, true);
-        int playerNameWidth = mc.textRenderer.getWidth(playerName);
+        String name = matchOutline.getTarget().getGameProfile().getName();
+        context.drawText(mc.textRenderer, name, textX, textY, -1, true);
+        int playerNameWidth = mc.textRenderer.getWidth(name);
         textX += playerNameWidth + 20;
         String totalDamage = "Used items: " + matchOutline.usedItems();
         context.drawText(mc.textRenderer, totalDamage, textX, textY, new Color(200, 200, 200).getRGB(), false);

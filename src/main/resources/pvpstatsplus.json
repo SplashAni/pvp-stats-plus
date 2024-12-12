@@ -12,7 +12,6 @@
   },
   "client": [
     "DrawContextMixin",
-    "InGameHudMixin",
-    "KeyboardMixin",
+    "InGameHudMixin"
   ]
 }

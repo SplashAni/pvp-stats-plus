@@ -103,9 +103,11 @@ public class MenuRenderer {
             for (MatchStatsMenu matchStatsMenu : Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(category))) {
                 if (matchStatsMenu.headHovered) {
                     menu = Menu.PlayerStats;
-                    playerStats = new PlayerStatsMenu(matchStatsMenu.matchOutline.getName(), y, width, height);
+                    playerStats = new PlayerStatsMenu(matchStatsMenu
+                            .matchOutline.getTarget(), y, width, height);
                     return;
                 }
+
 
                 int matchInfoTop = offset;
                 int matchInfoBottom = offset + 40;

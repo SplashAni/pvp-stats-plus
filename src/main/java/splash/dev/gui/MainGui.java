@@ -6,7 +6,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import splash.dev.BetterCpvp;
+import splash.dev.PVPStatsPlus;
 import splash.dev.data.Category;
 import splash.dev.data.MenuRenderer;
 
@@ -18,8 +18,8 @@ public class MainGui extends Screen {
     MenuRenderer renderContent;
 
     public MainGui() {
-        super(Text.literal("Main GUI"));
-        BetterCpvp.setGui(this);
+        super(Text.literal("main.gui"));
+        PVPStatsPlus.setGui(this);
     }
 
     @Override

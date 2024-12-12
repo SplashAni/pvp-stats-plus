@@ -1,14 +1,17 @@
 package splash.dev.recording;
 
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+
 public class MatchOutline {
-    String name;
+    AbstractClientPlayerEntity target;
     boolean won;
     int usedItems;
     float time;
     int id;
 
-    public MatchOutline(String name, boolean won, int usedItems, float time, int id) {
-        this.name = name;
+    public MatchOutline(AbstractClientPlayerEntity target, boolean won, int usedItems, float time, int id) {
+        this.target = target;
         this.won = won;
         this.usedItems = usedItems;
         this.time = time;
@@ -19,8 +22,8 @@ public class MatchOutline {
         return won;
     }
 
-    public String getName() {
-        return name;
+    public AbstractClientPlayerEntity getTarget() {
+        return target;
     }
 
     public int usedItems() {

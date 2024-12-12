@@ -1,6 +1,7 @@
 package splash.dev.gui;
 
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.entity.player.PlayerEntity;
 import splash.dev.data.Category;
 import splash.dev.data.StoredMatchData;
 
@@ -9,13 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static splash.dev.BetterCpvp.mc;
+import static splash.dev.PVPStatsPlus.getRecorder;
+import static splash.dev.PVPStatsPlus.mc;
 
 public class PlayerStatsMenu {
     private int y, width, height, kills, deaths, scrollOffset;
     private Category mostPlayed;
 
-    public PlayerStatsMenu(String name, int y, int width, int height) {
+    public PlayerStatsMenu(PlayerEntity name, int y, int width, int height) {
         this.y = y;
         this.width = width;
         this.height = height;
@@ -24,15 +26,8 @@ public class PlayerStatsMenu {
 
         StoredMatchData.getMatches()
                 .stream()
-                .filter(match -> Objects.equals(match.getMatchOutline().getName(), name))
+                .filter(match -> Objects.equals(match.getMatchOutline().getTarget(), name))
                 .forEach(match -> {
-
-                    if (match.getMatchOutline().isWon()) {
-                        kills++;
-                    } else {
-                        deaths++;
-                    }
-
                     Category gamemode = match.getCategory();
                     categoryCountMap.put(gamemode, categoryCountMap.getOrDefault(gamemode, 0) + 1);
                 });
@@ -42,6 +37,9 @@ public class PlayerStatsMenu {
                 .map(Map.Entry::getKey)
                 .orElse(null);
 
+        int[] kd = StoredMatchData.getKD(getRecorder().getTarget());
+        kills = kd[0];
+        deaths = kd[1];
 
     }
 
