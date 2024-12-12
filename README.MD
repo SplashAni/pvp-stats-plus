@@ -8,12 +8,14 @@ To download go to  `actions-> build-> download artifact` your README using the f
 
 ![showcase](showcase/image.png)
 ![showcase](showcase/image1.png)
+![showcase](showcase/image2.png)
 
 
 
-![badmath](https://img.shields.io/github/languages/top/lernantino/badmath?label=Java
-)
+
 
 ## Credits
-- SplashAni (Coding everything)
+- SplashAni (Coding everything) ![badmath](https://img.shields.io/github/languages/top/lernantino/badmath?label=Java
+  )
+
 - Monobao (For idea)
