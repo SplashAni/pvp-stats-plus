@@ -15,9 +15,6 @@ public class RecorderGui extends Screen {
     private final int dropdownHeight = 20;
     private boolean isDropdownOpen = false;
     private int baseY;
-    int centerX = this.width / 2;
-    int recordButtonY = baseY - dropdownHeight / 2;
-    int scoreButtonY = recordButtonY - dropdownHeight * 2;
 
     public RecorderGui() {
         super(Text.of("recorder.gui"));
@@ -25,22 +22,22 @@ public class RecorderGui extends Screen {
             PVPStatsPlus.getRecorder().stopRecording(true);
             mc.setScreen(null);
         }
-
-        baseY = this.height / 2 - 50;
-
     }
-
 
     @Override
     protected void init() {
+        
+        baseY = this.height / 2 - 50;
+        int centerX = this.width / 2;
+        System.out.println("baseY: " + baseY + ", centerX: " + centerX);
 
         this.addDrawableChild(ButtonWidget.builder(Text.of("Show Score"), button -> {
             PVPStatsPlus.toggleRenderScore();
-        }).size(dropdownWidth, dropdownHeight).build());
+        }).size(dropdownWidth, dropdownHeight).position(centerX - dropdownWidth / 2, baseY - dropdownHeight * 2).build());
 
         this.addDrawableChild(ButtonWidget.builder(Text.of("Record GameMode"), button -> {
             isDropdownOpen = !isDropdownOpen;
-        }).size(dropdownWidth, dropdownHeight).build());
+        }).size(dropdownWidth, dropdownHeight).position(centerX - dropdownWidth / 2, baseY - dropdownHeight / 2).build());
 
         super.init();
     }
@@ -49,19 +46,7 @@ public class RecorderGui extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
 
-
-
-        this.children().stream()
-                .filter(widget -> widget instanceof ButtonWidget)
-                .forEach(widget -> {
-                    ButtonWidget button = (ButtonWidget) widget;
-                    if (button.getMessage().getString().equals("Record GameMode")) {
-                        button.setY(recordButtonY);
-                    } else if (button.getMessage().getString().equals("Show Score")) {
-                        button.setY(scoreButtonY);
-                    }
-                    button.setX(centerX - dropdownWidth / 2);
-                });
+        int centerX = this.width / 2;
 
         if (isDropdownOpen) {
             int optionY = baseY + dropdownHeight / 2 + 5;
@@ -81,6 +66,7 @@ public class RecorderGui extends Screen {
                 optionY += optionHeight + 2;
             }
         }
+
     }
 
     @Override

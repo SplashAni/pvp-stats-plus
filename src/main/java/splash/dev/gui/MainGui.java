@@ -39,13 +39,12 @@ public class MainGui extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.renderBackground(context, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
         boxX = (this.width - boxWidth) / 2;
         boxY = (this.height - boxHeight) / 2;
         renderTabs(context, mouseX, mouseY);
         context.drawGuiTexture(RenderLayer::getGuiTextured, BACKGROUND_TEXTURE, boxX, boxY, boxWidth, boxHeight);
         renderActiveTabContent(context, mouseX, mouseY);
-        super.render(context, mouseX, mouseY, delta);
     }
 
     private void renderTabs(DrawContext context, int mouseX, int mouseY) {
