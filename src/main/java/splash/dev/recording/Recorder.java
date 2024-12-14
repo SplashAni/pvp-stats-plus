@@ -1,6 +1,7 @@
 package splash.dev.recording;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import splash.dev.PVPStatsPlus;
@@ -94,6 +95,7 @@ public class Recorder {
     }
 
     public void updateItem() {
+        if(mc.player.getMainHandStack().getItem() == Items.AIR) return;
         usedItems++;
         boolean found = false;
 
