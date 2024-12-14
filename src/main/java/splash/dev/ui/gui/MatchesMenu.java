@@ -1,4 +1,4 @@
-package splash.dev.gui;
+package splash.dev.ui.gui;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;

@@ -9,9 +9,10 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import splash.dev.gui.MainGui;
-import splash.dev.gui.RecorderGui;
+import splash.dev.ui.gui.MainGui;
+import splash.dev.ui.gui.RecorderGui;
 import splash.dev.recording.Recorder;
+import splash.dev.ui.hud.HudEditor;
 
 public class PVPStatsPlus implements ModInitializer {
     public static final String MOD_ID = "pvpstatsplus";
@@ -44,7 +45,7 @@ public class PVPStatsPlus implements ModInitializer {
     @Override
     public void onInitialize() {
         recorder = null;
-        String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui"};
+        String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui","Hud Editor"};
 
 
         KeyBinding recordGui = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -59,6 +60,12 @@ public class PVPStatsPlus implements ModInitializer {
                 GLFW.GLFW_KEY_RIGHT_SHIFT,
                 bind[0]
         ));
+        KeyBinding hudEditor = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                bind[3],
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_DOWN,
+                bind[0]
+        ));
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraftClient -> {
             if (mc.currentScreen == null && mc.world != null) {
@@ -71,7 +78,9 @@ public class PVPStatsPlus implements ModInitializer {
                 if (mainGui.wasPressed() && !(mc.currentScreen instanceof MainGui)) {
                     mc.setScreen(new MainGui());
                 }
-
+                if (hudEditor.wasPressed() && !(mc.currentScreen instanceof HudEditor)) {
+                    mc.setScreen(new HudEditor());
+                }
             }
             if (mc.world != null && mc.player != null && recorder != null && recorder.recording) {
                 recorder.tick();

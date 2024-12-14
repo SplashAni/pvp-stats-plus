@@ -18,7 +18,7 @@ public abstract class PlayerEntityMixin {
 
 
     @Inject(method = "applyDamage", at = @At("HEAD"))
-    public void applyDamage(ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {
+    public void applyDamage(DamageSource source, float amount, CallbackInfo ci) {
 
 
 

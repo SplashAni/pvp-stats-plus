@@ -2,8 +2,8 @@ package splash.dev.data;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
-import splash.dev.gui.MatchesMenu;
-import splash.dev.gui.PlayerStatsMenu;
+import splash.dev.ui.gui.MatchesMenu;
+import splash.dev.ui.gui.PlayerStatsMenu;
 
 import java.util.List;
 import java.util.Objects;
