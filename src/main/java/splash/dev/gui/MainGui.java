@@ -43,7 +43,7 @@ public class MainGui extends Screen {
         boxX = (this.width - boxWidth) / 2;
         boxY = (this.height - boxHeight) / 2;
         renderTabs(context, mouseX, mouseY);
-        context.drawGuiTexture(RenderLayer::getGuiTextured, BACKGROUND_TEXTURE, boxX, boxY, boxWidth, boxHeight);
+        context.drawGuiTexture(BACKGROUND_TEXTURE, boxX, boxY, boxWidth, boxHeight);
         renderActiveTabContent(context, mouseX, mouseY);
     }
 
@@ -78,14 +78,14 @@ public class MainGui extends Screen {
                 Identifier.ofVanilla("container/creative_inventory/tab_top_selected_3")
         };
         Identifier[] identifiers = active ? TAB_TOP_SELECTED_TEXTURES : TAB_TOP_UNSELECTED_TEXTURES;
-        context.drawGuiTexture(RenderLayer::getGuiTextured, identifiers[0], x, y, tabWidth, tabHeight);
+        context.drawGuiTexture(identifiers[0], x, y, tabWidth, tabHeight);
         context.getMatrices().push();
         context.getMatrices().translate(0.0F, 0.0F, 100.0F);
         int iconX = x + 6;
         int iconY = y + 8;
         ItemStack itemStack = category.getItemStack();
         context.drawItem(itemStack, iconX, iconY);
-        context.drawStackOverlay(this.textRenderer, itemStack, iconX, iconY);
+        context.drawItemInSlot(this.textRenderer, itemStack, iconX, iconY);
         context.getMatrices().pop();
     }
 

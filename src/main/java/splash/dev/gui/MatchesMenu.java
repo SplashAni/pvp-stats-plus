@@ -33,7 +33,7 @@ public class MatchesMenu {
         int scaledX = (int) (x / size);
         int scaledY = (int) (y / size);
         drawContext.drawItem(itemStack, scaledX, scaledY);
-        drawContext.drawStackOverlay(mc.textRenderer, itemStack, scaledX, scaledY, count);
+        drawContext.drawItemInSlot(mc.textRenderer, itemStack, scaledX, scaledY, count);
         matrices.pop();
     }
 
