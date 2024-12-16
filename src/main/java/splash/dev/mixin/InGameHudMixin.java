@@ -29,24 +29,7 @@ public abstract class InGameHudMixin {
 
 
         if (recorder != null && PVPStatsPlus.getRecorder().getTarget() != null && PVPStatsPlus.isRenderScore()) {
-            int[] kd = StoredMatchData.getKD(getRecorder().getTarget());
-            String text = kd[0] + "-" + kd[1];
 
-            int headSize = 32;
-            int textWidth = mc.textRenderer.getWidth(text);
-
-            int windowWidth = mc.getWindow().getScaledWidth();
-
-            int totalWidth = headSize + textWidth + headSize + 4;
-            int centerX = (windowWidth - totalWidth) / 2;
-
-            PlayerSkinDrawer.draw(context, mc.player.getSkinTextures(), centerX, 15, headSize);
-            centerX += headSize + 2;
-
-            context.drawTextWithShadow(mc.textRenderer, text, centerX, 15 + (headSize / 2 - mc.textRenderer.fontHeight / 2), -1);
-            centerX += textWidth + 2;
-
-            PlayerSkinDrawer.draw(context, getRecorder().getTarget().getSkinTextures(), centerX, 15, headSize);
         }
 
 

@@ -4,9 +4,12 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static splash.dev.PVPStatsPlus.mc;
 
@@ -15,9 +18,16 @@ public class HudEditor extends Screen {
     CheckboxWidget recordButton;
     ButtonWidget scoreEditButton;
     ButtonWidget recordEditButton;
+    List<HudElement> elements;
+    private int dragX, dragY;
 
     public HudEditor() {
         super(Text.of("gui.screen"));
+        elements = new ArrayList<>();
+        HudManager manager = new HudManager();
+        manager.init();
+
+        elements = manager.getElements();
     }
 
     @Override
@@ -46,8 +56,33 @@ public class HudEditor extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         renderOptions(context, mouseX, mouseY, delta);
+
+        for (HudElement element : elements) {
+            if (element.visible) {
+                element.render(context, mouseX, mouseY, delta);
+                if (element.dragging) {
+                    element.setX(mouseX - dragX);
+                    element.setY(mouseY - dragY);
+                }
+            }
+        }
+
         super.render(context, mouseX, mouseY, delta);
     }
+/*
+    public void renderElements(DrawContext context, int mouseX, int mouseY) {
+        elements.forEach(draggableElement -> {
+            MatrixStack matrices = context.getMatrices();
+            matrices.push();
+
+            matrices.translate(draggableElement.getX(), draggableElement.getY(), 0);
+
+            matrices.scale(draggableElement.getScale(), draggableElement.getScale(), 1.0f);
+
+            draggableElement.render(context, mouseX, mouseY,);
+            matrices.pop();
+        });
+    }*/
 
     public void renderOptions(DrawContext context, int mouseX, int mouseY, float delta) {
         int windowWidth = context.getScaledWindowWidth();
@@ -105,6 +140,25 @@ public class HudEditor extends Screen {
             recordEditButton.onPress();
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+
+
+        for (HudElement element : elements) {
+            if (element.isVisible() && element.isHovered((int) mouseX, (int) mouseY)) {
+
+                if (button == 0) {
+                    element.setDragging(true);
+                    dragX = (int) (mouseX - element.getX());
+                    dragY = (int) (mouseY - element.getY());
+                }
+            }
+        }
+        return false;
     }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        elements.forEach(hudElement -> hudElement.setDragging(false));
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
 }
