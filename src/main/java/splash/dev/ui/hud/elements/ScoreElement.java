@@ -17,7 +17,6 @@ public class ScoreElement extends HudElement {
         int padding = 2;
 
         int totalWidth = headSize + textWidth + headSize + (2 * padding);
-        int totalHeight = headSize;
 
         int offsetX = x;
 
@@ -30,16 +29,6 @@ public class ScoreElement extends HudElement {
 
         PlayerSkinDrawer.draw(context, mc.player.getSkinTextures(), offsetX, getY(), headSize);
 
-
-        int rectX = x + totalWidth + 10;
-        int rectY = getY();
-        int rectWidth = 50;
-        int rectHeight = 20;
-        context.fill(rectX, rectY, rectX + rectWidth, rectY + rectHeight, 0x550000FF);
-
-        String rectCoords = "Rect: " + rectX + ", " + rectY;
-        context.drawTextWithShadow(mc.textRenderer, rectCoords, 5, 15, 0xFFFFFF);
-
-        setSize(totalWidth, totalHeight);
+        setSize(totalWidth, 16);
     }
 }

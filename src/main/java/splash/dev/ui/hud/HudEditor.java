@@ -4,7 +4,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.awt.*;
@@ -18,16 +17,17 @@ public class HudEditor extends Screen {
     CheckboxWidget recordButton;
     ButtonWidget scoreEditButton;
     ButtonWidget recordEditButton;
-    List<HudElement> elements;
-    private int dragX, dragY;
+    HudManager hudManager;
 
     public HudEditor() {
         super(Text.of("gui.screen"));
-        elements = new ArrayList<>();
-        HudManager manager = new HudManager();
-        manager.init();
+        hudManager = new HudManager();
+    }
 
-        elements = manager.getElements();
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        hudManager.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     @Override
@@ -57,34 +57,14 @@ public class HudEditor extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         renderOptions(context, mouseX, mouseY, delta);
 
-        for (HudElement element : elements) {
-            if (element.visible) {
-                element.render(context, mouseX, mouseY, delta);
-                if (element.dragging) {
-                    element.setX(mouseX - dragX);
-                    element.setY(mouseY - dragY);
-                }
-            }
-        }
+        hudManager.render(context, mouseX, mouseY, delta);
 
         super.render(context, mouseX, mouseY, delta);
     }
-/*
-    public void renderElements(DrawContext context, int mouseX, int mouseY) {
-        elements.forEach(draggableElement -> {
-            MatrixStack matrices = context.getMatrices();
-            matrices.push();
 
-            matrices.translate(draggableElement.getX(), draggableElement.getY(), 0);
-
-            matrices.scale(draggableElement.getScale(), draggableElement.getScale(), 1.0f);
-
-            draggableElement.render(context, mouseX, mouseY,);
-            matrices.pop();
-        });
-    }*/
 
     public void renderOptions(DrawContext context, int mouseX, int mouseY, float delta) {
+
         int windowWidth = context.getScaledWindowWidth();
         int windowHeight = context.getScaledWindowHeight();
         int boxWidth = 250;
@@ -96,6 +76,7 @@ public class HudEditor extends Screen {
         int topBoxHeight = 15;
         int topY1 = y1 - topBoxHeight;
         int outlineThickness = 1;
+
         int outlineColor = new Color(190, 189, 189, 180).getRGB();
         context.fill(
                 x1 - outlineThickness,
@@ -104,6 +85,7 @@ public class HudEditor extends Screen {
                 y2 + outlineThickness,
                 outlineColor
         );
+
         context.fill(x1, y1, x2, y2, new Color(30, 30, 30, 220).getRGB());
         context.fill(x1, topY1, x2, y1, new Color(54, 54, 54, 255).getRGB());
         String text = "Hud Editor";
@@ -112,12 +94,16 @@ public class HudEditor extends Screen {
         int textY = topY1 + (topBoxHeight / 2) - (mc.textRenderer.fontHeight / 2) + 1;
         context.drawText(mc.textRenderer, text, textX, textY, -1, true);
         int buttonY = y1 + 20;
+
         scoreButton.setPosition(x1 + 10, buttonY);
         scoreButton.render(context, mouseX, mouseY, delta);
+
         recordButton.setPosition(x1 + 10, buttonY + scoreButton.getHeight() + 5);
         recordButton.render(context, mouseX, mouseY, delta);
+
         scoreEditButton.setPosition(scoreButton.getX() + scoreButton.getWidth() + 120, scoreButton.getY());
         scoreEditButton.render(context, mouseX, mouseY, delta);
+
         recordEditButton.setPosition(scoreButton.getX() + scoreButton.getWidth() + 120, recordButton.getY());
         recordEditButton.render(context, mouseX, mouseY, delta);
     }
@@ -140,24 +126,14 @@ public class HudEditor extends Screen {
             recordEditButton.onPress();
             return true;
         }
+        hudManager.mouseClicked(mouseX, mouseY, button);
 
-
-        for (HudElement element : elements) {
-            if (element.isVisible() && element.isHovered((int) mouseX, (int) mouseY)) {
-
-                if (button == 0) {
-                    element.setDragging(true);
-                    dragX = (int) (mouseX - element.getX());
-                    dragY = (int) (mouseY - element.getY());
-                }
-            }
-        }
         return false;
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        elements.forEach(hudElement -> hudElement.setDragging(false));
+        hudManager.mouseReleased(mouseX, mouseY, button);
         return super.mouseReleased(mouseX, mouseY, button);
     }
 

@@ -2,15 +2,16 @@ package splash.dev.ui.hud;
 
 import net.minecraft.client.gui.DrawContext;
 
-public abstract class HudElement  {
-    public int x,y;
+public abstract class HudElement {
+    public int x, y;
     int width, height;
-    boolean dragging;
-    boolean visible = true;
+    float scale;
+    boolean dragging, visible;
 
     public HudElement() {
-        this.x = 1;
-        this.y = 1;
+        dragging = false;
+        visible = true;
+        scale = 1.0f;
     }
 
 
@@ -20,15 +21,6 @@ public abstract class HudElement  {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-
-    public void setX(int x) {
-        this.x = x;
     }
 
 
@@ -49,7 +41,7 @@ public abstract class HudElement  {
         this.dragging = dragging;
     }
 
-    public void render(DrawContext context, int mouseX,int mouseY,float tickDelta) {
+    public void render(DrawContext context, int mouseX, int mouseY, float tickDelta) {
     }
 
     public boolean isHovered(int mouseX, int mouseY) {
@@ -59,8 +51,14 @@ public abstract class HudElement  {
     public void toggle() {
         this.visible = !visible;
     }
-    public void setSize(int width,int height){
+
+    public void setSize(int width, int height) {
         this.width = width;
         this.height = height;
+    }
+
+    public void setCoords(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }
