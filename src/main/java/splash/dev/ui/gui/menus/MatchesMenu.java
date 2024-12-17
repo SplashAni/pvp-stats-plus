@@ -1,4 +1,4 @@
-package splash.dev.ui.gui;
+package splash.dev.ui.gui.menus;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
@@ -34,8 +34,9 @@ public class MatchesMenu {
         int scaledX = (int) (x / size);
         int scaledY = (int) (y / size);
 
+
         ItemStack damaged = itemStack.copy();
-        damaged.setDamage(itemStack.getMaxDamage() - Integer.parseInt(count));
+        if (!count.isEmpty()) damaged.setDamage(itemStack.getMaxDamage() - Integer.parseInt(count));
         ItemStack stack = ItemHelper.isWeapon(itemStack) ? damaged : itemStack;
 
         drawContext.drawItem(stack, scaledX, scaledY);
@@ -55,11 +56,11 @@ public class MatchesMenu {
         int textWidth = mc.textRenderer.getWidth(headingText);
         int centeredX = x + (width - textWidth) / 2;
         int gradientY = y + mc.textRenderer.fontHeight / 2;
-        Renderer2D.fillGradient(context,
+        Renderer2D.fillHorizontalGradient(context,
                 x, gradientY, centeredX, gradientY + 1,
                 new Color(255, 255, 255, 0).getRGB(), new Color(255, 255, 255, 255).getRGB()
         );
-        Renderer2D.fillGradient(context,
+        Renderer2D.fillHorizontalGradient(context,
                 centeredX + textWidth, gradientY, x + width, gradientY + 1,
                 new Color(255, 255, 255, 255).getRGB(), new Color(255, 255, 255, 0).getRGB()
         );

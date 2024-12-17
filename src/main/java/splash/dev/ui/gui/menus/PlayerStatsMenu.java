@@ -1,8 +1,8 @@
-package splash.dev.ui.gui;
+package splash.dev.ui.gui.menus;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerEntity;
-import splash.dev.data.Category;
+import splash.dev.data.Gamemode;
 import splash.dev.data.StoredMatchData;
 
 import java.awt.*;
@@ -20,20 +20,20 @@ public class PlayerStatsMenu {
     private final int kills;
     private final int deaths;
     private int scrollOffset;
-    private final Category mostPlayed;
+    private final Gamemode mostPlayed;
 
     public PlayerStatsMenu(PlayerEntity name, int y, int width, int height) {
         this.y = y;
         this.width = width;
         this.height = height;
 
-        Map<Category, Integer> categoryCountMap = new HashMap<>();
+        Map<Gamemode, Integer> categoryCountMap = new HashMap<>();
 
         StoredMatchData.getMatches()
                 .stream()
                 .filter(match -> Objects.equals(match.getMatchOutline().getTarget(), name))
                 .forEach(match -> {
-                    Category gamemode = match.getCategory();
+                    Gamemode gamemode = match.getCategory();
                     categoryCountMap.put(gamemode, categoryCountMap.getOrDefault(gamemode, 0) + 1);
                 });
 

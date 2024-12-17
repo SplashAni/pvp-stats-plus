@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-public enum Category {
+public enum Gamemode {
     Cpvp(Items.END_CRYSTAL),
 
     Cartpvp(Items.TNT_MINECART),
@@ -26,7 +26,7 @@ public enum Category {
 
     final Item itemStack;
 
-    Category(Item itemStack) {
+    Gamemode(Item itemStack) {
         this.itemStack = itemStack;
     }
 

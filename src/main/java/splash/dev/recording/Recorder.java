@@ -8,7 +8,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.util.Hand;
 import splash.dev.PVPStatsPlus;
-import splash.dev.data.Category;
+import splash.dev.data.Gamemode;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.recording.infos.AttackInfo;
@@ -28,7 +28,7 @@ public class Recorder {
     int usedItems;
     float time;
     int damageDealt, damageTaken, maxCombo, crits, mises;
-    Category category;
+    Gamemode gamemode;
     int currentCombo = 0;
     long lastHitTime = 0;
     long startTime = 0;
@@ -36,18 +36,18 @@ public class Recorder {
 
     AbstractClientPlayerEntity target;
 
-    public void startRecording(Category category) {
+    public void startRecording(Gamemode gamemode) {
         if (recording) return;
         recording = true;
         itemUsed = new ArrayList<>();
         startTime = System.currentTimeMillis();
-        this.category = category;
+        this.gamemode = gamemode;
     }
 
     public void stopRecording(boolean won) {
         recording = false;
         StoredMatchData.addInfo(new MatchStatsMenu(
-                category,
+                gamemode,
                 new MatchOutline(target == null ? mc.player : target, won, usedItems, time,
                         StoredMatchData.getMatches().size() + 1),
                 itemUsed,

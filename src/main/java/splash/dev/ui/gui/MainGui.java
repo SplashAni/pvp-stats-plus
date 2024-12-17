@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import splash.dev.PVPStatsPlus;
-import splash.dev.data.Category;
+import splash.dev.data.Gamemode;
 import splash.dev.data.MenuRenderer;
 
 public class MainGui extends Screen {
@@ -29,7 +29,7 @@ public class MainGui extends Screen {
         tabHeight = 32;
         tabOffset = 2;
 
-        int tabCount = Category.values().length;
+        int tabCount = Gamemode.values().length;
         boxWidth = (tabWidth * tabCount) + (tabOffset * (tabCount - 1)) + 20;
         boxHeight = 150;
         boxX = (this.width - boxWidth) / 2;
@@ -47,7 +47,7 @@ public class MainGui extends Screen {
     }
 
     private void renderTabs(DrawContext context, int mouseX, int mouseY) {
-        Category[] categories = Category.values();
+        Gamemode[] categories = Gamemode.values();
         int tabCount = categories.length;
         int totalTabWidth = (tabWidth * tabCount) + (tabOffset * (tabCount - 1));
         int xStart = boxX + (boxWidth - totalTabWidth) / 2;
@@ -65,7 +65,7 @@ public class MainGui extends Screen {
         }
     }
 
-    protected void renderTabIcon(DrawContext context, Category category, int x, int y, boolean active) {
+    protected void renderTabIcon(DrawContext context, Gamemode gamemode, int x, int y, boolean active) {
         Identifier[] TAB_TOP_UNSELECTED_TEXTURES = new Identifier[]{
                 Identifier.ofVanilla("container/creative_inventory/tab_top_unselected_1"),
                 Identifier.ofVanilla("container/creative_inventory/tab_top_unselected_2"),
@@ -82,20 +82,20 @@ public class MainGui extends Screen {
         context.getMatrices().translate(0.0F, 0.0F, 100.0F);
         int iconX = x + 6;
         int iconY = y + 8;
-        ItemStack itemStack = category.getItemStack();
+        ItemStack itemStack = gamemode.getItemStack();
         context.drawItem(itemStack, iconX, iconY);
         context.drawItemInSlot(this.textRenderer, itemStack, iconX, iconY);
         context.getMatrices().pop();
     }
 
     private void renderActiveTabContent(DrawContext context, int mouseX, int mouseY) {
-        Category activeCategory = Category.values()[activeTabIndex];
+        Gamemode activeGamemode = Gamemode.values()[activeTabIndex];
         int contentX = boxX + 7;
         int contentY = boxY + 7;
 
 
         if (renderContent == null) {
-            renderContent = new MenuRenderer(activeCategory);
+            renderContent = new MenuRenderer(activeGamemode);
         }
         renderContent.setBounds(boxWidth - 15, boxHeight - 15, contentX, contentY);
 
@@ -114,10 +114,10 @@ public class MainGui extends Screen {
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
-    protected boolean renderTabTooltipIfHovered(DrawContext context, Category category, int mouseX, int mouseY, int tabX, int tabY) {
+    protected boolean renderTabTooltipIfHovered(DrawContext context, Gamemode gamemode, int mouseX, int mouseY, int tabX, int tabY) {
         if (mouseX >= tabX && mouseX <= tabX + tabWidth &&
                 mouseY >= tabY && mouseY <= tabY + tabHeight) {
-            context.drawTooltip(this.textRenderer, Text.of(category.name()), mouseX, mouseY);
+            context.drawTooltip(this.textRenderer, Text.of(gamemode.name()), mouseX, mouseY);
             return true;
         }
         return false;
@@ -133,7 +133,7 @@ public class MainGui extends Screen {
     }
 
     private boolean isClickInTabs(double mouseX, double mouseY) {
-        Category[] categories = Category.values();
+        Gamemode[] categories = Gamemode.values();
         int xStart = boxX + (boxWidth - ((tabWidth * categories.length) + (tabOffset * (categories.length - 1)))) / 2;
         int yPosition = boxY - tabHeight;
         for (int i = 0; i < categories.length; i++) {
@@ -147,7 +147,7 @@ public class MainGui extends Screen {
     }
 
     private void handleTabClick(double mouseX, double mouseY) {
-        Category[] categories = Category.values();
+        Gamemode[] categories = Gamemode.values();
         int xStart = boxX + (boxWidth - ((tabWidth * categories.length) + (tabOffset * (categories.length - 1)))) / 2;
         int yPosition = boxY - tabHeight + 8;
         for (int i = 0; i < categories.length; i++) {

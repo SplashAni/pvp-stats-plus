@@ -14,15 +14,15 @@ import java.util.List;
 import static splash.dev.PVPStatsPlus.mc;
 
 public class MatchStatsMenu {
-    Category category;
+    Gamemode gamemode;
     MatchOutline matchOutline;
     List<ItemUsed> itemUsed;
     DamageInfo damageInfo;
     AttackInfo attackInfo;
     boolean headHovered;
 
-    public MatchStatsMenu(Category category, MatchOutline matchOutline, List<ItemUsed> itemUsed, DamageInfo damageInfo, AttackInfo attackInfo) {
-        this.category = category;
+    public MatchStatsMenu(Gamemode gamemode, MatchOutline matchOutline, List<ItemUsed> itemUsed, DamageInfo damageInfo, AttackInfo attackInfo) {
+        this.gamemode = gamemode;
         this.matchOutline = matchOutline;
         this.itemUsed = itemUsed;
         this.damageInfo = damageInfo;
@@ -88,8 +88,8 @@ public class MatchStatsMenu {
     }
 
 
-    public Category getCategory() {
-        return category;
+    public Gamemode getCategory() {
+        return gamemode;
     }
 
     public DamageInfo getDamageInfo() {

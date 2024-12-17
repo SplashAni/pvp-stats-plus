@@ -13,10 +13,10 @@ public class StoredMatchData {
         matches = new ArrayList<>();
     }
 
-    public static List<MatchStatsMenu> getMatchDataInCategory(Category category) {
+    public static List<MatchStatsMenu> getMatchDataInCategory(Gamemode gamemode) {
         List<MatchStatsMenu> info = new ArrayList<>();
         matches.forEach(matchStatsMenu -> {
-            if (matchStatsMenu.category == category) info.add(matchStatsMenu);
+            if (matchStatsMenu.gamemode == gamemode) info.add(matchStatsMenu);
         });
         return info;
     }

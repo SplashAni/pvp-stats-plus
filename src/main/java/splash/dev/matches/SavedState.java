@@ -6,7 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import splash.dev.PVPStatsPlus;
-import splash.dev.data.Category;
+import splash.dev.data.Gamemode;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.recording.infos.AttackInfo;
@@ -106,7 +106,7 @@ public class SavedState implements Match {
                 JsonObject matchJson = gson.fromJson(fileContent, JsonObject.class);
 
                 String gamemode = matchJson.get("gamemode").getAsString();
-                Category category = Category.valueOf(gamemode);
+                Gamemode category = Gamemode.valueOf(gamemode);
 
                 JsonObject outlineJson = matchJson.getAsJsonObject("outline");
                 MatchOutline matchOutline = MatchOutline.fromJson(outlineJson);
@@ -134,12 +134,10 @@ public class SavedState implements Match {
 
                 StoredMatchData.addMatch(matchStatsMenu);
 
-                PVPStatsPlus.LOGGER.info("Loaded match data from " + matchFile.getName());
-
             } catch (IOException e) {
-                PVPStatsPlus.LOGGER.error("Error reading match file " + matchFile.getName(), e);
+                PVPStatsPlus.LOGGER.error("Error reading match file {}", matchFile.getName(), e);
             } catch (Exception e) {
-                PVPStatsPlus.LOGGER.error("Error parsing match file " + matchFile.getName(), e);
+                PVPStatsPlus.LOGGER.error("Error parsing match file {}", matchFile.getName(), e);
             }
         }
     }

@@ -7,12 +7,14 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 
+import java.awt.*;
+
 public class Renderer2D {
 
 
-    public static void fillGradient(DrawContext context, int startX, int startY, int endX, int endY, int colorStart, int colorEnd) {
+    public static void fillHorizontalGradient(DrawContext context, int startX, int startY, int endX, int endY, int colorStart, int colorEnd) {
         VertexConsumer vertexConsumer = ((VertexConsumerDuck) context).vertexConsumers().getBuffer(RenderLayer.getGui());
-        fillGradient(context.getMatrices(), vertexConsumer, startX, startY, endX, endY, colorStart, colorEnd);
+        fillHorizontalGradient(context.getMatrices(), vertexConsumer, startX, startY, endX, endY, colorStart, colorEnd);
     }
 
     public static void renderLineGraph(DrawContext context, int x, int y, int maxWidth, int[] points) {
@@ -54,8 +56,8 @@ public class Renderer2D {
     }
 
 
-    private static void fillGradient(MatrixStack matrices, VertexConsumer vertexConsumer,
-                                     int x1, int y1, int x2, int y2, int colorStart, int colorEnd) {
+    private static void fillHorizontalGradient(MatrixStack matrices, VertexConsumer vertexConsumer,
+                                               int x1, int y1, int x2, int y2, int colorStart, int colorEnd) {
         // Modified from DrawContext#fillGradient
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
 
@@ -64,5 +66,7 @@ public class Renderer2D {
 
         vertexConsumer.vertex(matrix4f, x2, y2, 0).color(colorEnd);
         vertexConsumer.vertex(matrix4f, x2, y1, 0).color(colorEnd);
+
     }
+
 }

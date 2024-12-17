@@ -13,4 +13,5 @@ public interface Match {
     void load();
 
     void initialize();
+
 }

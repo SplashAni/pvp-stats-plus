@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import splash.dev.matches.SavedState;
 import splash.dev.recording.Recorder;
 import splash.dev.ui.gui.MainGui;
-import splash.dev.ui.gui.RecorderGui;
+import splash.dev.ui.recorder.RecorderGui;
 import splash.dev.ui.hud.HudEditor;
 
 public class PVPStatsPlus implements ModInitializer {

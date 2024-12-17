@@ -2,22 +2,22 @@ package splash.dev.data;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
-import splash.dev.ui.gui.MatchesMenu;
-import splash.dev.ui.gui.PlayerStatsMenu;
+import splash.dev.ui.gui.menus.MatchesMenu;
+import splash.dev.ui.gui.menus.PlayerStatsMenu;
 
 import java.util.List;
 import java.util.Objects;
 
 public class MenuRenderer {
-    Category category;
+    Gamemode gamemode;
     int width, height, x, y;
     int scrollOffset = 0;
     MatchesMenu matchesStats;
     PlayerStatsMenu playerStats;
     Menu menu;
 
-    public MenuRenderer(Category category) {
-        this.category = category;
+    public MenuRenderer(Gamemode gamemode) {
+        this.gamemode = gamemode;
         menu = Menu.Matches;
     }
 
@@ -29,7 +29,7 @@ public class MenuRenderer {
     }
 
     public void render(DrawContext context, int mouseX, int mouseY) {
-        if (StoredMatchData.getMatchDataInCategory(category).isEmpty()) return;
+        if (StoredMatchData.getMatchDataInCategory(gamemode).isEmpty()) return;
 
         int scissorsWidth = width;
         int scissorsHeight = height;
@@ -44,7 +44,7 @@ public class MenuRenderer {
 
         switch (menu) {
             case Matches -> {
-                for (MatchStatsMenu matchStatsMenu : Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(category))) {
+                for (MatchStatsMenu matchStatsMenu : Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode))) {
                     matchStatsMenu.render(context, offset, width, mouseX, mouseY);
                     offset += 40;
                 }
@@ -71,7 +71,7 @@ public class MenuRenderer {
 
 
     public void mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        List<MatchStatsMenu> stats = StoredMatchData.getMatchDataInCategory(category);
+        List<MatchStatsMenu> stats = StoredMatchData.getMatchDataInCategory(gamemode);
 
         if (stats.size() >= 4) {
             int scrollSpeed = 30;
@@ -98,7 +98,7 @@ public class MenuRenderer {
 
             int offset = y + 10 + scrollOffset;
 
-            for (MatchStatsMenu matchStatsMenu : Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(category))) {
+            for (MatchStatsMenu matchStatsMenu : Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode))) {
                 if (matchStatsMenu.headHovered && matchStatsMenu.getMatchOutline().getTarget() != null) {
                     menu = Menu.PlayerStats;
                     playerStats = new PlayerStatsMenu(matchStatsMenu
@@ -123,7 +123,7 @@ public class MenuRenderer {
     }
 
     private int getTotalContentHeight() {
-        return 40 * Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(category)).size();
+        return 40 * Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode)).size();
     }
 
     private enum Menu {
