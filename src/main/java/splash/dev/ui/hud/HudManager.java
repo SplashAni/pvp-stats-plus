@@ -38,7 +38,7 @@ public class HudManager {
                 context.fill(-1, -1, element.width + 1, element.height + 1, new Color(255, 255, 255).getRGB());
             }
 
-            element.render(context, mouseX - element.x, mouseY - element.y, delta);
+            element.render(context, mouseX , mouseY, delta);
 
 
             if (element.dragging) {

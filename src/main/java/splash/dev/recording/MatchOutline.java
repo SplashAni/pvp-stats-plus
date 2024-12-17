@@ -1,7 +1,7 @@
 package splash.dev.recording;
 
+import com.google.gson.JsonObject;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 
 public class MatchOutline {
     AbstractClientPlayerEntity target;
@@ -37,4 +37,17 @@ public class MatchOutline {
     public int getId() {
         return id;
     }
+
+    public JsonObject getJson() {
+        JsonObject matchOutline = new JsonObject();
+        matchOutline.addProperty("won", this.won);
+        matchOutline.addProperty("usedItems", this.usedItems);
+        matchOutline.addProperty("time", this.time);
+
+        if (this.target != null) matchOutline.addProperty("target", this.target.getGameProfile().getName());
+        else matchOutline.addProperty("target", "unknown");
+
+        return matchOutline;
+    }
+
 }

@@ -1,5 +1,6 @@
 package splash.dev.recording;
 
+import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 
 import java.util.Objects;
@@ -50,5 +51,10 @@ public class ItemUsed {
                 "item=" + item + ", " +
                 "count=" + count + ']';
     }
-
+    public JsonObject getJson() {
+        JsonObject itemUsed = new JsonObject();
+        itemUsed.addProperty("item", item.getItem().toString());
+        itemUsed.addProperty("count", this.count);
+        return itemUsed;
+    }
 }

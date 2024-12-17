@@ -9,9 +9,10 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import splash.dev.matches.SavedMatches;
+import splash.dev.recording.Recorder;
 import splash.dev.ui.gui.MainGui;
 import splash.dev.ui.gui.RecorderGui;
-import splash.dev.recording.Recorder;
 import splash.dev.ui.hud.HudEditor;
 
 public class PVPStatsPlus implements ModInitializer {
@@ -21,6 +22,7 @@ public class PVPStatsPlus implements ModInitializer {
     public static Recorder recorder;
     private static MainGui gui;
     private static boolean renderScore;
+
 
     public static Recorder getRecorder() {
         return recorder;
@@ -45,7 +47,10 @@ public class PVPStatsPlus implements ModInitializer {
     @Override
     public void onInitialize() {
         recorder = null;
-        String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui","Hud Editor"};
+
+        new SavedMatches().initialize();
+
+        String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui", "Hud Editor"};
 
 
         KeyBinding recordGui = KeyBindingHelper.registerKeyBinding(new KeyBinding(

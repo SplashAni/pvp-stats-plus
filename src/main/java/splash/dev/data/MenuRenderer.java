@@ -101,7 +101,7 @@ public class MenuRenderer {
             int offset = y + 10 + scrollOffset;
 
             for (MatchStatsMenu matchStatsMenu : Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(category))) {
-                if (matchStatsMenu.headHovered) {
+                if (matchStatsMenu.headHovered && matchStatsMenu.getMatchOutline().getTarget() != null) {
                     menu = Menu.PlayerStats;
                     playerStats = new PlayerStatsMenu(matchStatsMenu
                             .matchOutline.getTarget(), y, width, height);
