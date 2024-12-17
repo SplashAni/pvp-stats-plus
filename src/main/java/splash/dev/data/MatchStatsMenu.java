@@ -3,10 +3,10 @@ package splash.dev.data;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.text.Text;
-import splash.dev.recording.AttackInfo;
-import splash.dev.recording.DamageInfo;
-import splash.dev.recording.ItemUsed;
-import splash.dev.recording.MatchOutline;
+import splash.dev.recording.infos.AttackInfo;
+import splash.dev.recording.infos.DamageInfo;
+import splash.dev.recording.infos.ItemUsed;
+import splash.dev.recording.infos.MatchOutline;
 
 import java.awt.*;
 import java.util.List;
@@ -64,7 +64,6 @@ public class MatchStatsMenu {
         int skinWidth = 20;
 
         assert mc.player != null;
-
 
 
         PlayerSkinDrawer.draw(context, getMatchOutline().getTarget().getSkinTextures(), skinX, centerY, skinWidth);

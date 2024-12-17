@@ -5,7 +5,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
-import splash.dev.recording.ItemUsed;
+import splash.dev.recording.infos.ItemUsed;
+import splash.dev.util.ItemHelper;
 import splash.dev.util.Renderer2D;
 
 import java.awt.*;
@@ -26,14 +27,21 @@ public class MatchesMenu {
         match = StoredMatchData.getMatchId(id);
     }
 
-    public static void drawItemCount(DrawContext drawContext, ItemStack itemStack, int x, int y, float size, String count) {
+    public static void drawItem(DrawContext drawContext, ItemStack itemStack, int x, int y, float size, String count) {
         MatrixStack matrices = drawContext.getMatrices();
         matrices.push();
         matrices.scale(size, size, 1f);
         int scaledX = (int) (x / size);
         int scaledY = (int) (y / size);
-        drawContext.drawItem(itemStack, scaledX, scaledY);
-        drawContext.drawItemInSlot(mc.textRenderer, itemStack, scaledX, scaledY, count);
+
+        ItemStack damaged = itemStack.copy();
+        damaged.setDamage(itemStack.getMaxDamage() - Integer.parseInt(count));
+        ItemStack stack = ItemHelper.isWeapon(itemStack) ? damaged : itemStack;
+
+        drawContext.drawItem(stack, scaledX, scaledY);
+
+        if (!ItemHelper.isWeapon(itemStack))
+            drawContext.drawItemInSlot(mc.textRenderer, itemStack, scaledX, scaledY, count);
         matrices.pop();
     }
 
@@ -80,7 +88,7 @@ public class MatchesMenu {
             String itemName = itemStack.getName().getString();
             context.drawText(mc.textRenderer, itemName, x + 10, currentY, -1, false);
             int itemIconX = x + width - 40;
-            drawItemCount(context, itemStack, itemIconX, currentY, 1.0f, String.valueOf(itemUsed.count()));
+            drawItem(context, itemStack, itemIconX, currentY, 1.0f, String.valueOf(itemUsed.count()));
             currentY += (index == itemCount - 1) ? 10 : 20;
             index++;
         }
@@ -158,7 +166,7 @@ public class MatchesMenu {
             contentHeight += mc.textRenderer.fontHeight * 2 + topMargin * 3;
         }
 
-        return contentHeight-15;
+        return contentHeight - 15;
     }
 
 }

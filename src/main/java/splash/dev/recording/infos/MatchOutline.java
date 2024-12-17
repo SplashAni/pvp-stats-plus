@@ -1,7 +1,9 @@
-package splash.dev.recording;
+package splash.dev.recording.infos;
 
 import com.google.gson.JsonObject;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+
+import static splash.dev.PVPStatsPlus.mc;
 
 public class MatchOutline {
     AbstractClientPlayerEntity target;
@@ -18,12 +20,23 @@ public class MatchOutline {
         this.id = id;
     }
 
+    public static MatchOutline fromJson(JsonObject outlineJson) {
+        boolean won = outlineJson.get("won").getAsBoolean();
+        int usedItems = outlineJson.get("usedItems").getAsInt();
+        float time = outlineJson.get("time").getAsFloat();
+        int id = outlineJson.has("id") ? outlineJson.get("id").getAsInt() : 0;
+
+
+        return new MatchOutline(mc.player, won, usedItems, time, id);
+    }
+
+
     public boolean isWon() {
         return won;
     }
 
     public AbstractClientPlayerEntity getTarget() {
-        return target;
+        return target == null ? mc.player : target;
     }
 
     public int usedItems() {

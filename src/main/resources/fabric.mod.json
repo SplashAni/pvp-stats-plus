@@ -20,7 +20,7 @@
 		]
 	},
 	"mixins": [
-      "pvpstatsplus.json"
+		"mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.15.11",

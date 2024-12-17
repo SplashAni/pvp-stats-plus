@@ -14,8 +14,13 @@ import static splash.dev.PVPStatsPlus.getRecorder;
 import static splash.dev.PVPStatsPlus.mc;
 
 public class PlayerStatsMenu {
-    private int y, width, height, kills, deaths, scrollOffset;
-    private Category mostPlayed;
+    private final int y;
+    private final int width;
+    private final int height;
+    private final int kills;
+    private final int deaths;
+    private int scrollOffset;
+    private final Category mostPlayed;
 
     public PlayerStatsMenu(PlayerEntity name, int y, int width, int height) {
         this.y = y;

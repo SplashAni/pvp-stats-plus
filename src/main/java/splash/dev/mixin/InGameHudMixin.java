@@ -1,7 +1,6 @@
 package splash.dev.mixin;
 
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.RenderTickCounter;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,11 +9,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import splash.dev.PVPStatsPlus;
-import splash.dev.data.StoredMatchData;
 
 import java.awt.*;
 
-import static splash.dev.PVPStatsPlus.*;
+import static splash.dev.PVPStatsPlus.mc;
+import static splash.dev.PVPStatsPlus.recorder;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
@@ -31,7 +30,6 @@ public abstract class InGameHudMixin {
         if (recorder != null && PVPStatsPlus.getRecorder().getTarget() != null && PVPStatsPlus.isRenderScore()) {
 
         }
-
 
 
         if (PVPStatsPlus.recorder == null || !PVPStatsPlus.recorder.isRecording()) {

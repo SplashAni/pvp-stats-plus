@@ -11,6 +11,6 @@ public interface Match {
     void save();
 
     void load();
-    void initialize();
 
+    void initialize();
 }

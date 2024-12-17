@@ -10,7 +10,9 @@ import splash.dev.util.VertexConsumerDuck;
 @Mixin(DrawContext.class)
 public class DrawContextMixin implements VertexConsumerDuck {
 
-    @Shadow @Final private VertexConsumerProvider.Immediate vertexConsumers;
+    @Shadow
+    @Final
+    private VertexConsumerProvider.Immediate vertexConsumers;
 
     @Override
     public VertexConsumerProvider.Immediate vertexConsumers() {

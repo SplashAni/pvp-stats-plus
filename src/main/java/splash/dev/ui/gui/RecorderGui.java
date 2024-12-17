@@ -26,7 +26,7 @@ public class RecorderGui extends Screen {
 
     @Override
     protected void init() {
-        
+
         baseY = this.height / 2 - 50;
         int centerX = this.width / 2;
         System.out.println("baseY: " + baseY + ", centerX: " + centerX);

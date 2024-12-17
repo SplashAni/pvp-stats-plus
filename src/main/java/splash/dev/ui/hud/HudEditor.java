@@ -7,8 +7,6 @@ import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.text.Text;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import static splash.dev.PVPStatsPlus.mc;
 

@@ -49,4 +49,8 @@ public class StoredMatchData {
     public static void addInfo(MatchStatsMenu matchStatsMenu) {
         matches.add(matchStatsMenu);
     }
+
+    public static void addMatch(MatchStatsMenu matchStatsMenu) {
+        matches.add(matchStatsMenu);
+    }
 }

@@ -3,7 +3,9 @@
   "package": "splash.dev.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "ClientConnectionMixin",
     "ClientPlayerInteractionManagerMixin",
+    "LivingEntityMixin",
     "MinecraftClientMixin"
   ],
   "injectors": {

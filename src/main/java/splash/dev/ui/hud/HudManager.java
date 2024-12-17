@@ -38,7 +38,7 @@ public class HudManager {
                 context.fill(-1, -1, element.width + 1, element.height + 1, new Color(255, 255, 255).getRGB());
             }
 
-            element.render(context, mouseX , mouseY, delta);
+            element.render(context, mouseX, mouseY, delta);
 
 
             if (element.dragging) {
@@ -48,8 +48,7 @@ public class HudManager {
             matrices.pop();
         });
 
-}
-
+    }
 
 
     public void mouseClicked(double mouseX, double mouseY, int button) {

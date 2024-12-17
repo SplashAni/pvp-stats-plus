@@ -56,7 +56,7 @@ public class MenuRenderer {
                 }
             }
             case PlayerStats -> {
-                if(playerStats != null){
+                if (playerStats != null) {
                     playerStats.render(context);
                 }
             }
@@ -70,11 +70,10 @@ public class MenuRenderer {
     }
 
 
-
     public void mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         List<MatchStatsMenu> stats = StoredMatchData.getMatchDataInCategory(category);
 
-        if (stats.size() >= 4){
+        if (stats.size() >= 4) {
             int scrollSpeed = 30;
             if (verticalAmount > 0) scrollOffset += scrollSpeed;
             else scrollOffset -= scrollSpeed;
@@ -85,11 +84,10 @@ public class MenuRenderer {
         }
 
 
-
         if (matchesStats != null) {
             matchesStats.mouseScrolled(verticalAmount);
         }
-        if(playerStats != null){
+        if (playerStats != null) {
             playerStats.mouseScrolled(verticalAmount);
         }
     }

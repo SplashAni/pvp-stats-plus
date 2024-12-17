@@ -1,5 +1,6 @@
 package splash.dev;
 
+import com.google.common.eventbus.EventBus;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -9,7 +10,7 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import splash.dev.matches.SavedMatches;
+import splash.dev.matches.SavedState;
 import splash.dev.recording.Recorder;
 import splash.dev.ui.gui.MainGui;
 import splash.dev.ui.gui.RecorderGui;
@@ -20,9 +21,9 @@ public class PVPStatsPlus implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final MinecraftClient mc = MinecraftClient.getInstance();
     public static Recorder recorder;
+    public static EventBus EVENT_BUS = new EventBus();
     private static MainGui gui;
     private static boolean renderScore;
-
 
     public static Recorder getRecorder() {
         return recorder;
@@ -48,7 +49,9 @@ public class PVPStatsPlus implements ModInitializer {
     public void onInitialize() {
         recorder = null;
 
-        new SavedMatches().initialize();
+        new SavedState().initialize();
+        EVENT_BUS.register(Recorder.class);
+
 
         String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui", "Hud Editor"};
 

@@ -1,13 +1,21 @@
 package splash.dev.recording;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
+import net.minecraft.util.Hand;
 import splash.dev.PVPStatsPlus;
 import splash.dev.data.Category;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
+import splash.dev.recording.infos.AttackInfo;
+import splash.dev.recording.infos.DamageInfo;
+import splash.dev.recording.infos.ItemUsed;
+import splash.dev.recording.infos.MatchOutline;
+import splash.dev.util.ItemHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,19 +72,12 @@ public class Recorder {
         }
     }
 
-    public void onItemUse() {
-        updateItem();
-    }
 
-    public void onAttack() {
-        updateItem();
-
-        if (mc.crosshairTarget instanceof EntityHitResult hitResult) {
-
-            if(target == null && hitResult.getEntity() instanceof AbstractClientPlayerEntity entity) {
-                target = entity;
+    public void onAttack(Entity entity, boolean success) {
+        if (success) {
+            if (target == null && entity instanceof AbstractClientPlayerEntity e) {
+                target = e;
             }
-
             if (mc.options.jumpKey.wasPressed()) crits++;
 
             if (mc.player != null && mc.player.hurtTime <= 0) {
@@ -85,23 +86,36 @@ public class Recorder {
                 lastHitTime = System.currentTimeMillis();
                 maxCombo = Math.max(maxCombo, currentCombo);
             }
+            if (ItemHelper.isWeapon(mc.player.getMainHandStack())) {
+                updateItem(Hand.MAIN_HAND);
+            } else currentCombo = 0;
         } else {
-            assert mc.crosshairTarget != null;
-            if (mc.crosshairTarget.getType().equals(HitResult.Type.MISS)) {
-                mises++;
-                currentCombo = 0;
+            mises++;
+            currentCombo = 0;
+        }
+    }
+
+    public void onPacketReceive(Packet<?> packet) {
+        if (packet instanceof EntityStatusS2CPacket entityStatusS2CPacket) {
+            if (entityStatusS2CPacket.getEntity(mc.world) == mc.player
+                    && entityStatusS2CPacket.getStatus() == 35) {
+                Hand hand = mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING ? Hand.OFF_HAND : Hand.MAIN_HAND;
+                updateItem(hand);
             }
         }
     }
 
-    public void updateItem() {
-        if(mc.player.getMainHandStack().getItem() == Items.AIR) return;
+    public void updateItem(Hand hand) {
+        Item stack = hand == Hand.MAIN_HAND ? mc.player.getMainHandStack().getItem() : mc.player.getOffHandStack().getItem();
+
+        if (stack == Items.AIR) return;
+
         usedItems++;
         boolean found = false;
 
         for (ItemUsed used : itemUsed) {
             assert mc.player != null;
-            if (used.item().getItem() == mc.player.getMainHandStack().getItem()) {
+            if (used.item().getItem() == stack) {
                 used.increment();
                 found = true;
                 break;
@@ -110,7 +124,7 @@ public class Recorder {
 
         if (!found) {
             assert mc.player != null;
-            ItemUsed newItem = new ItemUsed(mc.player.getMainHandStack(), 1);
+            ItemUsed newItem = new ItemUsed(stack.getDefaultStack(), 1);
             itemUsed.add(newItem);
         }
     }
