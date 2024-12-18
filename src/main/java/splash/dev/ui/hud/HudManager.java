@@ -13,15 +13,19 @@ public class HudManager {
     private final List<HudElement> elements = new ArrayList<>();
     private int dragX, dragY;
 
-    public HudManager() {
-        elements.add(new ScoreElement());
-        elements.add(new IndicatorElement());
-        int offset = 0;
+    public HudManager(boolean addDefault) {
 
-        for (HudElement element : elements) {
+        if (addDefault) {
+            elements.add(new ScoreElement());
+            elements.add(new IndicatorElement());
 
-            element.setCoords(1, offset);
-            offset += 15;
+            int offset = 0;
+
+            for (HudElement element : elements) {
+
+                element.setCoords(1, offset);
+                offset += 15;
+            }
         }
     }
 
@@ -72,9 +76,17 @@ public class HudManager {
     }
 
 
+    public List<HudElement> getElements() {
+        return elements;
+    }
+
     public void toggleVisibility(HudElement element) {
         for (HudElement element1 : elements) {
             if (element1 == element) element1.toggle();
         }
+    }
+
+    public void addElement(HudElement hudElement) {
+        elements.add(hudElement);
     }
 }

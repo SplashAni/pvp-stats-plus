@@ -32,10 +32,8 @@ public class PVPStatsPlus implements ModInitializer {
 
 
         new SavedState().initialize();
-        hudManager = new HudManager();
 
         String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui", "Hud Editor"};
-
 
         KeyBinding recordGui = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 bind[1],
@@ -98,5 +96,9 @@ public class PVPStatsPlus implements ModInitializer {
 
     public static HudManager getHudManager() {
         return hudManager;
+    }
+
+    public static void setHudManager(HudManager hudManager) {
+        PVPStatsPlus.hudManager = hudManager;
     }
 }

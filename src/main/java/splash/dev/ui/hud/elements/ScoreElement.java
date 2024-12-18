@@ -12,6 +12,10 @@ import static splash.dev.PVPStatsPlus.mc;
 public class ScoreElement extends HudElement {
 
 
+    public ScoreElement() {
+        super("score");
+    }
+
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);

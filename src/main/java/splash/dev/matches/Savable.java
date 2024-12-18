@@ -4,13 +4,18 @@ import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
 
-public interface Match {
+public interface Savable {
     File mainFolder = FabricLoader.getInstance().getGameDir().resolve("pvp-stats-plus").toFile();
     File matchesFolder = new File(mainFolder.getAbsoluteFile() + File.separator + "matches");
+    File hudFile = new File(mainFolder.getAbsoluteFile() + File.separator + "hud.json");
 
-    void save();
+    void saveMatches();
 
-    void load();
+    void loadMatches();
+
+    void saveHud();
+
+    void loadHud();
 
     void initialize();
 

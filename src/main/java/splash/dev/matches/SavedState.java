@@ -1,9 +1,6 @@
 package splash.dev.matches;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import net.minecraft.item.ItemStack;
 import splash.dev.PVPStatsPlus;
 import splash.dev.data.Gamemode;
@@ -13,22 +10,30 @@ import splash.dev.recording.infos.AttackInfo;
 import splash.dev.recording.infos.DamageInfo;
 import splash.dev.recording.infos.ItemUsed;
 import splash.dev.recording.infos.MatchOutline;
+import splash.dev.ui.hud.HudElement;
+import splash.dev.ui.hud.HudManager;
+import splash.dev.ui.hud.elements.IndicatorElement;
+import splash.dev.ui.hud.elements.ScoreElement;
 import splash.dev.util.ItemHelper;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
-public class SavedState implements Match {
+public class SavedState implements Savable {
     @Override
     public void initialize() {
         createDirs(mainFolder, matchesFolder);
-        load();
-        Runtime.getRuntime().addShutdownHook((new Thread(this::save)));
+        loadMatches();
+        loadHud();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            saveMatches();
+            saveHud();
+        }));
     }
 
     public void createDirs(File... files) {
@@ -39,7 +44,7 @@ public class SavedState implements Match {
 
 
     @Override
-    public void save() {
+    public void saveMatches() {
         if (StoredMatchData.getMatches().isEmpty()) {
             PVPStatsPlus.LOGGER.warn("No games found, saving nothing");
             return;
@@ -81,7 +86,7 @@ public class SavedState implements Match {
 
             try (PrintWriter writer = new PrintWriter(fileName)) {
                 writer.println(gson.toJson(match));
-                PVPStatsPlus.LOGGER.info("Saved game data to " + fileName);
+                PVPStatsPlus.LOGGER.info("Saved game data to {}", fileName);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException("Failed to save match data to " + fileName, e);
             }
@@ -90,7 +95,7 @@ public class SavedState implements Match {
 
 
     @Override
-    public void load() {
+    public void loadMatches() {
 
         if (!matchesFolder.exists()) return;
 
@@ -101,7 +106,7 @@ public class SavedState implements Match {
 
         for (File matchFile : matchFiles) {
             try {
-                String fileContent = new String(java.nio.file.Files.readAllBytes(matchFile.toPath()));
+                String fileContent = new String(Files.readAllBytes(matchFile.toPath()));
 
                 JsonObject matchJson = gson.fromJson(fileContent, JsonObject.class);
 
@@ -139,6 +144,86 @@ public class SavedState implements Match {
             } catch (Exception e) {
                 PVPStatsPlus.LOGGER.error("Error parsing match file {}", matchFile.getName(), e);
             }
+        }
+    }
+
+    @Override
+    public void saveHud() {
+        if (!hudFile.exists()) {
+            try {
+                if (hudFile.createNewFile()) {
+                    PVPStatsPlus.LOGGER.info("Successfully created a hud file.");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        HudManager hudManager = PVPStatsPlus.getHudManager();
+        JsonObject json = new JsonObject();
+        JsonArray elements = new JsonArray();
+
+        hudManager.getElements().forEach(hudElement -> {
+            JsonObject elementObject = new JsonObject();
+            elementObject.addProperty("name", hudElement.getName());
+            elementObject.addProperty("x", hudElement.getX());
+            elementObject.addProperty("y", hudElement.getY());
+            elementObject.addProperty("scale", hudElement.getScale());
+            elements.add(elementObject);
+        });
+
+        json.add("elements", elements);
+
+        try (PrintWriter writer = new PrintWriter(hudFile)) {
+            writer.println(gson.toJson(json));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void loadHud() {
+        if (!hudFile.exists()) {
+            PVPStatsPlus.setHudManager(new HudManager(true));
+            return;
+        }
+
+        try (FileReader reader = new FileReader(hudFile)) {
+            JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+            JsonArray elements = json.getAsJsonArray("elements");
+
+            HudManager hudManager = new HudManager(false);
+
+            elements.forEach(element -> {
+                JsonObject elementObject = element.getAsJsonObject();
+                String name = elementObject.get("name").getAsString();
+
+
+                Map<String, Supplier<HudElement>> elementSuppliers = Map.of(
+                        "score", ScoreElement::new,
+                        "indicator", IndicatorElement::new
+                );
+
+                Supplier<HudElement> supplier = elementSuppliers.get(name);
+                if (supplier == null) return;
+
+                HudElement hudElement = supplier.get();
+
+                if (hudElement == null) return;
+
+                hudElement.setCoords(elementObject.get("x").getAsInt(), elementObject.get("y").getAsInt());
+                hudElement.setScale(elementObject.get("scale").getAsFloat());
+
+                hudManager.addElement(hudElement);
+            });
+
+
+            PVPStatsPlus.setHudManager(hudManager);
+
+            PVPStatsPlus.LOGGER.info("HUD loaded successfully.");
+        } catch (IOException e) {
+            PVPStatsPlus.LOGGER.error("Error loading HUD file", e);
         }
     }
 
