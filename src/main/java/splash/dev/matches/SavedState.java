@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+@SuppressWarnings("ALL")
 public class SavedState implements Savable {
     @Override
     public void initialize() {
@@ -170,6 +171,7 @@ public class SavedState implements Savable {
             elementObject.addProperty("x", hudElement.getX());
             elementObject.addProperty("y", hudElement.getY());
             elementObject.addProperty("scale", hudElement.getScale());
+            elementObject.addProperty("visible", hudElement.isVisible());
             elements.add(elementObject);
         });
 
@@ -214,6 +216,7 @@ public class SavedState implements Savable {
 
                 hudElement.setCoords(elementObject.get("x").getAsInt(), elementObject.get("y").getAsInt());
                 hudElement.setScale(elementObject.get("scale").getAsFloat());
+                hudElement.setVisible(elementObject.get("visible").getAsBoolean());
 
                 hudManager.addElement(hudElement);
             });

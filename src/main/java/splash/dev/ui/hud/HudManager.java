@@ -22,7 +22,7 @@ public class HudManager {
             int offset = 0;
 
             for (HudElement element : elements) {
-
+                element.setVisible(true);
                 element.setCoords(1, offset);
                 offset += 15;
             }
@@ -80,11 +80,29 @@ public class HudManager {
         return elements;
     }
 
-    public void toggleVisibility(HudElement element) {
-        for (HudElement element1 : elements) {
-            if (element1 == element) element1.toggle();
+    public void toggleVisibility(Class<? extends HudElement> elementType) {
+        for (HudElement element : elements) {
+            if (elementType.isInstance(element)) {
+                element.toggle();
+            }
         }
     }
+    public void reset(Class<? extends HudElement> elementType) {
+        for (HudElement element : elements) {
+            if (elementType.isInstance(element)) {
+                element.setCoords(1,0);
+            }
+        }
+    }
+    public boolean isVisible(Class<? extends HudElement> elementType) {
+        for (HudElement element : elements) {
+            if (elementType.isInstance(element)) {
+                return element.isVisible();
+            }
+        }
+        return false;
+    }
+
 
     public void addElement(HudElement hudElement) {
         elements.add(hudElement);

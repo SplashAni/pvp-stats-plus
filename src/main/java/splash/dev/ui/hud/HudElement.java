@@ -15,9 +15,9 @@ public abstract class HudElement {
     public HudElement(String name) {
         this.name = name;
         dragging = false;
-        visible = true;
         scale = 1.0f;
     }
+
 
 
     public boolean isVisible() {
@@ -39,6 +39,10 @@ public abstract class HudElement {
 
     public float getScale() {
         return scale;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 
     public boolean isDragging() {
@@ -68,10 +72,6 @@ public abstract class HudElement {
     public void setCoords(int x, int y) {
         this.x = x;
         this.y = y;
-    }
-
-    public void setScale(float scale) {
-        this.scale = scale;
     }
 
     public String getName() {

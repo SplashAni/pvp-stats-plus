@@ -5,10 +5,12 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.text.Text;
-import splash.dev.PVPStatsPlus;
+import splash.dev.ui.hud.elements.IndicatorElement;
+import splash.dev.ui.hud.elements.ScoreElement;
 
 import java.awt.*;
 
+import static splash.dev.PVPStatsPlus.getHudManager;
 import static splash.dev.PVPStatsPlus.mc;
 
 public class HudEditor extends Screen {
@@ -16,7 +18,7 @@ public class HudEditor extends Screen {
     CheckboxWidget recordButton;
     ButtonWidget scoreEditButton;
     ButtonWidget recordEditButton;
-    HudManager hudManager = PVPStatsPlus.getHudManager();
+    HudManager hudManager = getHudManager();
 
     public HudEditor() {
         super(Text.of("gui.screen"));
@@ -32,23 +34,41 @@ public class HudEditor extends Screen {
     protected void init() {
         super.init();
         scoreButton = CheckboxWidget.builder(Text.of("Score"), mc.textRenderer)
+                .checked(getHudManager().isVisible(ScoreElement.class))
+                .callback((checkbox, checked) -> {
+                    if (checked) {
+                        getHudManager().toggleVisibility(ScoreElement.class);
+                    }
+                })
                 .build();
-        addDrawable(scoreButton);
-        recordButton = CheckboxWidget.builder(Text.of("Record"), mc.textRenderer)
+
+        recordButton = CheckboxWidget.builder(Text.of("Indicator"), mc.textRenderer)
+                .checked(getHudManager().isVisible(IndicatorElement.class))
+                .callback((checkbox, checked) -> {
+                    if (checked) {
+                        getHudManager().toggleVisibility(IndicatorElement.class);
+                    }
+                })
                 .build();
-        addDrawable(recordButton);
-        scoreEditButton = new ButtonWidget.Builder(Text.of("Visible"), button -> {
+
+        scoreEditButton = new ButtonWidget.Builder(Text.of("Reset"), button -> {
+            getHudManager().reset(ScoreElement.class);
         })
                 .position(scoreButton.getX() + scoreButton.getWidth() - 50, scoreButton.getY())
                 .size(50, 20)
                 .build();
-        addDrawable(scoreEditButton);
-        recordEditButton = new ButtonWidget.Builder(Text.of("Visible"), button -> {
+
+        recordEditButton = new ButtonWidget.Builder(Text.of("Reset"), button -> {
+            getHudManager().reset(IndicatorElement.class);
         })
                 .position(recordButton.getX() + recordButton.getWidth() - 50, recordButton.getY() + scoreButton.getHeight() + 5)
                 .size(50, 20)
                 .build();
+
+        addDrawable(scoreButton);
+        addDrawable(recordButton);
         addDrawable(recordEditButton);
+        addDrawable(scoreEditButton);
     }
 
     @Override
