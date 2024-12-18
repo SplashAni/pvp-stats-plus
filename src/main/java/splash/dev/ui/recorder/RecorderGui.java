@@ -18,7 +18,7 @@ public class RecorderGui extends Screen {
 
     public RecorderGui() {
         super(Text.of("recorder.gui"));
-        if (PVPStatsPlus.recorder != null && PVPStatsPlus.getRecorder().isRecording()) {
+        if (PVPStatsPlus.getRecorder() != null && PVPStatsPlus.getRecorder().isRecording()) {
             PVPStatsPlus.getRecorder().stopRecording(true);
             mc.setScreen(null);
         }
@@ -30,6 +30,8 @@ public class RecorderGui extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
+
         int boxWidth = boxes[0].getWidth();
         int boxHeight = boxes[0].getHeight();
 
@@ -46,8 +48,6 @@ public class RecorderGui extends Screen {
             int y = startY + row * (boxHeight + ySpacing);
             boxes[i].render(context, x, y, mouseX, mouseY);
         });
-
-        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override

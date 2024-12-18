@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.text.Text;
+import splash.dev.PVPStatsPlus;
 
 import java.awt.*;
 
@@ -15,11 +16,10 @@ public class HudEditor extends Screen {
     CheckboxWidget recordButton;
     ButtonWidget scoreEditButton;
     ButtonWidget recordEditButton;
-    HudManager hudManager;
+    HudManager hudManager = PVPStatsPlus.getHudManager();
 
     public HudEditor() {
         super(Text.of("gui.screen"));
-        hudManager = new HudManager();
     }
 
     @Override
@@ -37,13 +37,13 @@ public class HudEditor extends Screen {
         recordButton = CheckboxWidget.builder(Text.of("Record"), mc.textRenderer)
                 .build();
         addDrawable(recordButton);
-        scoreEditButton = new ButtonWidget.Builder(Text.of("Edit"), button -> {
+        scoreEditButton = new ButtonWidget.Builder(Text.of("Visible"), button -> {
         })
                 .position(scoreButton.getX() + scoreButton.getWidth() - 50, scoreButton.getY())
                 .size(50, 20)
                 .build();
         addDrawable(scoreEditButton);
-        recordEditButton = new ButtonWidget.Builder(Text.of("Edit"), button -> {
+        recordEditButton = new ButtonWidget.Builder(Text.of("Visible"), button -> {
         })
                 .position(recordButton.getX() + recordButton.getWidth() - 50, recordButton.getY() + scoreButton.getHeight() + 5)
                 .size(50, 20)
@@ -124,6 +124,7 @@ public class HudEditor extends Screen {
             recordEditButton.onPress();
             return true;
         }
+
         hudManager.mouseClicked(mouseX, mouseY, button);
 
         return false;

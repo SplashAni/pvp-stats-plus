@@ -46,7 +46,7 @@ public class GameModeBox {
 
     public void mouseReleased(double mouseX, double mouseY, int button) {
         if (hovered && button == 0) {
-            PVPStatsPlus.recorder = new Recorder();
+            PVPStatsPlus.resetRecorder(false);
             PVPStatsPlus.getRecorder().startRecording(gamemode);
             mc.setScreen(null);
         }

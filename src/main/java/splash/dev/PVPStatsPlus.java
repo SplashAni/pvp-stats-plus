@@ -1,6 +1,5 @@
 package splash.dev;
 
-import com.google.common.eventbus.EventBus;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -13,45 +12,27 @@ import org.slf4j.LoggerFactory;
 import splash.dev.matches.SavedState;
 import splash.dev.recording.Recorder;
 import splash.dev.ui.gui.MainGui;
-import splash.dev.ui.recorder.RecorderGui;
 import splash.dev.ui.hud.HudEditor;
+import splash.dev.ui.hud.HudManager;
+import splash.dev.ui.recorder.RecorderGui;
 
 public class PVPStatsPlus implements ModInitializer {
     public static final String MOD_ID = "pvpstatsplus";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final MinecraftClient mc = MinecraftClient.getInstance();
-    public static Recorder recorder;
-    public static EventBus EVENT_BUS = new EventBus();
+    private static HudManager hudManager;
+    private static Recorder recorder;
     private static MainGui gui;
-    private static boolean renderScore;
 
-    public static Recorder getRecorder() {
-        return recorder;
-    }
 
-    public static MainGui getGui() {
-        return gui;
-    }
-
-    public static void setGui(MainGui gui) {
-        PVPStatsPlus.gui = gui;
-    }
-
-    public static boolean isRenderScore() {
-        return renderScore;
-    }
-
-    public static void toggleRenderScore() {
-        PVPStatsPlus.renderScore = !renderScore;
-    }
 
     @Override
     public void onInitialize() {
         recorder = null;
 
-        new SavedState().initialize();
-        EVENT_BUS.register(Recorder.class);
 
+        new SavedState().initialize();
+        hudManager = new HudManager();
 
         String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui", "Hud Editor"};
 
@@ -98,5 +79,24 @@ public class PVPStatsPlus implements ModInitializer {
 
         LOGGER.info("Thanks for using PVP-Stats+");
     }
+    public static Recorder getRecorder() {
+        return recorder;
+    }
 
+    public static void resetRecorder(boolean invalidate) {
+        if (invalidate) recorder = null;
+        else recorder = new Recorder();
+    }
+
+    public static MainGui getGui() {
+        return gui;
+    }
+
+    public static void setGui(MainGui gui) {
+        PVPStatsPlus.gui = gui;
+    }
+
+    public static HudManager getHudManager() {
+        return hudManager;
+    }
 }

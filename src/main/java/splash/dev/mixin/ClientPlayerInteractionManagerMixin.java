@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import splash.dev.PVPStatsPlus;
 
-import static splash.dev.PVPStatsPlus.recorder;
 
 @Mixin(ClientPlayerInteractionManager.class)
 public class ClientPlayerInteractionManagerMixin {
@@ -34,7 +33,7 @@ public class ClientPlayerInteractionManagerMixin {
 
     @Unique
     public void updateRecorder(Hand hand) {
-        if (recorder == null || !recorder.isRecording()) return;
+        if (PVPStatsPlus.getRecorder() == null || !PVPStatsPlus.getRecorder().isRecording()) return;
         PVPStatsPlus.getRecorder().updateItem(hand);
     }
 

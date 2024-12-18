@@ -2,6 +2,7 @@ package splash.dev.recording;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.Packet;
@@ -19,6 +20,7 @@ import splash.dev.util.ItemHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static splash.dev.PVPStatsPlus.mc;
 
@@ -54,7 +56,7 @@ public class Recorder {
                 new DamageInfo(damageDealt, damageTaken),
                 new AttackInfo(maxCombo, mises, crits)
         ));
-        PVPStatsPlus.recorder = null;
+        PVPStatsPlus.resetRecorder(true);
 
     }
 
@@ -63,9 +65,14 @@ public class Recorder {
     }
 
     public void tick() {
-        if (recording) {
-            time = (System.currentTimeMillis() - startTime) / 1000.0f;
-        }
+
+        time = (System.currentTimeMillis() - startTime) / 1000.0f;
+
+        Objects.requireNonNull(mc.world).getPlayers()
+                .stream()
+                .filter(player -> player.deathTime > 0 || player.getHealth() <= 0)
+                .filter(player -> player == target).map(player -> true)
+                .forEachOrdered(this::stopRecording);
 
         if (System.currentTimeMillis() - lastHitTime > 3000) {
             currentCombo = 0;

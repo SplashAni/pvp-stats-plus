@@ -21,6 +21,10 @@ public class StoredMatchData {
         return info;
     }
 
+    public static String getKDString(AbstractClientPlayerEntity entity) {
+        return getKD(entity)[0] + "-" + getKD(entity)[1];
+    }
+
     public static int[] getKD(AbstractClientPlayerEntity entity) {
         int enemyKills = 0;
         int kills = 0;

@@ -2,10 +2,12 @@ package splash.dev.ui.hud;
 
 import net.minecraft.client.gui.DrawContext;
 
+import static splash.dev.PVPStatsPlus.mc;
+
 public abstract class HudElement {
     public int x, y;
+    public float scale;
     int width, height;
-    float scale;
     boolean dragging, visible;
 
     public HudElement() {
@@ -60,5 +62,9 @@ public abstract class HudElement {
     public void setCoords(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public boolean isInEditor() {
+        return mc.currentScreen instanceof HudEditor;
     }
 }

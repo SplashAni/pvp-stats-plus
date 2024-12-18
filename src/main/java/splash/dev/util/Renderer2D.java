@@ -1,9 +1,11 @@
 package splash.dev.util;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 
@@ -69,4 +71,14 @@ public class Renderer2D {
 
     }
 
+    public static void renderIndicator(DrawContext context, int x, int y, int scale) {
+
+        Identifier texture = Identifier.of("splash", "icon/indicator.png");
+
+        Color color = Color.RED;
+        RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+        RenderSystem.setShaderTexture(0, texture);
+        context.drawTexture(texture, x, y, 0, 0, scale, scale, scale, scale);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+    }
 }

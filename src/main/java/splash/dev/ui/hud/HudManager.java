@@ -1,7 +1,7 @@
 package splash.dev.ui.hud;
 
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
+import splash.dev.ui.hud.elements.IndicatorElement;
 import splash.dev.ui.hud.elements.ScoreElement;
 
 import java.awt.*;
@@ -15,27 +15,23 @@ public class HudManager {
 
     public HudManager() {
         elements.add(new ScoreElement());
+        elements.add(new IndicatorElement());
         int offset = 0;
 
         for (HudElement element : elements) {
 
             element.setCoords(1, offset);
-            offset += 10;
+            offset += 15;
         }
     }
 
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         elements.stream().filter(element -> element.visible).forEach(element -> {
-            MatrixStack matrices = context.getMatrices();
-
-            matrices.push();
-
-            matrices.translate(element.x, element.y, 0);
-            matrices.scale(element.scale, element.scale, 1.0f);
 
             if (element.isHovered(mouseX, mouseY)) {
-                context.fill(0, 0, element.width, element.height, new Color(255, 255, 255, 132).getRGB());
-                context.fill(-1, -1, element.width + 1, element.height + 1, new Color(255, 255, 255).getRGB());
+                context.fill(element.x - 1, element.y - 1, element.x + element.width + 1, element.y + element.height + 1, new Color(255, 255, 255).getRGB());
+                context.fill(element.x, element.y, element.x + element.width, element.y + element.height, new Color(255, 255, 255, 132).getRGB());
+
             }
 
             element.render(context, mouseX, mouseY, delta);
@@ -44,8 +40,6 @@ public class HudManager {
             if (element.dragging) {
                 element.setCoords(mouseX - dragX, mouseY - dragY);
             }
-
-            matrices.pop();
         });
 
     }

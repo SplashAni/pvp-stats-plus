@@ -18,14 +18,14 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "setScreen", at = @At("HEAD"))
     public void onDeath(Screen screen, CallbackInfo ci) {
         if (screen instanceof DeathScreen && PVPStatsPlus.getRecorder() != null) {
-            if (PVPStatsPlus.recorder.isRecording()) PVPStatsPlus.getRecorder().stopRecording(false);
+            if (PVPStatsPlus.getRecorder().isRecording()) PVPStatsPlus.getRecorder().stopRecording(false);
         }
     }
 
 
     @Inject(method = "doAttack", at = @At("HEAD"))
     public void doAttack(CallbackInfoReturnable<Boolean> cir) {
-        if (PVPStatsPlus.recorder == null) return;
+        if (PVPStatsPlus.getRecorder() == null) return;
         if (PVPStatsPlus.getRecorder().isRecording()) {
             if (mc.crosshairTarget instanceof EntityHitResult hitResult) {
                 PVPStatsPlus.getRecorder().onAttack(hitResult.getEntity(), true);
