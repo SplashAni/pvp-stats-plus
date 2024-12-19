@@ -66,10 +66,10 @@ public class MatchStatsMenu {
         assert mc.player != null;
 
 
-        PlayerSkinDrawer.draw(context, getMatchOutline().getTarget().getSkinTextures(), skinX, centerY, skinWidth);
+        PlayerSkinDrawer.draw(context, getMatchOutline().getSkin(), skinX, centerY, skinWidth);
         int textX = skinX + skinWidth + 5;
         int textY = centerY + 5;
-        String name = matchOutline.getTarget().getGameProfile().getName();
+        String name = matchOutline.getUsername();
         context.drawText(mc.textRenderer, name, textX, textY, -1, true);
         int playerNameWidth = mc.textRenderer.getWidth(name);
         textX += playerNameWidth + 20;

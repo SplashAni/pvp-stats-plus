@@ -20,10 +20,19 @@ public class ScoreElement extends HudElement {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
 
-        if (!isInEditor()) if (getRecorder() == null || !getRecorder().isRecording()) return;
+        if (!isInEditor()) {
+            if (getRecorder() == null || !getRecorder().isRecording() || getRecorder().getTarget() == null) return;
+        }
 
-        String text = isInEditor() ? "1-1" : StoredMatchData.getKDString(getRecorder().getTarget());
 
+        String text = isResults() ?  StoredMatchData.getKDString(
+                getRecorder().getTarget().getGameProfile().getName()) : "1-1";
+
+        renderScore(context, text);
+
+    }
+
+    public void renderScore(DrawContext context, String text) {
         int baseSize = 16;
         int headSize = (int) (baseSize * scale);
         int padding = (int) (2 * scale);
@@ -51,9 +60,15 @@ public class ScoreElement extends HudElement {
         matrices.pop();
         offsetX += textWidth + padding;
 
-        PlayerSkinDrawer.draw(context, mc.player.getSkinTextures(), offsetX, getY(), headSize);
+
+        PlayerSkinDrawer.draw(context, isResults() ? getRecorder().getTarget().getSkinTextures() : mc.player.getSkinTextures(), offsetX, getY(), headSize);
+
 
         setSize(totalWidth, headSize);
+    }
+
+    private boolean isResults() {
+        return !isInEditor() && getRecorder() != null && getRecorder().isRecording();
     }
 
 }

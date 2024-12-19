@@ -1,4 +1,4 @@
-package splash.dev.util;
+package splash.dev.util.ducks;
 
 import net.minecraft.client.render.VertexConsumerProvider;
 

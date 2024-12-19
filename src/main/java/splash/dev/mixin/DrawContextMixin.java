@@ -5,7 +5,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import splash.dev.util.VertexConsumerDuck;
+import splash.dev.util.ducks.VertexConsumerDuck;
 
 @Mixin(DrawContext.class)
 public class DrawContextMixin implements VertexConsumerDuck {

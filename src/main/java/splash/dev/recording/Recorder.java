@@ -2,7 +2,6 @@ package splash.dev.recording;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.Packet;
@@ -17,6 +16,7 @@ import splash.dev.recording.infos.DamageInfo;
 import splash.dev.recording.infos.ItemUsed;
 import splash.dev.recording.infos.MatchOutline;
 import splash.dev.util.ItemHelper;
+import splash.dev.util.SkinHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +48,12 @@ public class Recorder {
 
     public void stopRecording(boolean won) {
         recording = false;
+
+        if (target != null) SkinHelper.saveSkin(target);
+
         StoredMatchData.addInfo(new MatchStatsMenu(
                 gamemode,
-                new MatchOutline(target == null ? mc.player : target, won, usedItems, time,
+                new MatchOutline(target == null ? "unknown" : target.getGameProfile().getName(), target == null ? mc.player.getSkinTextures() : target.getSkinTextures(), won, usedItems, time,
                         StoredMatchData.getMatches().size() + 1),
                 itemUsed,
                 new DamageInfo(damageDealt, damageTaken),

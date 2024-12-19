@@ -1,7 +1,9 @@
-package splash.dev.matches;
+package splash.dev.saving;
 
 import com.google.gson.*;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
 import splash.dev.PVPStatsPlus;
 import splash.dev.data.Gamemode;
 import splash.dev.data.MatchStatsMenu;
@@ -24,11 +26,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import static splash.dev.PVPStatsPlus.LOGGER;
+import static splash.dev.PVPStatsPlus.mc;
+
 @SuppressWarnings("ALL")
 public class SavedState implements Savable {
+
+
+
     @Override
     public void initialize() {
-        createDirs(mainFolder, matchesFolder);
+        createDirs(mainFolder, matchesFolder,skinsFolder);
         loadMatches();
         loadHud();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -75,7 +83,7 @@ public class SavedState implements Savable {
             match.add("attack", matchStats.getAttackInfo().getJson());
             match.add("damage", matchStats.getDamageInfo().getJson());
 
-            String fileName = matchesFolder + "/" + matchStats.getMatchOutline().getId() + ".json";
+            String fileName = matchesFolder + "\\" + matchStats.getMatchOutline().getId() + ".json";
 
             if (!new File(fileName).exists()) {
                 try {
@@ -138,6 +146,7 @@ public class SavedState implements Savable {
 
                 MatchStatsMenu matchStatsMenu = new MatchStatsMenu(category, matchOutline, itemUsedList, damageInfo, attackInfo);
 
+                LOGGER.info("loaded match "+matchOutline.getId());
                 StoredMatchData.addMatch(matchStatsMenu);
 
             } catch (IOException e) {
@@ -229,6 +238,9 @@ public class SavedState implements Savable {
             PVPStatsPlus.LOGGER.error("Error loading HUD file", e);
         }
     }
+
+
+
 
 
 }

@@ -21,16 +21,16 @@ public class StoredMatchData {
         return info;
     }
 
-    public static String getKDString(AbstractClientPlayerEntity entity) {
-        return getKD(entity)[0] + "-" + getKD(entity)[1];
+    public static String getKDString(String name) {
+        return getKD(name)[0] + "-" + getKD(name)[1];
     }
 
-    public static int[] getKD(AbstractClientPlayerEntity entity) {
+    public static int[] getKD(String name) {
         int enemyKills = 0;
         int kills = 0;
 
         for (MatchStatsMenu match : getMatches()) {
-            if (Objects.equals(match.getMatchOutline().getTarget(), entity)) {
+            if (Objects.equals(match.getMatchOutline().getUsername(), name)) {
                 if (match.getMatchOutline().isWon()) kills++;
                 else enemyKills++;
             }

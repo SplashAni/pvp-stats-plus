@@ -9,7 +9,7 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import splash.dev.matches.SavedState;
+import splash.dev.saving.SavedState;
 import splash.dev.recording.Recorder;
 import splash.dev.ui.gui.MainGui;
 import splash.dev.ui.hud.HudEditor;
@@ -21,17 +21,46 @@ public class PVPStatsPlus implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final MinecraftClient mc = MinecraftClient.getInstance();
     private static HudManager hudManager;
+    private static SavedState savedState;
     private static Recorder recorder;
     private static MainGui gui;
 
+    public static Recorder getRecorder() {
+        return recorder;
+    }
 
+    public static SavedState getSavedState() {
+        return savedState;
+    }
+
+    public static void resetRecorder(boolean invalidate) {
+        if (invalidate) recorder = null;
+        else recorder = new Recorder();
+    }
+
+    public static MainGui getGui() {
+        return gui;
+    }
+
+    public static void setGui(MainGui gui) {
+        PVPStatsPlus.gui = gui;
+    }
+
+    public static HudManager getHudManager() {
+        return hudManager;
+    }
+
+    public static void setHudManager(HudManager hudManager) {
+        PVPStatsPlus.hudManager = hudManager;
+    }
 
     @Override
     public void onInitialize() {
         recorder = null;
 
 
-        new SavedState().initialize();
+        savedState = new SavedState();
+        savedState.initialize();
 
         String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui", "Hud Editor"};
 
@@ -76,29 +105,5 @@ public class PVPStatsPlus implements ModInitializer {
 
 
         LOGGER.info("Thanks for using PVP-Stats+");
-    }
-    public static Recorder getRecorder() {
-        return recorder;
-    }
-
-    public static void resetRecorder(boolean invalidate) {
-        if (invalidate) recorder = null;
-        else recorder = new Recorder();
-    }
-
-    public static MainGui getGui() {
-        return gui;
-    }
-
-    public static void setGui(MainGui gui) {
-        PVPStatsPlus.gui = gui;
-    }
-
-    public static HudManager getHudManager() {
-        return hudManager;
-    }
-
-    public static void setHudManager(HudManager hudManager) {
-        PVPStatsPlus.hudManager = hudManager;
     }
 }

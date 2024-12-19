@@ -1,19 +1,20 @@
 package splash.dev.recording.infos;
 
 import com.google.gson.JsonObject;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-
-import static splash.dev.PVPStatsPlus.mc;
+import net.minecraft.client.util.SkinTextures;
+import splash.dev.util.SkinHelper;
 
 public class MatchOutline {
-    AbstractClientPlayerEntity target;
+    String username;
+    SkinTextures skin;
     boolean won;
     int usedItems;
     float time;
     int id;
 
-    public MatchOutline(AbstractClientPlayerEntity target, boolean won, int usedItems, float time, int id) {
-        this.target = target;
+    public MatchOutline(String username, SkinTextures skin, boolean won, int usedItems, float time, int id) {
+        this.username = username;
+        this.skin = skin;
         this.won = won;
         this.usedItems = usedItems;
         this.time = time;
@@ -21,13 +22,14 @@ public class MatchOutline {
     }
 
     public static MatchOutline fromJson(JsonObject outlineJson) {
+        String username = outlineJson.get("username").getAsString();
         boolean won = outlineJson.get("won").getAsBoolean();
         int usedItems = outlineJson.get("usedItems").getAsInt();
         float time = outlineJson.get("time").getAsFloat();
         int id = outlineJson.has("id") ? outlineJson.get("id").getAsInt() : 0;
 
 
-        return new MatchOutline(mc.player, won, usedItems, time, id);
+        return new MatchOutline(username, null, won, usedItems, time, id);
     }
 
 
@@ -35,8 +37,12 @@ public class MatchOutline {
         return won;
     }
 
-    public AbstractClientPlayerEntity getTarget() {
-        return target == null ? mc.player : target;
+    public SkinTextures getSkin() {
+        return skin == null ? SkinHelper.getSkinTarget(username).getSkinTextures() : skin;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public int usedItems() {
@@ -53,11 +59,12 @@ public class MatchOutline {
 
     public JsonObject getJson() {
         JsonObject matchOutline = new JsonObject();
+        matchOutline.addProperty("username", username);
         matchOutline.addProperty("won", this.won);
         matchOutline.addProperty("usedItems", this.usedItems);
         matchOutline.addProperty("time", this.time);
 
-        if (this.target != null) matchOutline.addProperty("target", this.target.getGameProfile().getName());
+        if (this.skin != null) matchOutline.addProperty("target", username);
         else matchOutline.addProperty("target", "unknown");
 
         return matchOutline;
