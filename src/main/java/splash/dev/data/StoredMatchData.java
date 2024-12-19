@@ -1,7 +1,5 @@
 package splash.dev.data;
 
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

@@ -17,6 +17,7 @@ public interface Savable {
     void saveHud();
 
     void loadHud();
+
     void initialize();
 
 }

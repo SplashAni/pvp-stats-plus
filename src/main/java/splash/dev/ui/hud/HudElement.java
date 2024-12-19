@@ -19,7 +19,6 @@ public abstract class HudElement {
     }
 
 
-
     public boolean isVisible() {
         return visible;
     }

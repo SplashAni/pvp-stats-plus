@@ -25,7 +25,7 @@ public class ScoreElement extends HudElement {
         }
 
 
-        String text = isResults() ?  StoredMatchData.getKDString(
+        String text = isResults() ? StoredMatchData.getKDString(
                 getRecorder().getTarget().getGameProfile().getName()) : "1-1";
 
         renderScore(context, text);

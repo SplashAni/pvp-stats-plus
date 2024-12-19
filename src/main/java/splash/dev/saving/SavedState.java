@@ -1,9 +1,7 @@
 package splash.dev.saving;
 
 import com.google.gson.*;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
 import splash.dev.PVPStatsPlus;
 import splash.dev.data.Gamemode;
 import splash.dev.data.MatchStatsMenu;
@@ -27,16 +25,14 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import static splash.dev.PVPStatsPlus.LOGGER;
-import static splash.dev.PVPStatsPlus.mc;
 
 @SuppressWarnings("ALL")
 public class SavedState implements Savable {
 
 
-
     @Override
     public void initialize() {
-        createDirs(mainFolder, matchesFolder,skinsFolder);
+        createDirs(mainFolder, matchesFolder, skinsFolder);
         loadMatches();
         loadHud();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -146,7 +142,7 @@ public class SavedState implements Savable {
 
                 MatchStatsMenu matchStatsMenu = new MatchStatsMenu(category, matchOutline, itemUsedList, damageInfo, attackInfo);
 
-                LOGGER.info("loaded match "+matchOutline.getId());
+                LOGGER.info("loaded match " + matchOutline.getId());
                 StoredMatchData.addMatch(matchStatsMenu);
 
             } catch (IOException e) {
@@ -238,9 +234,6 @@ public class SavedState implements Savable {
             PVPStatsPlus.LOGGER.error("Error loading HUD file", e);
         }
     }
-
-
-
 
 
 }

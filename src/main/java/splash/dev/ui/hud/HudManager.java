@@ -87,13 +87,15 @@ public class HudManager {
             }
         }
     }
+
     public void reset(Class<? extends HudElement> elementType) {
         for (HudElement element : elements) {
             if (elementType.isInstance(element)) {
-                element.setCoords(1,0);
+                element.setCoords(1, 0);
             }
         }
     }
+
     public boolean isVisible(Class<? extends HudElement> elementType) {
         for (HudElement element : elements) {
             if (elementType.isInstance(element)) {

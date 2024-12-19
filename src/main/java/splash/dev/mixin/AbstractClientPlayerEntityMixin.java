@@ -13,6 +13,7 @@ import splash.dev.util.ducks.SkinTexturesDuck;
 public abstract class AbstractClientPlayerEntityMixin implements SkinTexturesDuck {
     @Unique
     Identifier texture;
+
     @Override
     public void setSkin(Identifier skinTextures) {
         this.texture = skinTextures;
@@ -20,8 +21,8 @@ public abstract class AbstractClientPlayerEntityMixin implements SkinTexturesDuc
 
     @ModifyReturnValue(method = "getSkinTextures", at = @At(value = "RETURN"))
     public SkinTextures getSkinTextures(SkinTextures original) {
-        SkinTextures textures = new SkinTextures(Identifier.of("","")
-                , original.textureUrl(), original.capeTexture(), texture, original.model(),false);
+        SkinTextures textures = new SkinTextures(Identifier.of("", "")
+                , original.textureUrl(), original.capeTexture(), texture, original.model(), false);
         return original;
     }
 }

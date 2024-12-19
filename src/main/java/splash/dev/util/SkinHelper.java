@@ -11,10 +11,14 @@ import splash.dev.saving.Savable;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 
 import static splash.dev.PVPStatsPlus.mc;
@@ -54,6 +58,14 @@ public class SkinHelper {
         return new FakeEntity(new GameProfile(UUID.randomUUID(), username));
     }
 
+    public static InputStream fromInput(File file) {
+        try {
+            return new FileInputStream(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     private static class FakeEntity extends AbstractClientPlayerEntity {
 
@@ -68,8 +80,7 @@ public class SkinHelper {
 
             if (skinFile.exists()) {
                 try (InputStream inputStream = fromInput(skinFile)) {
-
-                    Identifier textureId = Identifier.of("splash", "skins/" + getGameProfile().getName()+".png");  // You can still use the same identifier format
+                    Identifier textureId = Identifier.of("splash", "skins/" + (new Random().nextInt(420) + 1) + ".png");
                     assert inputStream != null;
                     NativeImage nativeImage = NativeImage.read(inputStream);
                     NativeImageBackedTexture skinTexture = new NativeImageBackedTexture(nativeImage);
@@ -83,14 +94,6 @@ public class SkinHelper {
                 }
             }
             return mc.player != null ? mc.player.getSkinTextures() : super.getSkinTextures();
-        }
-    }
-    public static InputStream fromInput(File file) {
-        try {
-            return new FileInputStream(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 }

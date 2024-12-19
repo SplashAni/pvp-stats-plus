@@ -1,7 +1,6 @@
 package splash.dev.ui.gui.menus;
 
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import splash.dev.data.Gamemode;
 import splash.dev.data.StoredMatchData;
 
@@ -18,8 +17,8 @@ public class PlayerStatsMenu {
     private final int height;
     private final int kills;
     private final int deaths;
-    private int scrollOffset;
     private final Gamemode mostPlayed;
+    private int scrollOffset;
 
     public PlayerStatsMenu(String username, int y, int width, int height) {
         this.y = y;
