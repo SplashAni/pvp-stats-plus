@@ -36,18 +36,16 @@ public class HudEditor extends Screen {
         scoreButton = CheckboxWidget.builder(Text.of("Score"), mc.textRenderer)
                 .checked(getHudManager().isVisible(ScoreElement.class))
                 .callback((checkbox, checked) -> {
-                    if (checked) {
-                        getHudManager().toggleVisibility(ScoreElement.class);
-                    }
+                    getHudManager().toggleVisibility(ScoreElement.class);
+
                 })
                 .build();
 
         recordButton = CheckboxWidget.builder(Text.of("Indicator"), mc.textRenderer)
                 .checked(getHudManager().isVisible(IndicatorElement.class))
                 .callback((checkbox, checked) -> {
-                    if (checked) {
-                        getHudManager().toggleVisibility(IndicatorElement.class);
-                    }
+                    getHudManager().toggleVisibility(IndicatorElement.class);
+
                 })
                 .build();
 

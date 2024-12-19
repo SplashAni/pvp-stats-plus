@@ -6,7 +6,8 @@
     "ClientConnectionMixin",
     "ClientPlayerInteractionManagerMixin",
     "LivingEntityMixin",
-    "MinecraftClientMixin"
+    "MinecraftClientMixin",
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

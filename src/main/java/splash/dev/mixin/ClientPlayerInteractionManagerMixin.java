@@ -27,7 +27,6 @@ public class ClientPlayerInteractionManagerMixin {
     public void interactItem(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
         if (cir.getReturnValue() == ActionResult.SUCCESS) {
             updateRecorder(hand);
-
         }
     }
 

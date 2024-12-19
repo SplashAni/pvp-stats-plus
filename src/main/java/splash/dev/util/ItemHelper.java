@@ -12,6 +12,7 @@ public class ItemHelper {
                 item.getItem() == Items.TRIDENT;
     }
 
+
     public static Item getItem(String name) { // rip 1 hour
         try {
             for (String value : name.split(",")) {
