@@ -6,6 +6,10 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
+import net.minecraft.registry.entry.RegistryEntry;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +20,14 @@ import splash.dev.ui.hud.HudEditor;
 import splash.dev.ui.hud.HudManager;
 import splash.dev.ui.recorder.RecorderGui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PVPStatsPlus implements ModInitializer {
     public static final String MOD_ID = "pvpstatsplus";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final MinecraftClient mc = MinecraftClient.getInstance();
+    public static  MinecraftClient mc;
+    public static List<RegistryEntry<Potion>> potions = new ArrayList<>();
     private static HudManager hudManager;
     private static Recorder recorder;
     private static MainGui gui;
@@ -53,11 +61,20 @@ public class PVPStatsPlus implements ModInitializer {
     @Override
     public void onInitialize() {
         recorder = null;
-
+        mc = MinecraftClient.getInstance();
+        System.out.println(Potions.STRONG_SWIFTNESS.getIdAsString());
 
         SavedState savedState = new SavedState();
         savedState.initialize();
+        // Loop through the potions and access their effects
+        for (RegistryEntry<Potion> potionEntry : potions) {
+            Potion potion = potionEntry.value();  // Get the Potion object
 
+            for (StatusEffectInstance effectInstance : potion.getEffects()) {
+                LOGGER.info("Potion: " + potion.getEffects() + ", Effect: " + effectInstance.getEffectType().getIdAsString());
+                // Here you can apply the effect logic (e.g., applying it to a player)
+            }
+        }
         String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui", "Hud Editor"};
 
         KeyBinding recordGui = KeyBindingHelper.registerKeyBinding(new KeyBinding(

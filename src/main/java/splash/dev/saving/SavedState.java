@@ -1,7 +1,11 @@
 package splash.dev.saving;
 
 import com.google.gson.*;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.registry.entry.RegistryEntry;
 import splash.dev.PVPStatsPlus;
 import splash.dev.data.Gamemode;
 import splash.dev.data.MatchStatsMenu;
@@ -66,7 +70,20 @@ public class SavedState implements Savable {
 
             matchStats.getItemUsed().forEach(itemUsed -> {
                 JsonObject item = new JsonObject();
-                item.addProperty("item", itemUsed.item().getItem().toString());
+
+                String itemData = itemUsed.item().getItem().toString();
+
+                if (itemUsed.item().getTranslationKey().contains("potion")) {
+                    String translated = itemUsed.item().getTranslationKey();
+                    int lasst = translated.lastIndexOf('.');
+                    if (lasst != -1) {
+                        String lastPart = translated.substring(lasst + 1);
+                        itemData = itemData.concat("::" + lastPart);
+                    }
+                }
+
+
+                item.addProperty("item", itemData);
                 item.addProperty("count", itemUsed.count());
                 items.add(item);
             });
@@ -99,7 +116,6 @@ public class SavedState implements Savable {
     }
 
 
-
     @Override
     public void loadMatches() {
 
@@ -124,13 +140,34 @@ public class SavedState implements Savable {
 
                 JsonArray itemsJson = matchJson.getAsJsonArray("items");
                 List<ItemUsed> itemUsedList = new ArrayList<>();
+
                 itemsJson.forEach(itemJson -> {
                     String item = itemJson.getAsJsonObject().get("item").getAsString();
-                    int count = itemJson.getAsJsonObject().get("count").getAsInt();
 
-                    ItemStack itemStack = ItemHelper.getItem(item);
+
+                    int count = itemJson.getAsJsonObject().get("count").getAsInt();
+                    ItemStack itemStack = null;
+
+
+                    if (item.contains("::")) {
+
+                        itemStack = ItemHelper.getItem(getNameBefore(item));
+
+                        if (get(getName(item)) != null) {
+
+                            itemStack.set(DataComponentTypes.POTION_CONTENTS,
+                                    new PotionContentsComponent(get(getName(item))));
+
+
+                        }
+
+                    } else {
+                        itemStack = ItemHelper.getItem(item);
+                    }
+
 
                     if (itemStack == null) return;
+
                     ItemUsed itemUsed = new ItemUsed(itemStack, count);
                     itemUsedList.add(itemUsed);
                 });
@@ -153,6 +190,30 @@ public class SavedState implements Savable {
             }
         }
     }
+
+    public RegistryEntry<Potion> get(String name) {
+        for (RegistryEntry<Potion> potion : PVPStatsPlus.potions) {
+            if (potion.getIdAsString().contains(name)) return potion;
+        }
+        return null;
+    }
+
+    public String getName(String input) {
+        String[] parts = input.split("::");
+        if (parts.length > 1) {
+            return parts[1].trim();
+        }
+        return "";
+    }
+
+    public String getNameBefore(String input) {
+        String[] parts = input.split("::");
+        if (parts.length > 0) {
+            return parts[0].trim(); 
+        }
+        return "";
+    }
+
 
     @Override
     public void saveHud() {

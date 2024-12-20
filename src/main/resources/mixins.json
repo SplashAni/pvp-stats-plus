@@ -6,13 +6,14 @@
     "ClientConnectionMixin",
     "ClientPlayerInteractionManagerMixin",
     "MinecraftClientMixin",
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "PotionsMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-     "DrawContextMixin",
+    "DrawContextMixin",
     "InGameHudMixin"
   ]
 }
