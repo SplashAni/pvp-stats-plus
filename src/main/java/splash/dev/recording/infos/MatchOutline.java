@@ -21,12 +21,12 @@ public class MatchOutline {
         this.id = id;
     }
 
-    public static MatchOutline fromJson(JsonObject outlineJson) {
+    public static MatchOutline fromJson(JsonObject outlineJson, int id) {
         String username = outlineJson.get("username").getAsString();
         boolean won = outlineJson.get("won").getAsBoolean();
         int usedItems = outlineJson.get("usedItems").getAsInt();
         float time = outlineJson.get("time").getAsFloat();
-        int id = outlineJson.has("id") ? outlineJson.get("id").getAsInt() : 0;
+   ;
 
 
         return new MatchOutline(username, null, won, usedItems, time, id);

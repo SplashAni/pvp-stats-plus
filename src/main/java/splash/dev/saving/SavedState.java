@@ -4,8 +4,6 @@ import com.google.gson.*;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.registry.entry.RegistryEntry;
 import splash.dev.PVPStatsPlus;
 import splash.dev.data.Gamemode;
 import splash.dev.data.MatchStatsMenu;
@@ -19,6 +17,7 @@ import splash.dev.ui.hud.HudManager;
 import splash.dev.ui.hud.elements.IndicatorElement;
 import splash.dev.ui.hud.elements.ScoreElement;
 import splash.dev.util.ItemHelper;
+import splash.dev.util.PotionUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -29,8 +28,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import static splash.dev.PVPStatsPlus.LOGGER;
+import static splash.dev.util.PotionUtils.*;
 
-@SuppressWarnings("ALL")
 public class SavedState implements Savable {
 
 
@@ -53,18 +52,30 @@ public class SavedState implements Savable {
 
     @Override
     public void saveMatches() {
+        System.out.println("Starting saveMatches method");
+
         if (StoredMatchData.getMatches().isEmpty()) {
+            System.out.println("No games found, saving nothing");
             PVPStatsPlus.LOGGER.warn("No games found, saving nothing");
             return;
         }
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+        List<MatchStatsMenu> matches = StoredMatchData.getMatches();
+
+        matches.removeIf(matchStatsMenu -> matchStatsMenu.getMatchOutline().getId() == 0);
+
         for (MatchStatsMenu matchStats : StoredMatchData.getMatches()) {
+            System.out.println("Processing match with ID: " + matchStats.getMatchOutline().getId());
+
             JsonObject match = new JsonObject();
 
             match.addProperty("gamemode", matchStats.getCategory().toString());
+            System.out.println("Set gamemode: " + matchStats.getCategory().toString());
+
             match.add("outline", matchStats.getMatchOutline().getJson());
+            System.out.println("Added outline JSON");
 
             JsonArray items = new JsonArray();
 
@@ -72,16 +83,17 @@ public class SavedState implements Savable {
                 JsonObject item = new JsonObject();
 
                 String itemData = itemUsed.item().getItem().toString();
+                System.out.println("Processing item: " + itemData);
 
                 if (itemUsed.item().getTranslationKey().contains("potion")) {
                     String translated = itemUsed.item().getTranslationKey();
-                    int lasst = translated.lastIndexOf('.');
-                    if (lasst != -1) {
-                        String lastPart = translated.substring(lasst + 1);
+                    int last = translated.lastIndexOf('.');
+                    if (last != -1) {
+                        String lastPart = translated.substring(last + 1);
                         itemData = itemData.concat("::" + lastPart);
+                        System.out.println("Updated item data for potion: " + itemData);
                     }
                 }
-
 
                 item.addProperty("item", itemData);
                 item.addProperty("count", itemUsed.count());
@@ -89,32 +101,41 @@ public class SavedState implements Savable {
             });
 
             match.add("items", items);
+            System.out.println("Added items to JSON");
 
             match.add("attack", matchStats.getAttackInfo().getJson());
+            System.out.println("Added attack info to JSON");
+
             match.add("damage", matchStats.getDamageInfo().getJson());
+            System.out.println("Added damage info to JSON");
 
             String fileName = matchesFolder + "\\" + matchStats.getMatchOutline().getId() + ".json";
             File matchFile = new File(fileName);
 
             if (matchFile.exists()) {
+                System.out.println("File already exists: " + fileName);
                 continue;
             }
 
             try {
                 matchFile.createNewFile();
+                System.out.println("Created new file: " + fileName);
 
                 try (PrintWriter writer = new PrintWriter(fileName)) {
                     writer.println(gson.toJson(match));
+                    System.out.println("Written JSON to file: " + fileName);
                     PVPStatsPlus.LOGGER.info("Saved game data to {}", fileName);
                 } catch (FileNotFoundException e) {
-                    throw new RuntimeException("Failed to save match data to " + fileName, e);
+                    System.out.println("FileNotFoundException encountered: " + e.getMessage());
+                    throw new RuntimeException("Failed to save match data " + fileName, e);
                 }
             } catch (IOException e) {
-                throw new RuntimeException("Failed to create file for " + fileName, e);
+                System.out.println("IOException encountered while creating file: " + fileName);
             }
         }
-    }
 
+        System.out.println("Completed saveMatches method");
+    }
 
     @Override
     public void loadMatches() {
@@ -122,11 +143,14 @@ public class SavedState implements Savable {
         if (!matchesFolder.exists()) return;
 
         Gson gson = new GsonBuilder().create();
-        File[] matchFiles = matchesFolder.listFiles((dir, name) -> name.endsWith(".json"));
+        File[] matchFiles = matchesFolder.listFiles((dir, name) -> {
+            return name.endsWith(".json") && name.substring(0, name.length() - 5).matches("\\d+");
+        });
 
         if (matchFiles == null) return;
 
-        for (File matchFile : matchFiles) {
+        for (int i = 0; i < matchFiles.length; i++) {
+            File matchFile = matchFiles[i];
             try {
                 String fileContent = new String(Files.readAllBytes(matchFile.toPath()));
 
@@ -136,7 +160,8 @@ public class SavedState implements Savable {
                 Gamemode category = Gamemode.valueOf(gamemode);
 
                 JsonObject outlineJson = matchJson.getAsJsonObject("outline");
-                MatchOutline matchOutline = MatchOutline.fromJson(outlineJson);
+
+                MatchOutline matchOutline = MatchOutline.fromJson(outlineJson, i);
 
                 JsonArray itemsJson = matchJson.getAsJsonArray("items");
                 List<ItemUsed> itemUsedList = new ArrayList<>();
@@ -144,27 +169,23 @@ public class SavedState implements Savable {
                 itemsJson.forEach(itemJson -> {
                     String item = itemJson.getAsJsonObject().get("item").getAsString();
 
-
                     int count = itemJson.getAsJsonObject().get("count").getAsInt();
                     ItemStack itemStack = null;
 
-
                     if (item.contains("::")) {
 
-                        itemStack = ItemHelper.getItem(getNameBefore(item));
+                        itemStack = ItemHelper.getItem(getContentBefore(item));
 
-                        if (get(getName(item)) != null) {
+                        if (PotionUtils.getPotion(getContentAfter(item)) != null) {
 
                             itemStack.set(DataComponentTypes.POTION_CONTENTS,
-                                    new PotionContentsComponent(get(getName(item))));
-
+                                    new PotionContentsComponent(getPotion(getContentAfter(item))));
 
                         }
 
                     } else {
                         itemStack = ItemHelper.getItem(item);
                     }
-
 
                     if (itemStack == null) return;
 
@@ -180,7 +201,8 @@ public class SavedState implements Savable {
 
                 MatchStatsMenu matchStatsMenu = new MatchStatsMenu(category, matchOutline, itemUsedList, damageInfo, attackInfo);
 
-                LOGGER.info("loaded match " + outlineJson.get("id"));
+                LOGGER.info("loaded match " + matchFile.getName());
+
                 StoredMatchData.addMatch(matchStatsMenu);
 
             } catch (IOException e) {
@@ -189,29 +211,6 @@ public class SavedState implements Savable {
                 PVPStatsPlus.LOGGER.error("Error parsing match file {}", matchFile.getName(), e);
             }
         }
-    }
-
-    public RegistryEntry<Potion> get(String name) {
-        for (RegistryEntry<Potion> potion : PVPStatsPlus.potions) {
-            if (potion.getIdAsString().contains(name)) return potion;
-        }
-        return null;
-    }
-
-    public String getName(String input) {
-        String[] parts = input.split("::");
-        if (parts.length > 1) {
-            return parts[1].trim();
-        }
-        return "";
-    }
-
-    public String getNameBefore(String input) {
-        String[] parts = input.split("::");
-        if (parts.length > 0) {
-            return parts[0].trim(); 
-        }
-        return "";
     }
 
 
