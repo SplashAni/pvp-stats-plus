@@ -55,7 +55,6 @@ public class SavedState implements Savable {
         System.out.println("Starting saveMatches method");
 
         if (StoredMatchData.getMatches().isEmpty()) {
-            System.out.println("No games found, saving nothing");
             PVPStatsPlus.LOGGER.warn("No games found, saving nothing");
             return;
         }
@@ -67,15 +66,12 @@ public class SavedState implements Savable {
         matches.removeIf(matchStatsMenu -> matchStatsMenu.getMatchOutline().getId() == 0);
 
         for (MatchStatsMenu matchStats : StoredMatchData.getMatches()) {
-            System.out.println("Processing match with ID: " + matchStats.getMatchOutline().getId());
 
             JsonObject match = new JsonObject();
 
             match.addProperty("gamemode", matchStats.getCategory().toString());
-            System.out.println("Set gamemode: " + matchStats.getCategory().toString());
 
             match.add("outline", matchStats.getMatchOutline().getJson());
-            System.out.println("Added outline JSON");
 
             JsonArray items = new JsonArray();
 
@@ -83,7 +79,6 @@ public class SavedState implements Savable {
                 JsonObject item = new JsonObject();
 
                 String itemData = itemUsed.item().getItem().toString();
-                System.out.println("Processing item: " + itemData);
 
                 if (itemUsed.item().getTranslationKey().contains("potion")) {
                     String translated = itemUsed.item().getTranslationKey();
@@ -91,7 +86,6 @@ public class SavedState implements Savable {
                     if (last != -1) {
                         String lastPart = translated.substring(last + 1);
                         itemData = itemData.concat("::" + lastPart);
-                        System.out.println("Updated item data for potion: " + itemData);
                     }
                 }
 
@@ -101,40 +95,30 @@ public class SavedState implements Savable {
             });
 
             match.add("items", items);
-            System.out.println("Added items to JSON");
 
             match.add("attack", matchStats.getAttackInfo().getJson());
-            System.out.println("Added attack info to JSON");
 
             match.add("damage", matchStats.getDamageInfo().getJson());
-            System.out.println("Added damage info to JSON");
 
             String fileName = matchesFolder + "\\" + matchStats.getMatchOutline().getId() + ".json";
             File matchFile = new File(fileName);
 
             if (matchFile.exists()) {
-                System.out.println("File already exists: " + fileName);
                 continue;
             }
 
             try {
                 matchFile.createNewFile();
-                System.out.println("Created new file: " + fileName);
 
                 try (PrintWriter writer = new PrintWriter(fileName)) {
                     writer.println(gson.toJson(match));
-                    System.out.println("Written JSON to file: " + fileName);
-                    PVPStatsPlus.LOGGER.info("Saved game data to {}", fileName);
+                    System.out.println("Saved game data to " + fileName);
                 } catch (FileNotFoundException e) {
-                    System.out.println("FileNotFoundException encountered: " + e.getMessage());
                     throw new RuntimeException("Failed to save match data " + fileName, e);
                 }
-            } catch (IOException e) {
-                System.out.println("IOException encountered while creating file: " + fileName);
+            } catch (IOException ignored) {
             }
         }
-
-        System.out.println("Completed saveMatches method");
     }
 
     @Override

@@ -1,15 +1,15 @@
 {
 	"schemaVersion": 1,
-	"id": "bettercpvp",
+	"id": "pvp-stats-plus",
 	"version": "${version}",
-	"name": "BetterCpvp",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "pvp-stats-plus",
+	"description": "A PVP Tracker Mod",
 	"authors": [
-		"Me!"
+		"SplashAni_"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/SplashAni/pvp-stats-plus"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/splash/icon.png",
