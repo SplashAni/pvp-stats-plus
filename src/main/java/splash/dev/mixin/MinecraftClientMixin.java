@@ -21,9 +21,10 @@ public abstract class MinecraftClientMixin {
     public void onDeath(Screen screen, CallbackInfo ci) {
         if (screen instanceof DeathScreen && PVPStatsPlus.getRecorder() != null) {
             if (PVPStatsPlus.getRecorder().isRecording()) {
-                if (getRecorder().getTarget() != null) RatioManager.update(getRecorder().getTarget(), false);
-                PVPStatsPlus.getRecorder().stopRecording(false);
 
+                if (getRecorder().getTarget() != null) RatioManager.update(getRecorder().getTarget(),
+                        false);
+                PVPStatsPlus.getRecorder().stopRecording(false);
 
             }
         }

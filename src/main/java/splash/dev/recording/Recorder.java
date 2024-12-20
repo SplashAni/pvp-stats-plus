@@ -3,6 +3,7 @@ package splash.dev.recording;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
@@ -58,7 +59,6 @@ public class Recorder {
                 RatioManager.update(target, won);
             }
         }
-
 
 
         StoredMatchData.addInfo(new MatchStatsMenu(
@@ -125,19 +125,19 @@ public class Recorder {
     }
 
     public void updateItem(Hand hand) {
-        Item stack = hand == Hand.MAIN_HAND ? mc.player.getMainHandStack().getItem() : mc.player.getOffHandStack().getItem();
+        ItemStack stack = hand == Hand.MAIN_HAND ? mc.player.getMainHandStack() : mc.player.getOffHandStack();
 
-        if (stack != Items.AIR) updateItem(stack);
+        if (stack != Items.AIR.getDefaultStack()) updateItem(stack);
 
     }
 
-    public void updateItem(Item stack) {
+    public void updateItem(ItemStack stack) {
         usedItems++;
         boolean found = false;
 
         for (ItemUsed used : itemUsed) {
             assert mc.player != null;
-            if (used.item().getItem() == stack) {
+            if (Objects.equals(used.item().getTranslationKey(), stack.getTranslationKey())) {
                 used.increment();
                 found = true;
                 break;
@@ -146,7 +146,7 @@ public class Recorder {
 
         if (!found) {
             assert mc.player != null;
-            ItemUsed newItem = new ItemUsed(stack.getDefaultStack(), 1);
+            ItemUsed newItem = new ItemUsed(stack, 1);
             itemUsed.add(newItem);
         }
     }

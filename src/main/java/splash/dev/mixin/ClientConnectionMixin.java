@@ -21,7 +21,7 @@ public class ClientConnectionMixin {
     public void channelRead0(ChannelHandlerContext chc, Packet<?> packet, CallbackInfo ci) {
         if (this.channel.isOpen() && packet != null && PVPStatsPlus.getRecorder() != null) {
             if (PVPStatsPlus.getRecorder().recording) PVPStatsPlus.getRecorder().onPacketReceive(packet);
-        }
+               }
     }
 
 }

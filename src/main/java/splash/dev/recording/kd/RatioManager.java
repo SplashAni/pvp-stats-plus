@@ -11,7 +11,8 @@ public class RatioManager {
     public static void update(PlayerEntity player, boolean playerWon) {
         Ratio ratio = ratios.get(player);
         if (ratio == null) {
-            ratio = new Ratio(player, 1, 0);
+
+            ratio = new Ratio(player, playerWon ? 1 : 0, playerWon ? 1 : 0);
             ratios.put(player, ratio);
         } else {
             if (playerWon) {
@@ -21,7 +22,8 @@ public class RatioManager {
             }
         }
     }
-    public static void resetScore(){
+
+    public static void resetScore() {
         ratios.clear();
     }
 

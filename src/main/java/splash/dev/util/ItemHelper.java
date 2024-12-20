@@ -12,15 +12,23 @@ public class ItemHelper {
                 item.getItem() == Items.TRIDENT;
     }
 
+    public static boolean isPostState(Item itemStack) {
+        return  (itemStack instanceof PotionItem) ||
+                (itemStack instanceof SplashPotionItem) ||
+                itemStack == Items.LAVA_BUCKET
+                || itemStack == Items.WATER_BUCKET;
 
-    public static Item getItem(String name) { // rip 1 hour
+    }
+
+
+    public static ItemStack getItem(String name) { // rip 1 hour
         try {
             for (String value : name.split(",")) {
                 value = value.trim();
                 Identifier id = value.contains(":") ? Identifier.of(value) : Identifier.of("minecraft", value);
 
                 if (Registries.ITEM.containsId(id)) {
-                    return Registries.ITEM.get(id);
+                    return Registries.ITEM.get(id).getDefaultStack();
                 }
             }
         } catch (Exception ignored) {

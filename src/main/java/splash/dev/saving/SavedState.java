@@ -47,7 +47,6 @@ public class SavedState implements Savable {
         }
     }
 
-
     @Override
     public void saveMatches() {
         if (StoredMatchData.getMatches().isEmpty()) {
@@ -63,7 +62,6 @@ public class SavedState implements Savable {
             match.addProperty("gamemode", matchStats.getCategory().toString());
             match.add("outline", matchStats.getMatchOutline().getJson());
 
-
             JsonArray items = new JsonArray();
 
             matchStats.getItemUsed().forEach(itemUsed -> {
@@ -75,28 +73,31 @@ public class SavedState implements Savable {
 
             match.add("items", items);
 
-
             match.add("attack", matchStats.getAttackInfo().getJson());
             match.add("damage", matchStats.getDamageInfo().getJson());
 
             String fileName = matchesFolder + "\\" + matchStats.getMatchOutline().getId() + ".json";
+            File matchFile = new File(fileName);
 
-            if (!new File(fileName).exists()) {
-                try {
-                    new File(fileName).createNewFile();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+            if (matchFile.exists()) {
+                continue;
             }
 
-            try (PrintWriter writer = new PrintWriter(fileName)) {
-                writer.println(gson.toJson(match));
-                PVPStatsPlus.LOGGER.info("Saved game data to {}", fileName);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException("Failed to save match data to " + fileName, e);
+            try {
+                matchFile.createNewFile();
+
+                try (PrintWriter writer = new PrintWriter(fileName)) {
+                    writer.println(gson.toJson(match));
+                    PVPStatsPlus.LOGGER.info("Saved game data to {}", fileName);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException("Failed to save match data to " + fileName, e);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to create file for " + fileName, e);
             }
         }
     }
+
 
 
     @Override
@@ -127,7 +128,7 @@ public class SavedState implements Savable {
                     String item = itemJson.getAsJsonObject().get("item").getAsString();
                     int count = itemJson.getAsJsonObject().get("count").getAsInt();
 
-                    ItemStack itemStack = ItemHelper.getItem(item).getDefaultStack();
+                    ItemStack itemStack = ItemHelper.getItem(item);
 
                     if (itemStack == null) return;
                     ItemUsed itemUsed = new ItemUsed(itemStack, count);
@@ -142,7 +143,7 @@ public class SavedState implements Savable {
 
                 MatchStatsMenu matchStatsMenu = new MatchStatsMenu(category, matchOutline, itemUsedList, damageInfo, attackInfo);
 
-                LOGGER.info("loaded match " + matchOutline.getId());
+                LOGGER.info("loaded match " + outlineJson.get("id"));
                 StoredMatchData.addMatch(matchStatsMenu);
 
             } catch (IOException e) {

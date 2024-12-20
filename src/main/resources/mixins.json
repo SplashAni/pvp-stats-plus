@@ -12,8 +12,7 @@
     "defaultRequire": 1
   },
   "client": [
-    "AbstractClientPlayerEntityMixin",
-    "DrawContextMixin",
+     "DrawContextMixin",
     "InGameHudMixin"
   ]
 }
