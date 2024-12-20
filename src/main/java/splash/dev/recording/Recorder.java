@@ -38,12 +38,16 @@ public class Recorder {
 
     AbstractClientPlayerEntity target;
 
+    private float lastHeath, lastAbsorption;
+
     public void startRecording(Gamemode gamemode) {
         if (recording) return;
         recording = true;
         itemUsed = new ArrayList<>();
         startTime = System.currentTimeMillis();
         this.gamemode = gamemode;
+        lastHeath = mc.player.getHealth();
+        lastAbsorption = mc.player.getAbsorptionAmount();
     }
 
     public void stopRecording(boolean won) {
@@ -80,6 +84,22 @@ public class Recorder {
         if (System.currentTimeMillis() - lastHitTime > 3000) {
             currentCombo = 0;
         }
+
+        float currentHealth = mc.player.getHealth();
+        float currentAbsorption = mc.player.getAbsorptionAmount();
+        float lastHealth = this.lastHeath;
+
+        if (lastHealth != -1.0f && (currentHealth + currentAbsorption) < lastHealth) {
+            float damageTaken = lastHealth - currentHealth - currentAbsorption;
+
+            if (damageTaken > 0) {
+                System.out.println("Took damage: " + damageTaken);
+                updateSelfDamageDealt(damageTaken);
+            }
+        }
+
+        this.lastHeath = currentHealth;
+        this.lastAbsorption = currentAbsorption;
     }
 
 
@@ -118,8 +138,11 @@ public class Recorder {
     public void updateItem(Hand hand) {
         Item stack = hand == Hand.MAIN_HAND ? mc.player.getMainHandStack().getItem() : mc.player.getOffHandStack().getItem();
 
-        if (stack == Items.AIR) return;
+        if (stack != Items.AIR) updateItem(stack);
 
+    }
+
+    public void updateItem(Item stack) {
         usedItems++;
         boolean found = false;
 
@@ -138,6 +161,7 @@ public class Recorder {
             itemUsed.add(newItem);
         }
     }
+
 
     public void updateDamageDealt(float value) {
         this.damageDealt += (int) value;

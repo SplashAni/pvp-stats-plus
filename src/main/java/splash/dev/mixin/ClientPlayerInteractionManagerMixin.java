@@ -23,12 +23,6 @@ public class ClientPlayerInteractionManagerMixin {
         }
     }
 
-    @Inject(at = @At("TAIL"), method = "interactItem")
-    public void interactItem(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-        if (cir.getReturnValue() == ActionResult.SUCCESS) {
-            updateRecorder(hand);
-        }
-    }
 
 
     @Unique

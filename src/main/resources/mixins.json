@@ -5,7 +5,6 @@
   "mixins": [
     "ClientConnectionMixin",
     "ClientPlayerInteractionManagerMixin",
-    "LivingEntityMixin",
     "MinecraftClientMixin",
     "PlayerEntityMixin"
   ],
