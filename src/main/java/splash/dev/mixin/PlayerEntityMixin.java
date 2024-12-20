@@ -1,6 +1,7 @@
 package splash.dev.mixin;
 
 import net.minecraft.advancement.criterion.ConsumeItemCriterion;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -41,6 +42,8 @@ public abstract class PlayerEntityMixin {
 
     @Shadow
     public abstract void incrementStat(Stat<?> stat);
+
+    @Shadow public abstract void remove(Entity.RemovalReason reason);
 
     @Redirect(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/criterion/ConsumeItemCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;)V"))
     public void eatFood(ConsumeItemCriterion instance, ServerPlayerEntity player, ItemStack stack) {
@@ -86,6 +89,7 @@ public abstract class PlayerEntityMixin {
     }
 
     public boolean canUpdate(PlayerEntity instance) {
-        return instance == mc.player && PVPStatsPlus.getRecorder() != null || PVPStatsPlus.getRecorder().isRecording();
+        if(getRecorder() == null) return false;
+        return instance == mc.player || PVPStatsPlus.getRecorder().isRecording();
     }
 }

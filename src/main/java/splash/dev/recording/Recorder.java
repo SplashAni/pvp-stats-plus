@@ -7,7 +7,6 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.util.Hand;
-import splash.dev.PVPStatsPlus;
 import splash.dev.data.Gamemode;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
@@ -15,6 +14,7 @@ import splash.dev.recording.infos.AttackInfo;
 import splash.dev.recording.infos.DamageInfo;
 import splash.dev.recording.infos.ItemUsed;
 import splash.dev.recording.infos.MatchOutline;
+import splash.dev.recording.kd.RatioManager;
 import splash.dev.util.ItemHelper;
 import splash.dev.util.SkinHelper;
 
@@ -38,7 +38,6 @@ public class Recorder {
 
     AbstractClientPlayerEntity target;
 
-    private float lastHeath, lastAbsorption;
 
     public void startRecording(Gamemode gamemode) {
         if (recording) return;
@@ -46,14 +45,21 @@ public class Recorder {
         itemUsed = new ArrayList<>();
         startTime = System.currentTimeMillis();
         this.gamemode = gamemode;
-        lastHeath = mc.player.getHealth();
-        lastAbsorption = mc.player.getAbsorptionAmount();
     }
 
     public void stopRecording(boolean won) {
         recording = false;
 
-        if (target != null) SkinHelper.saveSkin(target);
+        if (target != null) {
+            SkinHelper.saveSkin(target);
+
+
+            if (target.isDead()) {
+                RatioManager.update(target, won);
+            }
+        }
+
+
 
         StoredMatchData.addInfo(new MatchStatsMenu(
                 gamemode,
@@ -63,7 +69,6 @@ public class Recorder {
                 new DamageInfo(damageDealt, damageTaken),
                 new AttackInfo(maxCombo, mises, crits)
         ));
-        PVPStatsPlus.resetRecorder(true);
 
     }
 
@@ -84,22 +89,6 @@ public class Recorder {
         if (System.currentTimeMillis() - lastHitTime > 3000) {
             currentCombo = 0;
         }
-
-        float currentHealth = mc.player.getHealth();
-        float currentAbsorption = mc.player.getAbsorptionAmount();
-        float lastHealth = this.lastHeath;
-
-        if (lastHealth != -1.0f && (currentHealth + currentAbsorption) < lastHealth) {
-            float damageTaken = lastHealth - currentHealth - currentAbsorption;
-
-            if (damageTaken > 0) {
-                System.out.println("Took damage: " + damageTaken);
-                updateSelfDamageDealt(damageTaken);
-            }
-        }
-
-        this.lastHeath = currentHealth;
-        this.lastAbsorption = currentAbsorption;
     }
 
 

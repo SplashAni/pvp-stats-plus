@@ -10,7 +10,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import splash.dev.PVPStatsPlus;
+import splash.dev.recording.kd.RatioManager;
 
+import static splash.dev.PVPStatsPlus.getRecorder;
 import static splash.dev.PVPStatsPlus.mc;
 
 @Mixin(MinecraftClient.class)
@@ -18,7 +20,12 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "setScreen", at = @At("HEAD"))
     public void onDeath(Screen screen, CallbackInfo ci) {
         if (screen instanceof DeathScreen && PVPStatsPlus.getRecorder() != null) {
-            if (PVPStatsPlus.getRecorder().isRecording()) PVPStatsPlus.getRecorder().stopRecording(false);
+            if (PVPStatsPlus.getRecorder().isRecording()) {
+                if (getRecorder().getTarget() != null) RatioManager.update(getRecorder().getTarget(), false);
+                PVPStatsPlus.getRecorder().stopRecording(false);
+
+
+            }
         }
     }
 

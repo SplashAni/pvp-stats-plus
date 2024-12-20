@@ -8,9 +8,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static splash.dev.PVPStatsPlus.mc;
+
 public class HudManager {
 
     private final List<HudElement> elements = new ArrayList<>();
+    public boolean showHeads, blinking; // todo better system )=
     private int dragX, dragY;
 
     public HudManager(boolean addDefault) {
@@ -27,6 +30,16 @@ public class HudManager {
                 offset += 15;
             }
         }
+        showHeads = true;
+        blinking = false;
+    }
+
+    public void toggleBlinking() {
+        this.blinking = !blinking;
+    }
+
+    public void toggleShowHeads() {
+        this.showHeads = !showHeads;
     }
 
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -50,13 +63,18 @@ public class HudManager {
 
 
     public void mouseClicked(double mouseX, double mouseY, int button) {
-        elements.stream().filter(element -> element.isVisible() && element.isHovered((int) mouseX, (int) mouseY))
-                .filter(element -> button == 0)
-                .forEachOrdered(element -> {
+        for (HudElement element : elements) {
+            if (element.isVisible() && element.isHovered((int) mouseX, (int) mouseY)) {
+                if (button == 0) {
                     element.setDragging(true);
                     dragX = (int) (mouseX - element.getX());
                     dragY = (int) (mouseY - element.getY());
-                });
+                }
+                if (button == 1) {
+                    mc.setScreen(new ElementOptions(element));
+                }
+            }
+        }
     }
 
     public void mouseReleased(double mouseX, double mouseY, int button) {

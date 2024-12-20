@@ -12,6 +12,8 @@ import splash.dev.util.ducks.VertexConsumerDuck;
 
 import java.awt.*;
 
+import static splash.dev.PVPStatsPlus.mc;
+
 public class Renderer2D {
 
 
@@ -81,5 +83,38 @@ public class Renderer2D {
         RenderSystem.setShaderTexture(0, texture);
         context.drawTexture(texture, x, y, 0, 0, scale, scale, scale, scale);
         RenderSystem.setShaderColor(1, 1, 1, 1);
+    }
+
+    public static int[] renderOptionsBox(DrawContext context, String heading) {
+        int windowWidth = context.getScaledWindowWidth();
+        int windowHeight = context.getScaledWindowHeight();
+        int boxWidth = 250;
+        int boxHeight = 90;
+        int x1 = (windowWidth - boxWidth) / 2;
+        int y1 = (windowHeight - boxHeight) / 2;
+        int x2 = x1 + boxWidth;
+        int y2 = y1 + boxHeight;
+        int topBoxHeight = 15;
+        int topY1 = y1 - topBoxHeight;
+        int outlineThickness = 1;
+
+        int outlineColor = new Color(190, 189, 189, 180).getRGB();
+        context.fill(
+                x1 - outlineThickness,
+                topY1 - outlineThickness,
+                x2 + outlineThickness,
+                y2 + outlineThickness,
+                outlineColor
+        );
+
+        context.fill(x1, y1, x2, y2, new Color(30, 30, 30, 220).getRGB());
+        context.fill(x1, topY1, x2, y1, new Color(54, 54, 54, 255).getRGB());
+        int textWidth = mc.textRenderer.getWidth(heading);
+        int textX = x1 + (boxWidth / 2) - (textWidth / 2);
+        int textY = topY1 + (topBoxHeight / 2) - (mc.textRenderer.fontHeight / 2) + 1;
+        context.drawText(mc.textRenderer, heading, textX, textY, -1, true);
+        int buttonY = y1 + 20;
+        return new int[]{x1, buttonY};
+
     }
 }

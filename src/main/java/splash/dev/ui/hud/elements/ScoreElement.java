@@ -3,7 +3,9 @@ package splash.dev.ui.hud.elements;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.util.math.MatrixStack;
+import splash.dev.PVPStatsPlus;
 import splash.dev.data.StoredMatchData;
+import splash.dev.recording.kd.RatioManager;
 import splash.dev.ui.hud.HudElement;
 
 import static splash.dev.PVPStatsPlus.getRecorder;
@@ -20,13 +22,12 @@ public class ScoreElement extends HudElement {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
 
-        if (!isInEditor()) {
+        if (isInEditor()) {
             if (getRecorder() == null || !getRecorder().isRecording() || getRecorder().getTarget() == null) return;
         }
 
 
-        String text = isResults() ? StoredMatchData.getKDString(
-                getRecorder().getTarget().getGameProfile().getName()) : "1-1";
+        String text = isResults() ? RatioManager.getFormattedScore(getRecorder().getTarget()) : "1-1";
 
         renderScore(context, text);
 
@@ -36,14 +37,18 @@ public class ScoreElement extends HudElement {
         int baseSize = 16;
         int headSize = (int) (baseSize * scale);
         int padding = (int) (2 * scale);
+        boolean heads = PVPStatsPlus.getHudManager().showHeads; // gimme some head bro
 
         int textWidth = (int) (mc.textRenderer.getWidth(text) * scale);
-        int totalWidth = headSize + textWidth + headSize + (2 * padding);
+
+        int totalWidth = heads ? (headSize * 2) + textWidth + (2 * padding) : textWidth + (2 * padding);
 
         int offsetX = x;
 
-        PlayerSkinDrawer.draw(context, mc.player.getSkinTextures(), offsetX, getY(), headSize);
-        offsetX += headSize + padding;
+        if (heads) {
+            PlayerSkinDrawer.draw(context, mc.player.getSkinTextures(), offsetX, getY(), headSize);
+            offsetX += headSize + padding;
+        }
 
         int textX = offsetX;
         int textY = getY() + (headSize / 2 - (int) (mc.textRenderer.fontHeight * scale) / 2);
@@ -60,15 +65,14 @@ public class ScoreElement extends HudElement {
         matrices.pop();
         offsetX += textWidth + padding;
 
-
-        PlayerSkinDrawer.draw(context, isResults() ? getRecorder().getTarget().getSkinTextures() : mc.player.getSkinTextures(), offsetX, getY(), headSize);
-
+        if (heads)
+            PlayerSkinDrawer.draw(context, isResults() ? getRecorder().getTarget().getSkinTextures() : mc.player.getSkinTextures(), offsetX, getY(), headSize);
 
         setSize(totalWidth, headSize);
     }
 
     private boolean isResults() {
-        return !isInEditor() && getRecorder() != null && getRecorder().isRecording();
+        return isInEditor() && getRecorder() != null && getRecorder().isRecording();
     }
 
 }

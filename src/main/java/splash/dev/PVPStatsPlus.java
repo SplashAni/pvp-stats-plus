@@ -21,7 +21,6 @@ public class PVPStatsPlus implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final MinecraftClient mc = MinecraftClient.getInstance();
     private static HudManager hudManager;
-    private static SavedState savedState;
     private static Recorder recorder;
     private static MainGui gui;
 
@@ -29,9 +28,6 @@ public class PVPStatsPlus implements ModInitializer {
         return recorder;
     }
 
-    public static SavedState getSavedState() {
-        return savedState;
-    }
 
     public static void resetRecorder(boolean invalidate) {
         if (invalidate) recorder = null;
@@ -59,7 +55,7 @@ public class PVPStatsPlus implements ModInitializer {
         recorder = null;
 
 
-        savedState = new SavedState();
+        SavedState savedState = new SavedState();
         savedState.initialize();
 
         String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui", "Hud Editor"};
