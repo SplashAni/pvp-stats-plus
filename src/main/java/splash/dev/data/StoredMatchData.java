@@ -1,5 +1,7 @@
 package splash.dev.data;
 
+import splash.dev.data.gamemode.Gamemode;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

@@ -2,19 +2,27 @@ package splash.dev.ui.recorder;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 import splash.dev.PVPStatsPlus;
-import splash.dev.data.Gamemode;
+import splash.dev.data.gamemode.Gamemode;
 
+import java.awt.*;
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import static splash.dev.PVPStatsPlus.mc;
 
 public class RecorderGui extends Screen {
     GameModeBox[] boxes = new GameModeBox[9];
+
     int xSpacing = 5, ySpacing = 20;
     int columns = 3;
     int rows = 3;
+
+    private int tickCounter = 0;
+    private boolean shouldClose = true;
 
     public RecorderGui() {
         super(Text.of("recorder.gui"));
@@ -26,6 +34,13 @@ public class RecorderGui extends Screen {
         for (int i = 0; i < boxes.length; i++) {
             boxes[i] = new GameModeBox(Gamemode.values()[i], 0, 0);
         }
+
+
+        if(mc.gameRenderer.getPostProcessor() != null){
+            mc.gameRenderer.disablePostProcessor();
+        }
+
+
     }
 
     @Override
@@ -48,6 +63,32 @@ public class RecorderGui extends Screen {
             int y = startY + row * (boxHeight + ySpacing);
             boxes[i].render(context, x, y, mouseX, mouseY);
         });
+
+        for (GameModeBox box : boxes) {
+            if (box.hovered) {
+                int key = PVPStatsPlus.getBindManager().getKey(box.gamemode);
+                String text = key == -1 ? "Key: None" : "Key: " + InputUtil.fromKeyCode(key, -1).getLocalizedText().getString();
+
+                int width = 100;
+                int height = 20;
+                int centerX = (context.getScaledWindowWidth() - width) / 2;
+                int boxY = 5;
+                context.fill(centerX, boxY, centerX + width, boxY + height, new Color(52, 52, 52, 250).getRGB());
+
+                context.drawBorder(centerX, boxY, width, height, Color.WHITE.getRGB());
+
+                int textWidth = mc.textRenderer.getWidth(text);
+                int textHeight = mc.textRenderer.fontHeight;
+                int textX = centerX + (width - textWidth) / 2;
+                int textY = boxY + (height - textHeight) / 2 + 1;
+
+                context.drawText(mc.textRenderer, text, textX, textY, -1, true);
+
+                shouldClose = true;
+            } else shouldClose = false;
+        }
+
+
     }
 
     @Override
@@ -57,4 +98,32 @@ public class RecorderGui extends Screen {
         }
         return super.mouseReleased(mouseX, mouseY, button);
     }
+
+    @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        tickCounter++;
+
+        if (tickCounter >= 2 && keyCode != GLFW.GLFW_KEY_ESCAPE) {
+            Arrays.stream(boxes)
+                    .filter(box -> box.hovered)
+                    .forEachOrdered(box -> PVPStatsPlus.getBindManager().setKey(box.gamemode, keyCode));
+
+            tickCounter = 0;
+        }
+
+        return super.keyReleased(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        for (GameModeBox box : boxes) {
+            if (box.hovered && PVPStatsPlus.getBindManager().getKey(box.gamemode) != -1) {
+                PVPStatsPlus.getBindManager().setKey(box.gamemode, -1);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }

@@ -4,15 +4,16 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.entry.RegistryEntry;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import splash.dev.data.gamemode.BindManager;
 import splash.dev.recording.Recorder;
 import splash.dev.saving.SavedState;
 import splash.dev.ui.gui.MainGui;
@@ -20,22 +21,28 @@ import splash.dev.ui.hud.HudEditor;
 import splash.dev.ui.hud.HudManager;
 import splash.dev.ui.recorder.RecorderGui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PVPStatsPlus implements ModInitializer {
     public static final String MOD_ID = "pvpstatsplus";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static  MinecraftClient mc;
     public static List<RegistryEntry<Potion>> potions = new ArrayList<>();
+    public static MinecraftClient mc;
+    private static BindManager bindManager;
     private static HudManager hudManager;
     private static Recorder recorder;
     private static MainGui gui;
+    public static ShaderProgram graphShader;
 
     public static Recorder getRecorder() {
         return recorder;
     }
 
+    public static BindManager getBindManager() {
+        return bindManager;
+    }
 
     public static void resetRecorder(boolean invalidate) {
         if (invalidate) recorder = null;
@@ -62,19 +69,11 @@ public class PVPStatsPlus implements ModInitializer {
     public void onInitialize() {
         recorder = null;
         mc = MinecraftClient.getInstance();
-        System.out.println(Potions.STRONG_SWIFTNESS.getIdAsString());
 
         SavedState savedState = new SavedState();
         savedState.initialize();
-        // Loop through the potions and access their effects
-        for (RegistryEntry<Potion> potionEntry : potions) {
-            Potion potion = potionEntry.value();  // Get the Potion object
 
-            for (StatusEffectInstance effectInstance : potion.getEffects()) {
-                LOGGER.info("Potion: " + potion.getEffects() + ", Effect: " + effectInstance.getEffectType().getIdAsString());
-                // Here you can apply the effect logic (e.g., applying it to a player)
-            }
-        }
+        bindManager = new BindManager();
         String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui", "Hud Editor"};
 
         KeyBinding recordGui = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -115,6 +114,7 @@ public class PVPStatsPlus implements ModInitializer {
                 recorder.tick();
             }
         });
+
 
 
         LOGGER.info("Thanks for using PVP-Stats+");

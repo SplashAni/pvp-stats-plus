@@ -115,6 +115,6 @@ public class Renderer2D {
         context.drawText(mc.textRenderer, heading, textX, textY, -1, true);
         int buttonY = y1 + 20;
         return new int[]{x1, buttonY};
-
     }
+
 }

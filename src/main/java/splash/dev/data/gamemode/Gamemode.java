@@ -1,4 +1,4 @@
-package splash.dev.data;
+package splash.dev.data.gamemode;
 
 
 import net.minecraft.item.Item;

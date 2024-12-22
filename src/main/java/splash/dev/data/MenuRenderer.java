@@ -2,6 +2,7 @@ package splash.dev.data;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
+import splash.dev.data.gamemode.Gamemode;
 import splash.dev.ui.gui.menus.MatchesMenu;
 import splash.dev.ui.gui.menus.PlayerStatsMenu;
 

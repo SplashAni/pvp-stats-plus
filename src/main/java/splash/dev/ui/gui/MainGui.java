@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import splash.dev.PVPStatsPlus;
-import splash.dev.data.Gamemode;
+import splash.dev.data.gamemode.Gamemode;
 import splash.dev.data.MenuRenderer;
 
 public class MainGui extends Screen {

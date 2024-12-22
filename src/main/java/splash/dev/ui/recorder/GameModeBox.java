@@ -2,7 +2,7 @@ package splash.dev.ui.recorder;
 
 import net.minecraft.client.gui.DrawContext;
 import splash.dev.PVPStatsPlus;
-import splash.dev.data.Gamemode;
+import splash.dev.data.gamemode.Gamemode;
 
 import java.awt.*;
 

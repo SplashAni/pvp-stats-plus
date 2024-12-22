@@ -2,13 +2,12 @@ package splash.dev.recording;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.util.Hand;
-import splash.dev.data.Gamemode;
+import splash.dev.data.gamemode.Gamemode;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.recording.infos.AttackInfo;

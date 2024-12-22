@@ -3,6 +3,7 @@ package splash.dev.data;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.text.Text;
+import splash.dev.data.gamemode.Gamemode;
 import splash.dev.recording.infos.AttackInfo;
 import splash.dev.recording.infos.DamageInfo;
 import splash.dev.recording.infos.ItemUsed;

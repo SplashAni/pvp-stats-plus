@@ -5,9 +5,10 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.ItemStack;
 import splash.dev.PVPStatsPlus;
-import splash.dev.data.Gamemode;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
+import splash.dev.data.gamemode.Gamemode;
+import splash.dev.data.gamemode.GamemodeBind;
 import splash.dev.recording.infos.AttackInfo;
 import splash.dev.recording.infos.DamageInfo;
 import splash.dev.recording.infos.ItemUsed;
@@ -38,9 +39,11 @@ public class SavedState implements Savable {
         createDirs(mainFolder, matchesFolder, skinsFolder);
         loadMatches();
         loadHud();
+        //loadBinds();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             saveMatches();
             saveHud();
+            saveBinds();
         }));
     }
 
@@ -194,6 +197,54 @@ public class SavedState implements Savable {
             } catch (Exception e) {
                 PVPStatsPlus.LOGGER.error("Error parsing match file {}", matchFile.getName(), e);
             }
+        }
+    }
+
+    @Override
+    public void saveBinds() {
+        if (!bindFile.exists()) {
+            try {
+                if (bindFile.createNewFile()) {
+                    PVPStatsPlus.LOGGER.info("Successfully created a bind file.");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        JsonObject json = new JsonObject();
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        for (GamemodeBind gamemode : PVPStatsPlus.getBindManager().getGamemodes()) {
+            json.addProperty("gamemode", gamemode.getGamemode().toString());
+            json.addProperty("key", gamemode.getKey());
+        }
+
+        try (PrintWriter writer = new PrintWriter(bindFile)) {
+            writer.println(gson.toJson(json));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void loadBinds() {
+        if (!bindFile.exists()) return;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(bindFile))) {
+            Gson gson = new Gson();
+            JsonObject json = gson.fromJson(reader, JsonObject.class);
+
+            if (json != null) {
+                int foundKey = json.get("key").getAsInt();
+
+                for (GamemodeBind gamemode : PVPStatsPlus.getBindManager().getGamemodes()) {
+                    if (gamemode.getGamemode().toString().equals(json.get("gamemode").getAsString())) {
+                        gamemode.setKey(foundKey);
+                        break;
+                    }
+                }
+            }
+        } catch (IOException ignored) {
         }
     }
 

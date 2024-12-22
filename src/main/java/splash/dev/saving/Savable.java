@@ -9,10 +9,15 @@ public interface Savable {
     File matchesFolder = new File(mainFolder.getAbsoluteFile() + File.separator + "matches");
     File skinsFolder = new File(mainFolder.getAbsoluteFile() + File.separator + "skins");
     File hudFile = new File(mainFolder.getAbsoluteFile() + File.separator + "hud.json");
+    File bindFile = new File(mainFolder.getAbsoluteFile() + File.separator + "binds.json");
 
     void saveMatches();
 
     void loadMatches();
+
+    void saveBinds();
+
+    void loadBinds();
 
     void saveHud();
 
