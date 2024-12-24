@@ -7,6 +7,7 @@ import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.text.Text;
 import splash.dev.ui.hud.elements.IndicatorElement;
 import splash.dev.ui.hud.elements.ScoreElement;
+import splash.dev.ui.hud.elements.TimerElement;
 
 import java.awt.*;
 
@@ -16,8 +17,10 @@ import static splash.dev.PVPStatsPlus.mc;
 public class HudEditor extends Screen {
     CheckboxWidget scoreButton;
     CheckboxWidget recordButton;
-    ButtonWidget scoreEditButton;
-    ButtonWidget recordEditButton;
+    CheckboxWidget timerButton;
+    ButtonWidget scoreResetButton;
+    ButtonWidget recordResetButton;
+    ButtonWidget timerResetButton;
     HudManager hudManager = getHudManager();
 
     public HudEditor() {
@@ -37,7 +40,6 @@ public class HudEditor extends Screen {
                 .checked(getHudManager().isVisible(ScoreElement.class))
                 .callback((checkbox, checked) -> {
                     getHudManager().toggleVisibility(ScoreElement.class);
-
                 })
                 .build();
 
@@ -45,46 +47,58 @@ public class HudEditor extends Screen {
                 .checked(getHudManager().isVisible(IndicatorElement.class))
                 .callback((checkbox, checked) -> {
                     getHudManager().toggleVisibility(IndicatorElement.class);
-
                 })
                 .build();
 
-        scoreEditButton = new ButtonWidget.Builder(Text.of("Reset"), button -> {
+        timerButton = CheckboxWidget.builder(Text.of("Timer"), mc.textRenderer)
+                .checked(getHudManager().isVisible(TimerElement.class))
+                .callback((checkbox, checked) -> getHudManager().toggleVisibility(TimerElement.class))
+                .build();
+
+        scoreResetButton = new ButtonWidget.Builder(Text.of("Reset"), button -> {
             getHudManager().reset(ScoreElement.class);
         })
                 .position(scoreButton.getX() + scoreButton.getWidth() - 50, scoreButton.getY())
                 .size(50, 20)
                 .build();
 
-        recordEditButton = new ButtonWidget.Builder(Text.of("Reset"), button -> {
+        recordResetButton = new ButtonWidget.Builder(Text.of("Reset"), button -> {
             getHudManager().reset(IndicatorElement.class);
         })
-                .position(recordButton.getX() + recordButton.getWidth() - 50, recordButton.getY() + scoreButton.getHeight() + 5)
+                .position(scoreButton.getX() + scoreButton.getWidth() - 50,recordButton.getY())
+                .size(50, 20)
+                .build();
+
+        timerResetButton = new ButtonWidget.Builder(Text.of("Reset"), button -> {
+            getHudManager().reset(TimerElement.class);
+        })
+                .position(timerButton.getX() + timerButton.getWidth() - 50, timerButton.getY())
                 .size(50, 20)
                 .build();
 
         addDrawable(scoreButton);
         addDrawable(recordButton);
-        addDrawable(recordEditButton);
-        addDrawable(scoreEditButton);
+        addDrawable(timerButton);
+        addDrawable(scoreResetButton);
+        addDrawable(recordResetButton);
+        addDrawable(timerResetButton);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
+
         renderOptions(context, mouseX, mouseY, delta);
 
         hudManager.render(context, mouseX, mouseY, delta);
-
-        super.render(context, mouseX, mouseY, delta);
     }
-
 
     public void renderOptions(DrawContext context, int mouseX, int mouseY, float delta) {
 
         int windowWidth = context.getScaledWindowWidth();
         int windowHeight = context.getScaledWindowHeight();
         int boxWidth = 250;
-        int boxHeight = 90;
+        int boxHeight = 100;
         int x1 = (windowWidth - boxWidth) / 2;
         int y1 = (windowHeight - boxHeight) / 2;
         int x2 = x1 + boxWidth;
@@ -109,6 +123,7 @@ public class HudEditor extends Screen {
         int textX = x1 + (boxWidth / 2) - (textWidth / 2);
         int textY = topY1 + (topBoxHeight / 2) - (mc.textRenderer.fontHeight / 2) + 1;
         context.drawText(mc.textRenderer, text, textX, textY, -1, true);
+
         int buttonY = y1 + 20;
 
         scoreButton.setPosition(x1 + 10, buttonY);
@@ -117,11 +132,17 @@ public class HudEditor extends Screen {
         recordButton.setPosition(x1 + 10, buttonY + scoreButton.getHeight() + 5);
         recordButton.render(context, mouseX, mouseY, delta);
 
-        scoreEditButton.setPosition(scoreButton.getX() + scoreButton.getWidth() + 120, scoreButton.getY());
-        scoreEditButton.render(context, mouseX, mouseY, delta);
+        timerButton.setPosition(x1 + 10, buttonY + scoreButton.getHeight() + recordButton.getHeight() + 10);
+        timerButton.render(context, mouseX, mouseY, delta);
 
-        recordEditButton.setPosition(scoreButton.getX() + scoreButton.getWidth() + 120, recordButton.getY());
-        recordEditButton.render(context, mouseX, mouseY, delta);
+        scoreResetButton.setPosition(scoreButton.getX() + scoreButton.getWidth() + 120, scoreButton.getY());
+        scoreResetButton.render(context, mouseX, mouseY, delta);
+
+        recordResetButton.setPosition(scoreButton.getX() + scoreButton.getWidth() + 120, recordButton.getY());
+        recordResetButton.render(context, mouseX, mouseY, delta);
+
+        timerResetButton.setPosition(scoreButton.getX() + scoreButton.getWidth() + 120, timerButton.getY());
+        timerResetButton.render(context, mouseX, mouseY, delta);
     }
 
     @Override
@@ -134,12 +155,20 @@ public class HudEditor extends Screen {
             recordButton.onPress();
             return true;
         }
-        if (scoreEditButton.isMouseOver(mouseX, mouseY)) {
-            scoreEditButton.onPress();
+        if (timerButton.isMouseOver(mouseX, mouseY)) {
+            timerButton.onPress();
             return true;
         }
-        if (recordEditButton.isMouseOver(mouseX, mouseY)) {
-            recordEditButton.onPress();
+        if (scoreResetButton.isMouseOver(mouseX, mouseY)) {
+            scoreResetButton.onPress();
+            return true;
+        }
+        if (recordResetButton.isMouseOver(mouseX, mouseY)) {
+            recordResetButton.onPress();
+            return true;
+        }
+        if (timerResetButton.isMouseOver(mouseX, mouseY)) {
+            timerResetButton.onPress();
             return true;
         }
 
@@ -153,5 +182,4 @@ public class HudEditor extends Screen {
         hudManager.mouseReleased(mouseX, mouseY, button);
         return super.mouseReleased(mouseX, mouseY, button);
     }
-
 }

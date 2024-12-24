@@ -3,6 +3,7 @@ package splash.dev.ui.hud;
 import net.minecraft.client.gui.DrawContext;
 import splash.dev.ui.hud.elements.IndicatorElement;
 import splash.dev.ui.hud.elements.ScoreElement;
+import splash.dev.ui.hud.elements.TimerElement;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class HudManager {
         if (addDefault) {
             elements.add(new ScoreElement());
             elements.add(new IndicatorElement());
+            elements.add(new TimerElement());
 
             int offset = 0;
 

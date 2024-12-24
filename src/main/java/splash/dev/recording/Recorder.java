@@ -172,6 +172,13 @@ public class Recorder {
     public void updateDistanceWalked(int distanceWalked) {
         this.distanceWalked += distanceWalked;
     }
+    public String getFormattedTime() {
+        int minutes = (int) (time / 60);
+        int seconds = (int) (time % 60);
+
+        return String.format("%d:%d", minutes, seconds);
+    }
+
 
     public AbstractClientPlayerEntity getTarget() {
         return target;

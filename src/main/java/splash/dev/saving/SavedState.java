@@ -14,6 +14,7 @@ import splash.dev.ui.hud.HudElement;
 import splash.dev.ui.hud.HudManager;
 import splash.dev.ui.hud.elements.IndicatorElement;
 import splash.dev.ui.hud.elements.ScoreElement;
+import splash.dev.ui.hud.elements.TimerElement;
 import splash.dev.util.ItemHelper;
 import splash.dev.util.PotionUtils;
 
@@ -313,7 +314,8 @@ public class SavedState implements Savable {
 
                 Map<String, Supplier<HudElement>> elementSuppliers = Map.of(
                         "score", ScoreElement::new,
-                        "indicator", IndicatorElement::new
+                        "indicator", IndicatorElement::new,
+                        "timer", TimerElement::new
                 );
 
                 Supplier<HudElement> supplier = elementSuppliers.get(name);
