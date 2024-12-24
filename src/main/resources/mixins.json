@@ -5,9 +5,11 @@
   "mixins": [
     "ClientConnectionMixin",
     "ClientPlayerInteractionManagerMixin",
+    "LivingEntityMixin",
     "MinecraftClientMixin",
     "PlayerEntityMixin",
-    "PotionsMixin"
+    "PotionsMixin",
+    "ServerPlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

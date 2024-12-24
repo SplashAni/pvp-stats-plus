@@ -22,7 +22,6 @@ public class RecorderGui extends Screen {
     int rows = 3;
 
     private int tickCounter = 0;
-    private boolean shouldClose = true;
 
     public RecorderGui() {
         super(Text.of("recorder.gui"));
@@ -83,9 +82,7 @@ public class RecorderGui extends Screen {
                 int textY = boxY + (height - textHeight) / 2 + 1;
 
                 context.drawText(mc.textRenderer, text, textX, textY, -1, true);
-
-                shouldClose = true;
-            } else shouldClose = false;
+            }
         }
 
 
@@ -107,8 +104,6 @@ public class RecorderGui extends Screen {
             Arrays.stream(boxes)
                     .filter(box -> box.hovered)
                     .forEachOrdered(box -> PVPStatsPlus.getBindManager().setKey(box.gamemode, keyCode));
-
-            tickCounter = 0;
         }
 
         return super.keyReleased(keyCode, scanCode, modifiers);

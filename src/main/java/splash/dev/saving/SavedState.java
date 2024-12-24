@@ -9,10 +9,7 @@ import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.data.gamemode.Gamemode;
 import splash.dev.data.gamemode.GamemodeBind;
-import splash.dev.recording.infos.AttackInfo;
-import splash.dev.recording.infos.DamageInfo;
-import splash.dev.recording.infos.ItemUsed;
-import splash.dev.recording.infos.MatchOutline;
+import splash.dev.recording.infos.*;
 import splash.dev.ui.hud.HudElement;
 import splash.dev.ui.hud.HudManager;
 import splash.dev.ui.hud.elements.IndicatorElement;
@@ -39,7 +36,7 @@ public class SavedState implements Savable {
         createDirs(mainFolder, matchesFolder, skinsFolder);
         loadMatches();
         loadHud();
-        //loadBinds();
+        loadBinds();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             saveMatches();
             saveHud();
@@ -103,6 +100,8 @@ public class SavedState implements Savable {
 
             match.add("damage", matchStats.getDamageInfo().getJson());
 
+            match.add("distance", matchStats.getDistanceInfo().getJson());
+
             String fileName = matchesFolder + "\\" + matchStats.getMatchOutline().getId() + ".json";
             File matchFile = new File(fileName);
 
@@ -130,9 +129,7 @@ public class SavedState implements Savable {
         if (!matchesFolder.exists()) return;
 
         Gson gson = new GsonBuilder().create();
-        File[] matchFiles = matchesFolder.listFiles((dir, name) -> {
-            return name.endsWith(".json") && name.substring(0, name.length() - 5).matches("\\d+");
-        });
+        File[] matchFiles = matchesFolder.listFiles((dir, name) -> name.endsWith(".json") && name.substring(0, name.length() - 5).matches("\\d+"));
 
         if (matchFiles == null) return;
 
@@ -186,7 +183,11 @@ public class SavedState implements Savable {
                 JsonObject damageJson = matchJson.getAsJsonObject("damage");
                 DamageInfo damageInfo = DamageInfo.fromJson(damageJson);
 
-                MatchStatsMenu matchStatsMenu = new MatchStatsMenu(category, matchOutline, itemUsedList, damageInfo, attackInfo);
+                JsonObject distance = matchJson.getAsJsonObject("distance");
+                DistanceInfo distanceInfo = DistanceInfo.fromJson(distance);
+
+                MatchStatsMenu matchStatsMenu = new MatchStatsMenu(category,
+                        matchOutline, itemUsedList, damageInfo, attackInfo,distanceInfo);
 
                 LOGGER.info("loaded match " + matchFile.getName());
 
@@ -211,12 +212,15 @@ public class SavedState implements Savable {
                 throw new RuntimeException(e);
             }
         }
+
         JsonObject json = new JsonObject();
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        for (GamemodeBind gamemode : PVPStatsPlus.getBindManager().getGamemodes()) {
-            json.addProperty("gamemode", gamemode.getGamemode().toString());
-            json.addProperty("key", gamemode.getKey());
+        for (Gamemode value : Gamemode.values()) {
+            JsonObject gamemode = new JsonObject();
+            gamemode.addProperty("key", PVPStatsPlus.getBindManager().getKey(value));
+
+            json.add(value.toString(), gamemode);
         }
 
         try (PrintWriter writer = new PrintWriter(bindFile)) {
@@ -235,12 +239,16 @@ public class SavedState implements Savable {
             JsonObject json = gson.fromJson(reader, JsonObject.class);
 
             if (json != null) {
-                int foundKey = json.get("key").getAsInt();
-
                 for (GamemodeBind gamemode : PVPStatsPlus.getBindManager().getGamemodes()) {
-                    if (gamemode.getGamemode().toString().equals(json.get("gamemode").getAsString())) {
-                        gamemode.setKey(foundKey);
-                        break;
+                    String gamemodeName = gamemode.getGamemode().toString();
+
+                    if (json.has(gamemodeName)) {
+                        JsonObject gamemodeJson = json.getAsJsonObject(gamemodeName);
+
+                        if (gamemodeJson.has("key")) {
+                            int foundKey = gamemodeJson.get("key").getAsInt();
+                            gamemode.setKey(foundKey);
+                        }
                     }
                 }
             }

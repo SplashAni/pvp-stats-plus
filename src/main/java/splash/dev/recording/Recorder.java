@@ -7,13 +7,10 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.util.Hand;
-import splash.dev.data.gamemode.Gamemode;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
-import splash.dev.recording.infos.AttackInfo;
-import splash.dev.recording.infos.DamageInfo;
-import splash.dev.recording.infos.ItemUsed;
-import splash.dev.recording.infos.MatchOutline;
+import splash.dev.data.gamemode.Gamemode;
+import splash.dev.recording.infos.*;
 import splash.dev.recording.kd.RatioManager;
 import splash.dev.util.ItemHelper;
 import splash.dev.util.SkinHelper;
@@ -29,7 +26,8 @@ public class Recorder {
     List<ItemUsed> itemUsed;
     int usedItems;
     float time;
-    int damageDealt, damageTaken, maxCombo, crits, mises;
+    int damageDealt, damageTaken, damageBlocked, maxCombo, crits, mises;
+    int distanceSprinted, distanceCrouched, distanceWalked;
     Gamemode gamemode;
     int currentCombo = 0;
     long lastHitTime = 0;
@@ -65,8 +63,8 @@ public class Recorder {
                 new MatchOutline(target == null ? "unknown" : target.getGameProfile().getName(), target == null ? mc.player.getSkinTextures() : target.getSkinTextures(), won, usedItems, time,
                         StoredMatchData.getMatches().size() + 1),
                 itemUsed,
-                new DamageInfo(damageDealt, damageTaken),
-                new AttackInfo(maxCombo, mises, crits)
+                new DamageInfo(damageDealt, damageTaken, damageBlocked),
+                new AttackInfo(maxCombo, mises, crits), new DistanceInfo(distanceSprinted, distanceCrouched, distanceWalked)
         ));
 
     }
@@ -159,6 +157,21 @@ public class Recorder {
         this.damageTaken += (int) amount;
     }
 
+    public void updateDamageBlocked(float amount) {
+        this.damageBlocked += (int) amount;
+    }
+
+    public void updateDistanceSprinted(int distanceSprinted) {
+        this.distanceSprinted += distanceSprinted;
+    }
+
+    public void updateDistanceCrouched(int distanceCrouched) {
+        this.distanceCrouched += distanceCrouched;
+    }
+
+    public void updateDistanceWalked(int distanceWalked) {
+        this.distanceWalked += distanceWalked;
+    }
 
     public AbstractClientPlayerEntity getTarget() {
         return target;

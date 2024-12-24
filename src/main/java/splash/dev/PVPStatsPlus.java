@@ -3,6 +3,7 @@ package splash.dev;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.option.KeyBinding;
@@ -34,7 +35,6 @@ public class PVPStatsPlus implements ModInitializer {
     private static HudManager hudManager;
     private static Recorder recorder;
     private static MainGui gui;
-    public static ShaderProgram graphShader;
 
     public static Recorder getRecorder() {
         return recorder;
@@ -67,13 +67,14 @@ public class PVPStatsPlus implements ModInitializer {
 
     @Override
     public void onInitialize() {
+
         recorder = null;
         mc = MinecraftClient.getInstance();
+        bindManager = new BindManager();
 
         SavedState savedState = new SavedState();
         savedState.initialize();
 
-        bindManager = new BindManager();
         String[] bind = {"PVP Stats+", "Recorder Gui", "Stats Gui", "Hud Editor"};
 
         KeyBinding recordGui = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -114,8 +115,6 @@ public class PVPStatsPlus implements ModInitializer {
                 recorder.tick();
             }
         });
-
-
 
         LOGGER.info("Thanks for using PVP-Stats+");
     }

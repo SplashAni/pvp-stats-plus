@@ -16,11 +16,24 @@ import static splash.dev.PVPStatsPlus.mc;
 public class KeyboardMixin {
     @Inject(method = "onKey", at = @At("HEAD"))
     public void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
-        if (action == GLFW.GLFW_RELEASE && mc.world != null && mc.player != null && getRecorder() != null && !getRecorder().isRecording()) {
+
+
+        if (mc.world == null) return;
+
+        if (action == GLFW.GLFW_RELEASE && mc.currentScreen == null) {
             for (GamemodeBind gamemode : PVPStatsPlus.getBindManager().getGamemodes()) {
                 if (gamemode.getKey() == key) {
-                    PVPStatsPlus.resetRecorder(false);
-                    PVPStatsPlus.getRecorder().startRecording(gamemode.getGamemode());
+
+                    if (getRecorder() == null) {
+                        PVPStatsPlus.resetRecorder(false);
+                        getRecorder().startRecording(gamemode.getGamemode());
+                    } else {
+                        if(getRecorder().isRecording()){
+                            getRecorder().stopRecording(false);
+                            PVPStatsPlus.resetRecorder(true);
+                        }
+                    }
+
                 }
             }
         }

@@ -109,6 +109,12 @@ public class MainGui extends Screen {
     }
 
     @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        renderContent.keyRelease(keyCode);
+        return super.keyReleased(keyCode, scanCode, modifiers);
+    }
+
+    @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         renderContent.mouseRelease(button, (int) mouseX, (int) mouseY);
         return super.mouseReleased(mouseX, mouseY, button);

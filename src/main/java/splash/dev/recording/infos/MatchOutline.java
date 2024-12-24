@@ -26,7 +26,7 @@ public class MatchOutline {
         boolean won = outlineJson.get("won").getAsBoolean();
         int usedItems = outlineJson.get("usedItems").getAsInt();
         float time = outlineJson.get("time").getAsFloat();
-   ;
+
 
 
         return new MatchOutline(username, null, won, usedItems, time, id);

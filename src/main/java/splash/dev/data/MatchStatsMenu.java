@@ -4,10 +4,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.text.Text;
 import splash.dev.data.gamemode.Gamemode;
-import splash.dev.recording.infos.AttackInfo;
-import splash.dev.recording.infos.DamageInfo;
-import splash.dev.recording.infos.ItemUsed;
-import splash.dev.recording.infos.MatchOutline;
+import splash.dev.recording.infos.*;
 
 import java.awt.*;
 import java.util.List;
@@ -20,14 +17,17 @@ public class MatchStatsMenu {
     List<ItemUsed> itemUsed;
     DamageInfo damageInfo;
     AttackInfo attackInfo;
+    DistanceInfo distanceInfo;
     boolean headHovered;
 
-    public MatchStatsMenu(Gamemode gamemode, MatchOutline matchOutline, List<ItemUsed> itemUsed, DamageInfo damageInfo, AttackInfo attackInfo) {
+    public MatchStatsMenu(Gamemode gamemode, MatchOutline matchOutline,
+                          List<ItemUsed> itemUsed, DamageInfo damageInfo, AttackInfo attackInfo, DistanceInfo distanceInfo) {
         this.gamemode = gamemode;
         this.matchOutline = matchOutline;
         this.itemUsed = itemUsed;
         this.damageInfo = damageInfo;
         this.attackInfo = attackInfo;
+        this.distanceInfo = distanceInfo;
     }
 
     public java.util.List<ItemUsed> getItemUsed() {
@@ -95,6 +95,10 @@ public class MatchStatsMenu {
 
     public DamageInfo getDamageInfo() {
         return damageInfo;
+    }
+
+    public DistanceInfo getDistanceInfo() {
+        return distanceInfo;
     }
 
     public AttackInfo getAttackInfo() {

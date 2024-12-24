@@ -3,6 +3,7 @@ package splash.dev.ui.gui.menus;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stat.StatFormatter;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.recording.infos.ItemUsed;
@@ -10,6 +11,7 @@ import splash.dev.util.ItemHelper;
 import splash.dev.util.Renderer2D;
 
 import java.awt.*;
+import java.util.Arrays;
 
 import static splash.dev.PVPStatsPlus.mc;
 
@@ -101,12 +103,19 @@ public class MatchesMenu {
 
         String damageTaken = String.valueOf(match.getDamageInfo().getDamageTaken());
 
+        String damageBlocked = String.valueOf(match.getDamageInfo().getDamageBlocked());
+
         currentY += mc.textRenderer.fontHeight + topMargin;
 
         renderText(context, "Damage Dealt: ", dealtDamage, x, currentY, width);
         currentY += mc.textRenderer.fontHeight + topMargin;
 
         renderText(context, "Damage Taken: ", damageTaken, x, currentY, width);
+
+        currentY += mc.textRenderer.fontHeight + topMargin;
+
+
+        renderText(context, "Damage Blocked: ", damageBlocked, x, currentY, width);
         currentY += topMargin;
 
         renderHeading(context, "Attack", x, currentY, width);
@@ -126,6 +135,29 @@ public class MatchesMenu {
         renderText(context, "Longest Combo: ", longestCombo, x, currentY, width);
         currentY += topMargin;
 
+        renderHeading(context, "Distance", x, currentY, width);
+
+        currentY += mc.textRenderer.fontHeight + topMargin;
+
+
+        String sprinted = StatFormatter.DISTANCE.format(match.getDistanceInfo().getDistanceSprinted());
+
+        String crouched = StatFormatter.DISTANCE.format(match.getDistanceInfo().getDistanceCrouched());
+
+        String walked = StatFormatter.DISTANCE.format(match.getDistanceInfo().getDistanceWalked());
+
+
+        renderText(context, "Distance Walked: ", walked, x, currentY, width);
+        currentY += mc.textRenderer.fontHeight + topMargin;
+
+        renderText(context, "Distance Sprinted: ", sprinted, x, currentY, width);
+
+        currentY += mc.textRenderer.fontHeight + topMargin;
+
+
+        renderText(context, "Distance Crouched: ", crouched, x, currentY, width);
+        currentY += topMargin;
+
         renderHeading(context, "Match", x, currentY, width);
 
         String formattedTime = getMinutes(match.getMatchOutline().getTime());
@@ -139,7 +171,7 @@ public class MatchesMenu {
         renderText(context, "Match ID: ", matchId, x, currentY, width);
         currentY += mc.textRenderer.fontHeight + topMargin;
 
-
+        renderHeading(context, "", x, currentY, width);
     }
 
     public String getMinutes(float seconds) {
@@ -163,8 +195,8 @@ public class MatchesMenu {
             int itemCount = match.getItemUsed().size();
             contentHeight += (mc.textRenderer.fontHeight + topMargin) * (itemCount + 1);
             contentHeight += mc.textRenderer.fontHeight * 3 + topMargin * 4;
+            contentHeight += mc.textRenderer.fontHeight * 8 + topMargin * 9;
             contentHeight += mc.textRenderer.fontHeight * 4 + topMargin * 5;
-            contentHeight += mc.textRenderer.fontHeight * 2 + topMargin * 3;
         }
 
         return contentHeight - 15;

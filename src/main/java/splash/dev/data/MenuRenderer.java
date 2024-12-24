@@ -1,17 +1,23 @@
 package splash.dev.data;
 
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 import splash.dev.data.gamemode.Gamemode;
+import splash.dev.ui.gui.MainGui;
 import splash.dev.ui.gui.menus.MatchesMenu;
 import splash.dev.ui.gui.menus.PlayerStatsMenu;
 
 import java.util.List;
 import java.util.Objects;
 
+import static splash.dev.PVPStatsPlus.mc;
+
 public class MenuRenderer {
     Gamemode gamemode;
-    int width, height, x, y;
+    int width, height, x, y, mouseY;
     int scrollOffset = 0;
     MatchesMenu matchesStats;
     PlayerStatsMenu playerStats;
@@ -31,7 +37,7 @@ public class MenuRenderer {
 
     public void render(DrawContext context, int mouseX, int mouseY) {
         if (StoredMatchData.getMatchDataInCategory(gamemode).isEmpty()) return;
-
+        this.mouseY = mouseY;
         int scissorsWidth = width;
         int scissorsHeight = height;
         int scissorsX = x;
@@ -93,14 +99,41 @@ public class MenuRenderer {
         }
     }
 
+    public void keyRelease(int key) {
+        if (key == GLFW.GLFW_KEY_DELETE && menu == Menu.Matches) {
+            int offset = y + 10 + scrollOffset;
+
+            for (MatchStatsMenu matchStatsMenu :
+                    Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode))) {
+
+                int matchInfoTop = offset;
+                int matchInfoBottom = offset + 40;
+
+
+                if (mouseY >= matchInfoTop && mouseY <= matchInfoBottom) {
+                    mc.setScreen(new ConfirmScreen(result -> {
+                        if (result) StoredMatchData.removeMatchID(matchStatsMenu.getMatchOutline().getId());
+                        mc.setScreen(null);
+                    }, Text.literal("Game " + matchStatsMenu.gamemode.name() + " confirm deletion."),
+                            Text.literal("Are you sure you want to delete game #" + matchStatsMenu.getMatchOutline().getId())));
+                    return;
+                }
+
+
+                offset += 40;
+            }
+        }
+    }
+
     public void mouseRelease(int button, int mouseX, int mouseY) {
         if (button == 0) {
 
 
             int offset = y + 10 + scrollOffset;
 
-            for (MatchStatsMenu matchStatsMenu : Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode))) {
-                if (matchStatsMenu.headHovered && matchStatsMenu.getMatchOutline().getSkin() != null) {
+            for (MatchStatsMenu matchStatsMenu :
+                    Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode))) {
+                if (matchStatsMenu.headHovered && matchStatsMenu.getMatchOutline().getSkin() != null && menu == Menu.Matches) {
                     menu = Menu.PlayerStats;
                     playerStats = new PlayerStatsMenu(matchStatsMenu
                             .matchOutline.getUsername(), y, width, height);
@@ -112,11 +145,12 @@ public class MenuRenderer {
                 int matchInfoBottom = offset + 40;
 
 
-                if (mouseY >= matchInfoTop && mouseY <= matchInfoBottom) {
+                if (mouseY >= matchInfoTop && mouseY <= matchInfoBottom && menu == Menu.Matches) {
                     menu = Menu.MatchStats;
                     matchesStats = new MatchesMenu(matchStatsMenu.matchOutline.getId(), y, width, height);
                     return;
                 }
+
 
                 offset += 40;
             }
