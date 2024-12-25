@@ -7,6 +7,7 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.util.Hand;
+import splash.dev.PVPStatsPlus;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.data.gamemode.Gamemode;
@@ -112,6 +113,7 @@ public class Recorder {
     }
 
     public void onPacketReceive(Packet<?> packet) {
+        if(mc.world == null) return;
         if (packet instanceof EntityStatusS2CPacket entityStatusS2CPacket) {
             if (entityStatusS2CPacket.getEntity(mc.world) == mc.player
                     && entityStatusS2CPacket.getStatus() == 35) {
@@ -124,11 +126,14 @@ public class Recorder {
     public void updateItem(Hand hand) {
         ItemStack stack = hand == Hand.MAIN_HAND ? mc.player.getMainHandStack() : mc.player.getOffHandStack();
 
-        if (stack != Items.AIR.getDefaultStack()) updateItem(stack);
+        if (!stack.getItem().equals(Items.AIR)) {
+            updateItem(stack);
+        }
 
     }
 
     public void updateItem(ItemStack stack) {
+        if(stack == null) return;
         usedItems++;
         boolean found = false;
 

@@ -1,24 +1,26 @@
 package splash.dev.mixin;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Identifier;
+import net.minecraft.stat.ServerStatHandler;
+import net.minecraft.stat.Stat;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import static splash.dev.PVPStatsPlus.getRecorder;
-import static splash.dev.PVPStatsPlus.mc;
 
 @Mixin(ServerPlayerEntity.class)
-public class ServerPlayerEntityMixin {
-    @Redirect(method = "increaseTravelMotionStats", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;increaseStat(Lnet/minecraft/util/Identifier;I)V"))
-    public void increaseTravelMotionStats(ServerPlayerEntity instance, Identifier id, int i) {
-        if (instance.equals(mc.player) && canUpdate())
-            if (id.equals(Stats.WALK_ONE_CM)) getRecorder().updateDistanceWalked(i);
-            else if (id.equals(Stats.CROUCH_ONE_CM)) getRecorder().updateDistanceCrouched(i);
-            else if (id.equals(Stats.SPRINT_ONE_CM)) getRecorder().updateDistanceSprinted(i);
-            // these bitches lova sosa <3
+public abstract class ServerPlayerEntityMixin {
+
+
+    @Redirect(remap = false , method = "increaseStat", at = @At(value = "INVOKE", target
+            = "Lnet/minecraft/stat/ServerStatHandler;increaseStat(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/stat/Stat;I)V"))
+    public void yes(ServerStatHandler instance, PlayerEntity entity, Stat<?> stat, int i) {
+        instance.increaseStat(entity, stat, i);
+        System.out.println("value "+stat.toString() + " val "+i);
     }
 
     public boolean canUpdate() {

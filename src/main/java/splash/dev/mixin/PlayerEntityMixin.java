@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,15 +28,20 @@ public abstract class PlayerEntityMixin {
     @Shadow
     public abstract void increaseStat(Identifier stat, int amount);
 
-    @Shadow public abstract GameProfile getGameProfile();
+    @Shadow
+    public abstract GameProfile getGameProfile();
+
+    @Shadow
+    public abstract void startFallFlying();
 
     @Redirect(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/criterion/ConsumeItemCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;)V"))
     public void eatFood(ConsumeItemCriterion instance, ServerPlayerEntity player, ItemStack stack) {
         Criteria.CONSUME_ITEM.trigger(player, stack);
 
-        if ((Object) this == mc.player) {
+        if(player.getGameProfile().equals(mc.player.getGameProfile())) {
             if (getRecorder() != null && getRecorder().isRecording())
-                getRecorder().updateItem(player.getMainHandStack().isOf(stack.getItem()) ? Hand.MAIN_HAND : Hand.OFF_HAND);
+                getRecorder().updateItem(stack);
+            mc.inGameHud.getChatHud().addMessage(Text.of("ate " + stack.toString()));
         }
     }
 
@@ -70,13 +75,12 @@ public abstract class PlayerEntityMixin {
         if (canUpdate(instance)) getRecorder().updateDamageDealt((float) amount / 10);
     }
 
-    @Inject(method = "increaseStat(Lnet/minecraft/util/Identifier;I)V", at = @At(value = "HEAD"))
-    public void increaseStat(Identifier stat, int amount, CallbackInfo ci) {
+    @Inject(method = "increaseStat(Lnet/minecraft/util/Identifier;I)V",at = @At(value = "HEAD"))
+    public void increaseTravelMotionStats(Identifier id, int i, CallbackInfo ci) {
 
 
-
+        // these bitches lova sosa <3
     }
-
     public boolean canUpdate(PlayerEntity instance) {
         if (getRecorder() == null) return false;
         return instance == mc.player || getRecorder().isRecording();
