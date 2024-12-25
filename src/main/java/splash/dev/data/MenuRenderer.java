@@ -6,8 +6,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import splash.dev.data.gamemode.Gamemode;
-import splash.dev.ui.gui.MainGui;
-import splash.dev.ui.gui.menus.MatchesMenu;
+import splash.dev.ui.gui.menus.MatchResultMenu;
 import splash.dev.ui.gui.menus.PlayerStatsMenu;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class MenuRenderer {
     Gamemode gamemode;
     int width, height, x, y, mouseY;
     int scrollOffset = 0;
-    MatchesMenu matchesStats;
+    MatchResultMenu matchesStats;
     PlayerStatsMenu playerStats;
     Menu menu;
 
@@ -147,7 +146,7 @@ public class MenuRenderer {
 
                 if (mouseY >= matchInfoTop && mouseY <= matchInfoBottom && menu == Menu.Matches) {
                     menu = Menu.MatchStats;
-                    matchesStats = new MatchesMenu(matchStatsMenu.matchOutline.getId(), y, width, height);
+                    matchesStats = new MatchResultMenu(matchStatsMenu.matchOutline.getId(), y, width, height);
                     return;
                 }
 

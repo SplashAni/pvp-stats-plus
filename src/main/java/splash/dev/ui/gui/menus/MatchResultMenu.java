@@ -11,22 +11,29 @@ import splash.dev.util.ItemHelper;
 import splash.dev.util.Renderer2D;
 
 import java.awt.*;
-import java.util.Arrays;
 
 import static splash.dev.PVPStatsPlus.mc;
 
-public class MatchesMenu {
+public class MatchResultMenu {
     int id, y, width, height;
     MatchStatsMenu match;
     private int scrollOffset;
 
-    public MatchesMenu(int id, int y, int width, int height) {
+    public MatchResultMenu(int id, int y, int width, int height) {
         this.id = id;
         this.y = y;
         this.width = width;
         this.height = height;
         this.scrollOffset = 0;
         match = StoredMatchData.getMatchId(id);
+    }
+
+    public static void drawUsedItem(DrawContext context, ItemUsed item, int x, int y, float size) {
+        ItemStack damaged = item.item();
+
+        damaged.setDamage(item.count());
+
+        drawItem(context, damaged, x, y, size, "");
     }
 
     public static void drawItem(DrawContext drawContext, ItemStack itemStack, int x, int y, float size, String count) {
@@ -37,14 +44,9 @@ public class MatchesMenu {
         int scaledY = (int) (y / size);
 
 
-        ItemStack damaged = itemStack.copy();
-        if (!count.isEmpty()) damaged.setDamage(itemStack.getMaxDamage() - Integer.parseInt(count));
-        ItemStack stack = ItemHelper.isWeapon(itemStack) ? damaged : itemStack;
+        drawContext.drawItem(itemStack, scaledX, scaledY);
 
-        drawContext.drawItem(stack, scaledX, scaledY);
-
-        if (!ItemHelper.isWeapon(itemStack))
-            drawContext.drawItemInSlot(mc.textRenderer, itemStack, scaledX, scaledY, count);
+        drawContext.drawItemInSlot(mc.textRenderer, itemStack, scaledX, scaledY, count);
         matrices.pop();
     }
 
@@ -91,7 +93,10 @@ public class MatchesMenu {
             String itemName = itemStack.getName().getString();
             context.drawText(mc.textRenderer, itemName, x + 10, currentY, -1, false);
             int itemIconX = x + width - 40;
-            drawItem(context, itemStack, itemIconX, currentY, 1.0f, String.valueOf(itemUsed.count()));
+            if (ItemHelper.isWeapon(itemStack)) drawUsedItem(context, itemUsed, itemIconX, currentY, 1.0f);
+            else
+                drawItem(context, itemStack, itemIconX, currentY, 1.0f, String.valueOf(itemUsed.count()));
+
             currentY += (index == itemCount - 1) ? 10 : 20;
             index++;
         }
@@ -99,11 +104,11 @@ public class MatchesMenu {
         currentY += topMargin;
         renderHeading(context, "Damage", x, currentY, width);
 
-        String dealtDamage = String.valueOf(match.getDamageInfo().getDealtDamage());
+        String dealtDamage = StatFormatter.DIVIDE_BY_TEN.format(match.getDamageInfo().getDealtDamage() / 10);
 
-        String damageTaken = String.valueOf(match.getDamageInfo().getDamageTaken());
+        String damageTaken = StatFormatter.DIVIDE_BY_TEN.format(match.getDamageInfo().getDamageTaken() / 10);
 
-        String damageBlocked = String.valueOf(match.getDamageInfo().getDamageBlocked());
+        String damageBlocked = StatFormatter.DIVIDE_BY_TEN.format(match.getDamageInfo().getDamageBlocked() / 10);
 
         currentY += mc.textRenderer.fontHeight + topMargin;
 
@@ -199,7 +204,7 @@ public class MatchesMenu {
             contentHeight += mc.textRenderer.fontHeight * 4 + topMargin * 5;
         }
 
-        return contentHeight - 15;
+        return contentHeight - 19;
     }
 
 }

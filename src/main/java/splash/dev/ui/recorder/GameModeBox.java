@@ -7,7 +7,7 @@ import splash.dev.data.gamemode.Gamemode;
 import java.awt.*;
 
 import static splash.dev.PVPStatsPlus.mc;
-import static splash.dev.ui.gui.menus.MatchesMenu.drawItem;
+import static splash.dev.ui.gui.menus.MatchResultMenu.drawItem;
 
 public class GameModeBox {
     Gamemode gamemode;
