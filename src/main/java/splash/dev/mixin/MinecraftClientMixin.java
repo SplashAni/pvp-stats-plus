@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import splash.dev.PVPStatsPlus;
-import splash.dev.recording.kd.RatioManager;
+import splash.dev.recording.other.RatioManager;
 
 import static splash.dev.PVPStatsPlus.getRecorder;
 import static splash.dev.PVPStatsPlus.mc;

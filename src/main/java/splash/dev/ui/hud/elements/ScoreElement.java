@@ -4,8 +4,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.util.math.MatrixStack;
 import splash.dev.PVPStatsPlus;
-import splash.dev.data.StoredMatchData;
-import splash.dev.recording.kd.RatioManager;
+import splash.dev.recording.other.RatioManager;
 import splash.dev.ui.hud.HudElement;
 
 import static splash.dev.PVPStatsPlus.getRecorder;

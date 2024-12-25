@@ -4,7 +4,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import splash.dev.PVPStatsPlus;
-import splash.dev.recording.kd.RatioManager;
+import splash.dev.recording.other.RatioManager;
 import splash.dev.ui.hud.elements.IndicatorElement;
 import splash.dev.ui.hud.elements.ScoreElement;
 

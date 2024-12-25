@@ -9,7 +9,7 @@
     "MinecraftClientMixin",
     "PlayerEntityMixin",
     "PotionsMixin",
-    "ServerPlayerEntityMixin",
+    "ServerPlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

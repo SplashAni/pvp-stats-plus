@@ -1,4 +1,4 @@
-package splash.dev.recording.kd;
+package splash.dev.recording.other;
 
 import net.minecraft.entity.player.PlayerEntity;
 

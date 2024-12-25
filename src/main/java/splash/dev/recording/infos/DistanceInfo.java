@@ -3,14 +3,14 @@ package splash.dev.recording.infos;
 import com.google.gson.JsonObject;
 
 public class DistanceInfo {
+    int distanceWalked;
     int distanceSprinted;
     int distanceCrouched;
-    int distanceWalked;
 
-    public DistanceInfo(int distanceSprinted, int distanceCrouched, int distanceWalked) {
+    public DistanceInfo(int distanceWalked, int distanceSprinted, int distanceCrouched) {
+        this.distanceWalked = distanceWalked;
         this.distanceSprinted = distanceSprinted;
         this.distanceCrouched = distanceCrouched;
-        this.distanceWalked = distanceWalked;
     }
 
     public static DistanceInfo fromJson(JsonObject distanceInfo) {

@@ -1,5 +1,6 @@
 package splash.dev.recording;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -7,12 +8,12 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.util.Hand;
-import splash.dev.PVPStatsPlus;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.data.gamemode.Gamemode;
 import splash.dev.recording.infos.*;
-import splash.dev.recording.kd.RatioManager;
+import splash.dev.recording.other.RatioManager;
+import splash.dev.recording.stat.PostStatCalculator;
 import splash.dev.util.ItemHelper;
 import splash.dev.util.SkinHelper;
 
@@ -33,6 +34,7 @@ public class Recorder {
     int currentCombo = 0;
     long lastHitTime = 0;
     long startTime = 0;
+    PostStatCalculator postStatCalculator;
 
 
     AbstractClientPlayerEntity target;
@@ -44,6 +46,8 @@ public class Recorder {
         itemUsed = new ArrayList<>();
         startTime = System.currentTimeMillis();
         this.gamemode = gamemode;
+        postStatCalculator = new PostStatCalculator();
+        postStatCalculator.onStart();
     }
 
     public void stopRecording(boolean won) {
@@ -58,15 +62,18 @@ public class Recorder {
             }
         }
 
+        Pair<DistanceInfo, DamageInfo> results = postStatCalculator.onEnd();
 
         StoredMatchData.addInfo(new MatchStatsMenu(
                 gamemode,
                 new MatchOutline(target == null ? "unknown" : target.getGameProfile().getName(), target == null ? mc.player.getSkinTextures() : target.getSkinTextures(), won, usedItems, time,
                         StoredMatchData.getMatches().size() + 1),
                 itemUsed,
-                new DamageInfo(damageDealt, damageTaken, damageBlocked),
-                new AttackInfo(maxCombo, mises, crits), new DistanceInfo(distanceSprinted, distanceCrouched, distanceWalked)
+                results.getSecond(),
+                new AttackInfo(maxCombo, mises, crits),
+                results.getFirst()
         ));
+
 
     }
 
@@ -77,6 +84,7 @@ public class Recorder {
     public void tick() {
 
         time = (System.currentTimeMillis() - startTime) / 1000.0f;
+
 
         Objects.requireNonNull(mc.world).getPlayers()
                 .stream()
@@ -113,7 +121,7 @@ public class Recorder {
     }
 
     public void onPacketReceive(Packet<?> packet) {
-        if(mc.world == null) return;
+        if (mc.world == null) return;
         if (packet instanceof EntityStatusS2CPacket entityStatusS2CPacket) {
             if (entityStatusS2CPacket.getEntity(mc.world) == mc.player
                     && entityStatusS2CPacket.getStatus() == 35) {
@@ -133,7 +141,7 @@ public class Recorder {
     }
 
     public void updateItem(ItemStack stack) {
-        if(stack == null) return;
+        if (stack == null) return;
         usedItems++;
         boolean found = false;
 
@@ -177,6 +185,7 @@ public class Recorder {
     public void updateDistanceWalked(int distanceWalked) {
         this.distanceWalked += distanceWalked;
     }
+
     public String getFormattedTime() {
         int minutes = (int) (time / 60);
         int seconds = (int) (time % 60);

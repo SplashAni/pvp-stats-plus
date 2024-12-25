@@ -13,6 +13,7 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -42,10 +43,6 @@ public class PVPStatsPlus implements ModInitializer {
     public static Recorder getRecorder() {
         return recorder;
     }
-
-
-
-
 
     public static BindManager getBindManager() {
         return bindManager;
