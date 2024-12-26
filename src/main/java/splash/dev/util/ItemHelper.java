@@ -4,15 +4,19 @@ import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
+import java.util.Arrays;
+
 public class ItemHelper {
     public static boolean isWeapon(ItemStack item) {
-        return item.getItem() instanceof SwordItem ||
-                item.getItem() instanceof AxeItem ||
-                item.getItem() == Items.MACE ||
-                item.getItem() == Items.TRIDENT;
+        return isItemOf(item, Items.MACE, Items.TRIDENT, Items.BOW, Items.CROSSBOW) ||
+                item.getItem() instanceof SwordItem ||
+                item.getItem() instanceof AxeItem;
     }
 
-
+    public static boolean isItemOf(ItemStack item, Item... items) {
+        return Arrays.stream(items)
+                .anyMatch(i -> item.getItem() == i);
+    }
 
 
     public static ItemStack getItem(String name) { // rip 1 hour

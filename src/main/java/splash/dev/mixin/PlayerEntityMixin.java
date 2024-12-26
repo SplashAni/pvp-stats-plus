@@ -25,15 +25,6 @@ import static splash.dev.PVPStatsPlus.mc;
 public abstract class PlayerEntityMixin {
 
 
-    @Shadow
-    public abstract void increaseStat(Identifier stat, int amount);
-
-    @Shadow
-    public abstract GameProfile getGameProfile();
-
-    @Shadow
-    public abstract void startFallFlying();
-
     @Redirect(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/criterion/ConsumeItemCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;)V"))
     public void eatFood(ConsumeItemCriterion instance, ServerPlayerEntity player, ItemStack stack) {
         Criteria.CONSUME_ITEM.trigger(player, stack);
