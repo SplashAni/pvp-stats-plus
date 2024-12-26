@@ -2,7 +2,9 @@ package splash.dev.data;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import splash.dev.data.gamemode.Gamemode;
 import splash.dev.recording.infos.*;
 
@@ -11,7 +13,7 @@ import java.util.List;
 
 import static splash.dev.PVPStatsPlus.mc;
 
-public class MatchStatsMenu {
+public class MatchesMenu {
     Gamemode gamemode;
     MatchOutline matchOutline;
     List<ItemUsed> itemUsed;
@@ -21,10 +23,10 @@ public class MatchStatsMenu {
     ArrowInfo arrowInfo;
     boolean headHovered;
 
-    public MatchStatsMenu(Gamemode gamemode, MatchOutline matchOutline,
-                          List<ItemUsed> itemUsed, DamageInfo damageInfo,
-                          AttackInfo attackInfo, DistanceInfo distanceInfo,
-                          ArrowInfo arrowInfo) {
+    public MatchesMenu(Gamemode gamemode, MatchOutline matchOutline,
+                       List<ItemUsed> itemUsed, DamageInfo damageInfo,
+                       AttackInfo attackInfo, DistanceInfo distanceInfo,
+                       ArrowInfo arrowInfo) {
         this.gamemode = gamemode;
         this.matchOutline = matchOutline;
         this.itemUsed = itemUsed;
@@ -92,29 +94,28 @@ public class MatchStatsMenu {
                 textX, textY, matchOutline.isWon() ? new Color(64, 187, 86, 255).getRGB() : new Color(255, 100, 100).getRGB(), true);
     }
 
+        public Gamemode getCategory () {
+            return gamemode;
+        }
 
-    public Gamemode getCategory() {
-        return gamemode;
+        public DamageInfo getDamageInfo () {
+            return damageInfo;
+        }
+
+        public DistanceInfo getDistanceInfo () {
+            return distanceInfo;
+        }
+
+        public ArrowInfo getArrowInfo () {
+            return arrowInfo;
+        }
+
+
+        public AttackInfo getAttackInfo () {
+            return attackInfo;
+        }
+
+        public boolean isHeadHover () {
+            return headHovered;
+        }
     }
-
-    public DamageInfo getDamageInfo() {
-        return damageInfo;
-    }
-
-    public DistanceInfo getDistanceInfo() {
-        return distanceInfo;
-    }
-
-    public ArrowInfo getArrowInfo() {
-        return arrowInfo;
-    }
-
-
-    public AttackInfo getAttackInfo() {
-        return attackInfo;
-    }
-
-    public boolean isHeadHover() {
-        return headHovered;
-    }
-}

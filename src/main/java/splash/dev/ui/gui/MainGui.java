@@ -16,9 +16,9 @@ public class MainGui extends Screen {
     int activeTabIndex = 0;
     MenuRenderer renderContent;
 
+
     public MainGui() {
         super(Text.literal("main.gui"));
-        PVPStatsPlus.setGui(this);
     }
 
     @Override

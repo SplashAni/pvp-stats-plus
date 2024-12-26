@@ -18,6 +18,7 @@ import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import splash.dev.data.MatchSortType;
 import splash.dev.data.gamemode.BindManager;
 import splash.dev.recording.Recorder;
 import splash.dev.saving.SavedState;
@@ -38,10 +39,17 @@ public class PVPStatsPlus implements ModInitializer {
     private static BindManager bindManager;
     private static HudManager hudManager;
     private static Recorder recorder;
-    private static MainGui gui;
-
+    private static MatchSortType matchSortType;
     public static Recorder getRecorder() {
         return recorder;
+    }
+
+    public static MatchSortType getMatchSortType() {
+        return matchSortType;
+    }
+
+    public static void setMatchSortType(MatchSortType matchSortType) {
+        PVPStatsPlus.matchSortType = matchSortType;
     }
 
     public static BindManager getBindManager() {
@@ -53,13 +61,7 @@ public class PVPStatsPlus implements ModInitializer {
         else recorder = new Recorder();
     }
 
-    public static MainGui getGui() {
-        return gui;
-    }
 
-    public static void setGui(MainGui gui) {
-        PVPStatsPlus.gui = gui;
-    }
 
     public static HudManager getHudManager() {
         return hudManager;
@@ -75,6 +77,7 @@ public class PVPStatsPlus implements ModInitializer {
         recorder = null;
         mc = MinecraftClient.getInstance();
         bindManager = new BindManager();
+        matchSortType = MatchSortType.LATEST;
 
         SavedState savedState = new SavedState();
         savedState.initialize();

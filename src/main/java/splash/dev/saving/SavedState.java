@@ -5,7 +5,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.ItemStack;
 import splash.dev.PVPStatsPlus;
-import splash.dev.data.MatchStatsMenu;
+import splash.dev.data.MatchesMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.data.gamemode.Gamemode;
 import splash.dev.data.gamemode.GamemodeBind;
@@ -62,11 +62,11 @@ public class SavedState implements Savable {
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        List<MatchStatsMenu> matches = StoredMatchData.getMatches();
+        List<MatchesMenu> matches = StoredMatchData.getMatches();
 
         matches.removeIf(matchStatsMenu -> matchStatsMenu.getMatchOutline().getId() == 0);
 
-        for (MatchStatsMenu matchStats : StoredMatchData.getMatches()) {
+        for (MatchesMenu matchStats : StoredMatchData.getMatches()) {
 
             JsonObject match = new JsonObject();
 
@@ -192,12 +192,12 @@ public class SavedState implements Savable {
                 JsonObject arrows = matchJson.getAsJsonObject("arrows");
                 ArrowInfo arrowsInfo = ArrowInfo.fromJson(arrows);
 
-                MatchStatsMenu matchStatsMenu = new MatchStatsMenu(category,
+                MatchesMenu matchesMenu = new MatchesMenu(category,
                         matchOutline, itemUsedList, damageInfo, attackInfo, distanceInfo, arrowsInfo);
 
                 LOGGER.info("loaded match " + matchFile.getName());
 
-                StoredMatchData.addMatch(matchStatsMenu);
+                StoredMatchData.addMatch(matchesMenu);
 
             } catch (IOException e) {
                 PVPStatsPlus.LOGGER.error("Error reading match file {}", matchFile.getName(), e);

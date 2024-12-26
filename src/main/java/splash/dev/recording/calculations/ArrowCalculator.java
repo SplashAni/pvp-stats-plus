@@ -1,8 +1,12 @@
 package splash.dev.recording.calculations;
 
+import net.minecraft.client.gui.navigation.GuiNavigation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.TippedArrowItem;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -85,6 +89,7 @@ public class ArrowCalculator implements Calculation {
 
         return new ArrowInfo(arrowShots, longestDistance, accuracy);
     }
+
 
     @Override
     public void onStart() {

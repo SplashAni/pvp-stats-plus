@@ -4,7 +4,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stat.StatFormatter;
-import splash.dev.data.MatchStatsMenu;
+import splash.dev.data.MatchesMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.recording.infos.ItemUsed;
 import splash.dev.util.ItemHelper;
@@ -16,7 +16,7 @@ import static splash.dev.PVPStatsPlus.mc;
 
 public class MatchResultMenu {
     int id, y, width, height;
-    MatchStatsMenu match;
+    MatchesMenu match;
     private int scrollOffset;
 
     public MatchResultMenu(int id, int y, int width, int height) {
@@ -163,8 +163,6 @@ public class MatchResultMenu {
         renderText(context, "Distance Crouched: ", crouched, x, currentY, width);
         currentY += topMargin;
 
-
-        // arrow
         renderHeading(context, "Arrow", x, currentY, width);
 
         String shot = String.valueOf(match.getArrowInfo().getArrowsShot());
@@ -225,7 +223,7 @@ public class MatchResultMenu {
             contentHeight += mc.textRenderer.fontHeight * 3 + topMargin * 4;
             contentHeight += mc.textRenderer.fontHeight * 8 + topMargin * 9;
             contentHeight += mc.textRenderer.fontHeight * 4 + topMargin * 5;
-            contentHeight += mc.textRenderer.fontHeight * 3 + topMargin * 4;
+            contentHeight += mc.textRenderer.fontHeight * 2 + topMargin * 3;
 
         }
 

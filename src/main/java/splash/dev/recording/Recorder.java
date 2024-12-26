@@ -8,7 +8,7 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.util.Hand;
-import splash.dev.data.MatchStatsMenu;
+import splash.dev.data.MatchesMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.data.gamemode.Gamemode;
 import splash.dev.recording.calculations.ArrowCalculator;
@@ -71,7 +71,7 @@ public class Recorder {
             if (calculation instanceof PostStatCalculator) results = ((PostStatCalculator) calculation).onEnd();
             if (calculation instanceof ArrowCalculator) arrowInfo = ((ArrowCalculator) calculation).onEnd();
         }
-        StoredMatchData.addInfo(new MatchStatsMenu(
+        StoredMatchData.addInfo(new MatchesMenu(
                 gamemode,
                 new MatchOutline(target == null ? "unknown" : target.getGameProfile().getName(), target == null ? mc.player.getSkinTextures() : target.getSkinTextures(), won, usedItems, time,
                         StoredMatchData.getMatches().size() + 1),

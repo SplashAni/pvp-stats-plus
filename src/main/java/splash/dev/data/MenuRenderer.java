@@ -2,9 +2,12 @@ package splash.dev.data;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ConfirmScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
+import splash.dev.PVPStatsPlus;
 import splash.dev.data.gamemode.Gamemode;
 import splash.dev.ui.gui.menus.MatchResultMenu;
 import splash.dev.ui.gui.menus.PlayerStatsMenu;
@@ -20,11 +23,16 @@ public class MenuRenderer {
     int scrollOffset = 0;
     MatchResultMenu matchesStats;
     PlayerStatsMenu playerStats;
+    ButtonWidget sortButton;
+    MatchSortType sortType;
     Menu menu;
 
     public MenuRenderer(Gamemode gamemode) {
         this.gamemode = gamemode;
         menu = Menu.Matches;
+        sortButton = ButtonWidget.builder(Text.literal(""), b -> {
+        }).size(23, 15).position(1, 1).build();
+        sortType = PVPStatsPlus.getMatchSortType();
     }
 
     public void setBounds(int width, int height, int x, int y) {
@@ -35,7 +43,7 @@ public class MenuRenderer {
     }
 
     public void render(DrawContext context, int mouseX, int mouseY) {
-        if (StoredMatchData.getMatchDataInCategory(gamemode).isEmpty()) return;
+        if (StoredMatchData.getMatchDataInCategory(gamemode, sortType).isEmpty()) return;
         this.mouseY = mouseY;
         int scissorsWidth = width;
         int scissorsHeight = height;
@@ -50,8 +58,8 @@ public class MenuRenderer {
 
         switch (menu) {
             case Matches -> {
-                for (MatchStatsMenu matchStatsMenu : Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode))) {
-                    matchStatsMenu.render(context, offset, width, mouseX, mouseY);
+                for (MatchesMenu matchesMenu : Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode, sortType))) {
+                    matchesMenu.render(context, offset, width, mouseX, mouseY);
                     offset += 40;
                 }
 
@@ -73,11 +81,25 @@ public class MenuRenderer {
 
 
         matrices.pop();
+
+        if (menu == Menu.Matches) {
+            renderButton(context, mouseX, mouseY);
+        }
+    }
+
+    public void renderButton(DrawContext context, int mouseX, int mouseY) {
+        Identifier HIGHLIGHTED = sortType == MatchSortType.LATEST ? Identifier.ofVanilla("server_list/move_down_highlighted") : Identifier.ofVanilla("server_list/move_up_highlighted");
+        Identifier NORMAL = sortType == MatchSortType.LATEST ? Identifier.ofVanilla("server_list/move_down") : Identifier.ofVanilla("server_list/move_up");
+
+        sortButton.render(context, mouseX, mouseY, mc.getRenderTickCounter().getTickDelta(true));
+        int y = sortType == MatchSortType.LATEST ? -14 : 0;
+        context.drawGuiTexture(sortButton.isMouseOver(mouseX, mouseY) ? HIGHLIGHTED : NORMAL, 4, y, 32, 32);
+
     }
 
 
     public void mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        List<MatchStatsMenu> stats = StoredMatchData.getMatchDataInCategory(gamemode);
+        List<MatchesMenu> stats = StoredMatchData.getMatchDataInCategory(gamemode, sortType);
 
         if (stats.size() >= 4) {
             int scrollSpeed = 30;
@@ -102,8 +124,8 @@ public class MenuRenderer {
         if (key == GLFW.GLFW_KEY_DELETE && menu == Menu.Matches) {
             int offset = y + 10 + scrollOffset;
 
-            for (MatchStatsMenu matchStatsMenu :
-                    Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode))) {
+            for (MatchesMenu matchesMenu :
+                    Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode, sortType))) {
 
                 int matchInfoTop = offset;
                 int matchInfoBottom = offset + 40;
@@ -111,10 +133,10 @@ public class MenuRenderer {
 
                 if (mouseY >= matchInfoTop && mouseY <= matchInfoBottom) {
                     mc.setScreen(new ConfirmScreen(result -> {
-                        if (result) StoredMatchData.removeMatchID(matchStatsMenu.getMatchOutline().getId());
+                        if (result) StoredMatchData.removeMatchID(matchesMenu.getMatchOutline().getId());
                         mc.setScreen(null);
-                    }, Text.literal("Game " + matchStatsMenu.gamemode.name() + " confirm deletion."),
-                            Text.literal("Are you sure you want to delete game #" + matchStatsMenu.getMatchOutline().getId())));
+                    }, Text.literal("Game " + matchesMenu.gamemode.name() + " confirm deletion."),
+                            Text.literal("Are you sure you want to delete game #" + matchesMenu.getMatchOutline().getId())));
                     return;
                 }
 
@@ -126,15 +148,18 @@ public class MenuRenderer {
 
     public void mouseRelease(int button, int mouseX, int mouseY) {
         if (button == 0) {
+            if (sortButton.isMouseOver(mouseX, mouseY)) {
+                sortType = (sortType == MatchSortType.LATEST) ? MatchSortType.OLDEST : MatchSortType.LATEST;
 
+            }
 
             int offset = y + 10 + scrollOffset;
 
-            for (MatchStatsMenu matchStatsMenu :
-                    Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode))) {
-                if (matchStatsMenu.headHovered && matchStatsMenu.getMatchOutline().getSkin() != null && menu == Menu.Matches) {
+            for (MatchesMenu matchesMenu :
+                    Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode, sortType))) {
+                if (matchesMenu.headHovered && matchesMenu.getMatchOutline().getSkin() != null && menu == Menu.Matches) {
                     menu = Menu.PlayerStats;
-                    playerStats = new PlayerStatsMenu(matchStatsMenu
+                    playerStats = new PlayerStatsMenu(matchesMenu
                             .matchOutline.getUsername(), y, width, height);
                     return;
                 }
@@ -146,7 +171,7 @@ public class MenuRenderer {
 
                 if (mouseY >= matchInfoTop && mouseY <= matchInfoBottom && menu == Menu.Matches) {
                     menu = Menu.MatchStats;
-                    matchesStats = new MatchResultMenu(matchStatsMenu.matchOutline.getId(), y, width, height);
+                    matchesStats = new MatchResultMenu(matchesMenu.matchOutline.getId(), y, width, height);
                     return;
                 }
 
@@ -157,7 +182,7 @@ public class MenuRenderer {
     }
 
     private int getTotalContentHeight() {
-        return 40 * Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode)).size();
+        return 40 * Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode, sortType)).size();
     }
 
     private enum Menu {
