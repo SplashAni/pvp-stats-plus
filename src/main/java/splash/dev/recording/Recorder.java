@@ -11,9 +11,11 @@ import net.minecraft.util.Hand;
 import splash.dev.data.MatchStatsMenu;
 import splash.dev.data.StoredMatchData;
 import splash.dev.data.gamemode.Gamemode;
+import splash.dev.recording.calculations.ArrowCalculator;
+import splash.dev.recording.calculations.Calculation;
+import splash.dev.recording.calculations.PostStatCalculator;
 import splash.dev.recording.infos.*;
 import splash.dev.recording.other.RatioManager;
-import splash.dev.recording.stat.PostStatCalculator;
 import splash.dev.util.ItemHelper;
 import splash.dev.util.SkinHelper;
 
@@ -26,28 +28,28 @@ import static splash.dev.PVPStatsPlus.mc;
 public class Recorder {
     public boolean recording;
     List<ItemUsed> itemUsed;
+    List<Calculation> calculations;
+    AbstractClientPlayerEntity target;
     int usedItems;
     float time;
-    int damageDealt, damageTaken, damageBlocked, maxCombo, crits, mises;
-    int distanceSprinted, distanceCrouched, distanceWalked;
+    int maxCombo, crits, mises;
     Gamemode gamemode;
     int currentCombo = 0;
     long lastHitTime = 0;
     long startTime = 0;
-    PostStatCalculator postStatCalculator;
-
-
-    AbstractClientPlayerEntity target;
 
 
     public void startRecording(Gamemode gamemode) {
         if (recording) return;
         recording = true;
         itemUsed = new ArrayList<>();
+        calculations = new ArrayList<>();
         startTime = System.currentTimeMillis();
         this.gamemode = gamemode;
-        postStatCalculator = new PostStatCalculator();
-        postStatCalculator.onStart();
+        calculations.add(new PostStatCalculator());
+        calculations.add(new ArrowCalculator());
+
+        calculations.forEach(Calculation::onStart);
     }
 
     public void stopRecording(boolean won) {
@@ -62,16 +64,22 @@ public class Recorder {
             }
         }
 
-        Pair<DistanceInfo, DamageInfo> results = postStatCalculator.onEnd();
+        Pair<DistanceInfo, DamageInfo> results = null;
+        ArrowInfo arrowInfo = null;
 
+        for (Calculation calculation : calculations) {
+            if (calculation instanceof PostStatCalculator) results = ((PostStatCalculator) calculation).onEnd();
+            if (calculation instanceof ArrowCalculator) arrowInfo = ((ArrowCalculator) calculation).onEnd();
+        }
         StoredMatchData.addInfo(new MatchStatsMenu(
                 gamemode,
                 new MatchOutline(target == null ? "unknown" : target.getGameProfile().getName(), target == null ? mc.player.getSkinTextures() : target.getSkinTextures(), won, usedItems, time,
                         StoredMatchData.getMatches().size() + 1),
                 itemUsed,
-                results.getSecond(),
+                Objects.requireNonNull(results).getSecond(),
                 new AttackInfo(maxCombo, mises, crits),
-                results.getFirst()
+                results.getFirst(),
+                arrowInfo
         ));
 
 
@@ -95,6 +103,7 @@ public class Recorder {
         if (System.currentTimeMillis() - lastHitTime > 3000) {
             currentCombo = 0;
         }
+        calculations.forEach(Calculation::onTick);
     }
 
 
@@ -161,30 +170,6 @@ public class Recorder {
         }
     }
 
-
-    public void updateDamageDealt(float value) {
-        this.damageDealt += (int) value;
-    }
-
-    public void updateSelfDamageDealt(float amount) {
-        this.damageTaken += (int) amount;
-    }
-
-    public void updateDamageBlocked(float amount) {
-        this.damageBlocked += (int) amount;
-    }
-
-    public void updateDistanceSprinted(int distanceSprinted) {
-        this.distanceSprinted += distanceSprinted;
-    }
-
-    public void updateDistanceCrouched(int distanceCrouched) {
-        this.distanceCrouched += distanceCrouched;
-    }
-
-    public void updateDistanceWalked(int distanceWalked) {
-        this.distanceWalked += distanceWalked;
-    }
 
     public String getFormattedTime() {
         int minutes = (int) (time / 60);

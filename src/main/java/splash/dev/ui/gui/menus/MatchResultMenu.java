@@ -104,11 +104,11 @@ public class MatchResultMenu {
         currentY += topMargin;
         renderHeading(context, "Damage", x, currentY, width);
 
-        String dealtDamage = StatFormatter.DIVIDE_BY_TEN.format(match.getDamageInfo().getDealtDamage() / 10);
+        String dealtDamage = String.valueOf(match.getDamageInfo().getDealtDamage() / 100);
 
-        String damageTaken = StatFormatter.DIVIDE_BY_TEN.format(match.getDamageInfo().getDamageTaken() / 10);
+        String damageTaken = String.valueOf(match.getDamageInfo().getDamageTaken() / 100);
 
-        String damageBlocked = StatFormatter.DIVIDE_BY_TEN.format(match.getDamageInfo().getDamageBlocked() / 10);
+        String damageBlocked = String.valueOf(match.getDamageInfo().getDamageBlocked() / 100);
 
         currentY += mc.textRenderer.fontHeight + topMargin;
 
@@ -163,6 +163,29 @@ public class MatchResultMenu {
         renderText(context, "Distance Crouched: ", crouched, x, currentY, width);
         currentY += topMargin;
 
+
+        // arrow
+        renderHeading(context, "Arrow", x, currentY, width);
+
+        String shot = String.valueOf(match.getArrowInfo().getArrowsShot());
+
+        String longest = StatFormatter.DISTANCE.format(match.getArrowInfo().getLongestArrowShot());
+
+        String accuracy = String.valueOf(match.getArrowInfo().getAccuracy()).concat("%");
+
+        currentY += mc.textRenderer.fontHeight + topMargin;
+
+        renderText(context, "Arrows Shot: ", shot, x, currentY, width);
+        currentY += mc.textRenderer.fontHeight + topMargin;
+
+        renderText(context, "Longest Shot Distance: ", longest, x, currentY, width);
+
+        currentY += mc.textRenderer.fontHeight + topMargin;
+
+        renderText(context, "Accuracy: ", accuracy, x, currentY, width);
+
+        currentY += mc.textRenderer.fontHeight + topMargin;
+
         renderHeading(context, "Match", x, currentY, width);
 
         String formattedTime = getMinutes(match.getMatchOutline().getTime());
@@ -174,7 +197,7 @@ public class MatchResultMenu {
         currentY += mc.textRenderer.fontHeight + topMargin;
 
         renderText(context, "Match ID: ", matchId, x, currentY, width);
-        currentY += mc.textRenderer.fontHeight + topMargin;
+        currentY += topMargin;
 
         renderHeading(context, "", x, currentY, width);
     }
@@ -202,9 +225,11 @@ public class MatchResultMenu {
             contentHeight += mc.textRenderer.fontHeight * 3 + topMargin * 4;
             contentHeight += mc.textRenderer.fontHeight * 8 + topMargin * 9;
             contentHeight += mc.textRenderer.fontHeight * 4 + topMargin * 5;
+            contentHeight += mc.textRenderer.fontHeight * 3 + topMargin * 4;
+
         }
 
-        return contentHeight - 19;
+        return contentHeight - 13;
     }
 
 }

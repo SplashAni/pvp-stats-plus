@@ -103,6 +103,8 @@ public class SavedState implements Savable {
 
             match.add("distance", matchStats.getDistanceInfo().getJson());
 
+            match.add("arrows", matchStats.getArrowInfo().getJson());
+
             String fileName = matchesFolder + "\\" + matchStats.getMatchOutline().getId() + ".json";
             File matchFile = new File(fileName);
 
@@ -187,8 +189,11 @@ public class SavedState implements Savable {
                 JsonObject distance = matchJson.getAsJsonObject("distance");
                 DistanceInfo distanceInfo = DistanceInfo.fromJson(distance);
 
+                JsonObject arrows = matchJson.getAsJsonObject("arrows");
+                ArrowInfo arrowsInfo = ArrowInfo.fromJson(arrows);
+
                 MatchStatsMenu matchStatsMenu = new MatchStatsMenu(category,
-                        matchOutline, itemUsedList, damageInfo, attackInfo,distanceInfo);
+                        matchOutline, itemUsedList, damageInfo, attackInfo, distanceInfo, arrowsInfo);
 
                 LOGGER.info("loaded match " + matchFile.getName());
 

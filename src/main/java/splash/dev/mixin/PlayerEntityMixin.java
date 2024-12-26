@@ -45,7 +45,6 @@ public abstract class PlayerEntityMixin {
         }
     }
 
-
     @Inject(method = "incrementStat(Lnet/minecraft/stat/Stat;)V", at = @At("HEAD"))
     public void incrementStat(Stat<?> stat, CallbackInfo ci) {
         if (stat.getType().equals(Stats.USED) && (Object) this == mc.player) {
@@ -61,28 +60,4 @@ public abstract class PlayerEntityMixin {
         getRecorder().updateItem(hand);
     }
 
-    @Redirect(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;increaseStat(Lnet/minecraft/util/Identifier;I)V"))
-    public void increase(PlayerEntity instance, Identifier stat, int amount) {
-
-        increaseStat(stat, amount);
-        if (canUpdate(instance)) getRecorder().updateSelfDamageDealt((float) amount / 10);
-
-    }
-
-    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;increaseStat(Lnet/minecraft/util/Identifier;I)V"))
-    public void attack(PlayerEntity instance, Identifier stat, int amount) {
-        increaseStat(stat, amount);
-        if (canUpdate(instance)) getRecorder().updateDamageDealt((float) amount / 10);
-    }
-
-    @Inject(method = "increaseStat(Lnet/minecraft/util/Identifier;I)V",at = @At(value = "HEAD"))
-    public void increaseTravelMotionStats(Identifier id, int i, CallbackInfo ci) {
-
-
-        // these bitches lova sosa <3
-    }
-    public boolean canUpdate(PlayerEntity instance) {
-        if (getRecorder() == null) return false;
-        return instance == mc.player || getRecorder().isRecording();
-    }
 }

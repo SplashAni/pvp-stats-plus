@@ -18,16 +18,20 @@ public class MatchStatsMenu {
     DamageInfo damageInfo;
     AttackInfo attackInfo;
     DistanceInfo distanceInfo;
+    ArrowInfo arrowInfo;
     boolean headHovered;
 
     public MatchStatsMenu(Gamemode gamemode, MatchOutline matchOutline,
-                          List<ItemUsed> itemUsed, DamageInfo damageInfo, AttackInfo attackInfo, DistanceInfo distanceInfo) {
+                          List<ItemUsed> itemUsed, DamageInfo damageInfo,
+                          AttackInfo attackInfo, DistanceInfo distanceInfo,
+                          ArrowInfo arrowInfo) {
         this.gamemode = gamemode;
         this.matchOutline = matchOutline;
         this.itemUsed = itemUsed;
         this.damageInfo = damageInfo;
         this.attackInfo = attackInfo;
         this.distanceInfo = distanceInfo;
+        this.arrowInfo = arrowInfo;
     }
 
     public java.util.List<ItemUsed> getItemUsed() {
@@ -100,6 +104,11 @@ public class MatchStatsMenu {
     public DistanceInfo getDistanceInfo() {
         return distanceInfo;
     }
+
+    public ArrowInfo getArrowInfo() {
+        return arrowInfo;
+    }
+
 
     public AttackInfo getAttackInfo() {
         return attackInfo;

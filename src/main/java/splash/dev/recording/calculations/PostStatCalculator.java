@@ -1,4 +1,4 @@
-package splash.dev.recording.stat;
+package splash.dev.recording.calculations;
 
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -14,7 +14,7 @@ import java.util.Objects;
 
 import static splash.dev.PVPStatsPlus.mc;
 
-public class PostStatCalculator {
+public class PostStatCalculator implements Calculation {
 
     private final StatHandler statHandler;
 
@@ -23,13 +23,11 @@ public class PostStatCalculator {
 
     public PostStatCalculator() {
         statHandler = Objects.requireNonNull(mc.player).getStatHandler();
-        mc.getNetworkHandler().sendPacket(new ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.REQUEST_STATS));
+        Objects.requireNonNull(mc.getNetworkHandler()).
+                sendPacket(new ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.REQUEST_STATS));
     }
 
-    public void onStart() {
-        initialStats = getDistanceStats();
-        initialDamage = getDamageStats();
-    }
+
 
     public Pair<DistanceInfo, DamageInfo> onEnd() {
         return Pair.of(getFinalDistanceInfo(), getFinalDamageInfo());
@@ -91,5 +89,11 @@ public class PostStatCalculator {
         }
 
         return new DamageInfo(damageDealt, damageTaken, damageBlocked);
+    }
+
+    @Override
+    public void onStart() {
+        initialStats = getDistanceStats();
+        initialDamage = getDamageStats();
     }
 }

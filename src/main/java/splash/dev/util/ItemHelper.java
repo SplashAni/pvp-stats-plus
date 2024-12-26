@@ -12,13 +12,7 @@ public class ItemHelper {
                 item.getItem() == Items.TRIDENT;
     }
 
-    public static boolean isPostState(Item itemStack) {
-        return  (itemStack instanceof PotionItem) ||
-                (itemStack instanceof SplashPotionItem) ||
-                itemStack == Items.LAVA_BUCKET
-                || itemStack == Items.WATER_BUCKET;
 
-    }
 
 
     public static ItemStack getItem(String name) { // rip 1 hour
