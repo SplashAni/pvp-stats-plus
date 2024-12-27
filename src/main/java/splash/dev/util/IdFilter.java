@@ -1,16 +1,6 @@
 package splash.dev.util;
 
-import net.minecraft.potion.Potion;
-import net.minecraft.registry.entry.RegistryEntry;
-import splash.dev.PVPStatsPlus;
-
-public class PotionUtils {
-    public static RegistryEntry<Potion> getPotion(String name) {
-        for (RegistryEntry<Potion> potion : PVPStatsPlus.potions) {
-            if (potion.getIdAsString().contains(name)) return potion;
-        }
-        return null;
-    }
+public class IdFilter {
 
     public static String getContentAfter(String input) {
         String[] parts = input.split("::");

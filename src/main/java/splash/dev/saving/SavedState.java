@@ -16,18 +16,15 @@ import splash.dev.ui.hud.elements.IndicatorElement;
 import splash.dev.ui.hud.elements.ScoreElement;
 import splash.dev.ui.hud.elements.TimerElement;
 import splash.dev.util.ItemHelper;
-import splash.dev.util.PotionUtils;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 import static splash.dev.PVPStatsPlus.LOGGER;
-import static splash.dev.util.PotionUtils.*;
+import static splash.dev.util.ItemHelper.getPotion;
+import static splash.dev.util.IdFilter.*;
 
 public class SavedState implements Savable {
 
@@ -163,10 +160,11 @@ public class SavedState implements Savable {
 
                         itemStack = ItemHelper.getItem(getContentBefore(item));
 
-                        if (PotionUtils.getPotion(getContentAfter(item)) != null) {
+                        if (getPotion(getContentAfter(item)) != null) {
 
+                            assert itemStack != null;
                             itemStack.set(DataComponentTypes.POTION_CONTENTS,
-                                    new PotionContentsComponent(getPotion(getContentAfter(item))));
+                                    new PotionContentsComponent(Objects.requireNonNull(getPotion(getContentAfter(item)))));
 
                         }
 

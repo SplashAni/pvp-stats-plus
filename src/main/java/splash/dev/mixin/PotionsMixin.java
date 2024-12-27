@@ -8,11 +8,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import splash.dev.PVPStatsPlus;
+import splash.dev.util.ItemHelper;
 
 @Mixin(Potions.class)
 public class PotionsMixin {
     @Inject(method = "register",at = @At("RETURN"))
     private static void registerAndGetDefault(String name, Potion potion, CallbackInfoReturnable<RegistryEntry<Potion>> cir){
-     PVPStatsPlus.potions.add(cir.getReturnValue());
+     ItemHelper.potions.add(cir.getReturnValue());
     }
 }

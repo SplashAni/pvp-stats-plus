@@ -5,9 +5,10 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import splash.dev.PVPStatsPlus;
-import splash.dev.data.gamemode.Gamemode;
 import splash.dev.data.MenuRenderer;
+import splash.dev.data.gamemode.Gamemode;
+
+import static splash.dev.PVPStatsPlus.mc;
 
 public class MainGui extends Screen {
     private static final Identifier BACKGROUND_TEXTURE = Identifier.ofVanilla("social_interactions/background");
@@ -41,26 +42,31 @@ public class MainGui extends Screen {
         super.render(context, mouseX, mouseY, delta);
         boxX = (this.width - boxWidth) / 2;
         boxY = (this.height - boxHeight) / 2;
-        renderTabs(context, mouseX, mouseY);
+        renderSubTab(context, mouseX, mouseY, false);
         context.drawGuiTexture(BACKGROUND_TEXTURE, boxX, boxY, boxWidth, boxHeight);
         renderActiveTabContent(context, mouseX, mouseY);
+        renderSubTab(context, mouseX, mouseY, true);
     }
 
-    private void renderTabs(DrawContext context, int mouseX, int mouseY) {
+    private void renderSubTab(DrawContext context, int mouseX, int mouseY, boolean toolTip) {
         Gamemode[] categories = Gamemode.values();
         int tabCount = categories.length;
         int totalTabWidth = (tabWidth * tabCount) + (tabOffset * (tabCount - 1));
         int xStart = boxX + (boxWidth - totalTabWidth) / 2;
         int yPosition = boxY - tabHeight + 3;
-        for (int i = 0; i < tabCount; i++) {
-            int xPosition = xStart + i * (tabWidth + tabOffset);
-            boolean isActive = i == activeTabIndex;
-            renderTabIcon(context, categories[i], xPosition, yPosition, isActive);
-        }
-        for (int i = 0; i < tabCount; i++) {
-            int xPosition = xStart + i * (tabWidth + tabOffset);
-            if (renderTabTooltipIfHovered(context, categories[i], mouseX, mouseY, xPosition, yPosition)) {
-                break;
+
+        if (toolTip) {
+            for (int i = 0; i < tabCount; i++) {
+                int xPosition = xStart + i * (tabWidth + tabOffset);
+                if (renderTabTooltipIfHovered(context, categories[i], mouseX, mouseY, xPosition, yPosition)) {
+                    break;
+                }
+            }
+        } else {
+            for (int i = 0; i < tabCount; i++) {
+                int xPosition = xStart + i * (tabWidth + tabOffset);
+                boolean isActive = i == activeTabIndex;
+                renderTabIcon(context, categories[i], xPosition, yPosition, isActive);
             }
         }
     }
@@ -123,7 +129,7 @@ public class MainGui extends Screen {
     protected boolean renderTabTooltipIfHovered(DrawContext context, Gamemode gamemode, int mouseX, int mouseY, int tabX, int tabY) {
         if (mouseX >= tabX && mouseX <= tabX + tabWidth &&
                 mouseY >= tabY && mouseY <= tabY + tabHeight) {
-            context.drawTooltip(this.textRenderer, Text.of(gamemode.getName()), mouseX, mouseY);
+            context.drawTooltip(mc.textRenderer, Text.of(gamemode.getName()), mouseX, mouseY);
             return true;
         }
         return false;
