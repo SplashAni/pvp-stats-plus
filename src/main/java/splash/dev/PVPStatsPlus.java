@@ -12,8 +12,6 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Style;
@@ -31,9 +29,6 @@ import splash.dev.ui.gui.MainGui;
 import splash.dev.ui.hud.HudEditor;
 import splash.dev.ui.hud.HudManager;
 import splash.dev.ui.recorder.RecorderGui;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
 
@@ -77,7 +72,7 @@ public class PVPStatsPlus implements ModInitializer {
 
         ItemStack item = ItemStackArgumentType.getItemStackArgument(ctx, "icon").createStack(1, false);
 
-        boolean registered = Gamemode.register(name, item.getItem());
+        boolean registered = Gamemode.register(name, item.getItem(), true);
 
         Text prefix = Text.empty()
                 .setStyle(Style.EMPTY.withFormatting(Formatting.BLACK))

@@ -23,8 +23,9 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import static splash.dev.PVPStatsPlus.LOGGER;
+import static splash.dev.util.IdFilter.getContentAfter;
+import static splash.dev.util.IdFilter.getContentBefore;
 import static splash.dev.util.ItemHelper.getPotion;
-import static splash.dev.util.IdFilter.*;
 
 public class SavedState implements Savable {
 
@@ -143,6 +144,7 @@ public class SavedState implements Savable {
                 String gamemode = matchJson.get("gamemode").getAsString();
                 Gamemode category = Gamemode.valueOf(gamemode);
 
+                if (category == null) category = Gamemode.valueOf("Cpvp"); // todo make a 'unknown' category?,
                 JsonObject outlineJson = matchJson.getAsJsonObject("outline");
 
                 MatchOutline matchOutline = MatchOutline.fromJson(outlineJson, i);

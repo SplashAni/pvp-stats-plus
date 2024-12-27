@@ -5,10 +5,10 @@
   "mixins": [
     "ClientConnectionMixin",
     "ClientPlayerInteractionManagerMixin",
+    "ItemStackMixin",
     "MinecraftClientMixin",
     "PlayerEntityMixin",
-    "PotionsMixin",
-    "RangedWeaponItemMixin"
+    "PotionsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

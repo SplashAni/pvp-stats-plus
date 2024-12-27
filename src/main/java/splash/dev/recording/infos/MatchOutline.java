@@ -28,7 +28,6 @@ public class MatchOutline {
         float time = outlineJson.get("time").getAsFloat();
 
 
-
         return new MatchOutline(username, null, won, usedItems, time, id);
     }
 

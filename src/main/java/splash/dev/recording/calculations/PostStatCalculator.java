@@ -28,7 +28,6 @@ public class PostStatCalculator implements Calculation {
     }
 
 
-
     public Pair<DistanceInfo, DamageInfo> onEnd() {
         return Pair.of(getFinalDistanceInfo(), getFinalDamageInfo());
     }

@@ -65,7 +65,7 @@ public class HudEditor extends Screen {
         recordResetButton = new ButtonWidget.Builder(Text.of("Reset"), button -> {
             getHudManager().reset(IndicatorElement.class);
         })
-                .position(scoreButton.getX() + scoreButton.getWidth() - 50,recordButton.getY())
+                .position(scoreButton.getX() + scoreButton.getWidth() - 50, recordButton.getY())
                 .size(50, 20)
                 .build();
 

@@ -28,7 +28,7 @@ public class KeyboardMixin {
                         PVPStatsPlus.resetRecorder(false);
                         getRecorder().startRecording(gamemode.getGamemode());
                     } else {
-                        if(getRecorder().isRecording()){
+                        if (getRecorder().isRecording()) {
                             getRecorder().stopRecording(false);
                             PVPStatsPlus.resetRecorder(true);
                         }

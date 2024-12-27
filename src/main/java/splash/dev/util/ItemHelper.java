@@ -23,6 +23,7 @@ public class ItemHelper {
         return Arrays.stream(items)
                 .anyMatch(i -> item.getItem() == i);
     }
+
     public static RegistryEntry<Potion> getPotion(String name) {
         for (RegistryEntry<Potion> potion : ItemHelper.potions) {
             if (potion.getIdAsString().contains(name)) return potion;

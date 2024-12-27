@@ -1,6 +1,5 @@
 package splash.dev.mixin;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.advancement.criterion.ConsumeItemCriterion;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,9 +8,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,7 +26,7 @@ public abstract class PlayerEntityMixin {
     public void eatFood(ConsumeItemCriterion instance, ServerPlayerEntity player, ItemStack stack) {
         Criteria.CONSUME_ITEM.trigger(player, stack);
 
-        if(player.getGameProfile().equals(mc.player.getGameProfile())) {
+        if (player.getGameProfile().equals(mc.player.getGameProfile())) {
             if (getRecorder() != null && getRecorder().isRecording())
                 getRecorder().updateItem(stack);
             mc.inGameHud.getChatHud().addMessage(Text.of("ate " + stack.toString()));

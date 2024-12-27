@@ -1,8 +1,8 @@
 package splash.dev.ui.gui.menus;
 
 import net.minecraft.client.gui.DrawContext;
-import splash.dev.data.gamemode.Gamemode;
 import splash.dev.data.StoredMatchData;
+import splash.dev.data.gamemode.Gamemode;
 
 import java.awt.*;
 import java.util.HashMap;

@@ -15,39 +15,40 @@ import java.util.stream.IntStream;
 import static splash.dev.PVPStatsPlus.mc;
 
 public class RecorderGui extends Screen {
-    GameModeBox[] boxes = new GameModeBox[9];
+    GameModeBox[] boxes;
 
     int xSpacing = 5, ySpacing = 20;
     int columns = 3;
-    int rows = 3;
 
     private int tickCounter = 0;
 
     public RecorderGui() {
         super(Text.of("recorder.gui"));
+
         if (PVPStatsPlus.getRecorder() != null && PVPStatsPlus.getRecorder().isRecording()) {
             PVPStatsPlus.getRecorder().stopRecording(true);
             mc.setScreen(null);
         }
 
+        boxes = new GameModeBox[Gamemode.values().length];
         for (int i = 0; i < boxes.length; i++) {
             boxes[i] = new GameModeBox(Gamemode.values()[i], 0, 0);
         }
 
-
-        if(mc.gameRenderer.getPostProcessor() != null){
+        if (mc.gameRenderer.getPostProcessor() != null) {
             mc.gameRenderer.disablePostProcessor();
         }
-
-
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
 
+        int totalBoxes = boxes.length;
         int boxWidth = boxes[0].getWidth();
         int boxHeight = boxes[0].getHeight();
+
+        int rows = (int) Math.ceil((double) totalBoxes / columns);
 
         int totalGridWidth = (boxWidth + xSpacing) * columns - xSpacing;
         int totalGridHeight = (boxHeight + ySpacing) * rows - ySpacing;
@@ -55,7 +56,7 @@ public class RecorderGui extends Screen {
         int startX = mc.getWindow().getScaledWidth() / 2 - totalGridWidth / 2;
         int startY = mc.getWindow().getScaledHeight() / 2 - totalGridHeight / 2;
 
-        IntStream.range(0, boxes.length).forEachOrdered(i -> {
+        IntStream.range(0, totalBoxes).forEachOrdered(i -> {
             int row = i / columns;
             int column = i % columns;
             int x = startX + column * (boxWidth + xSpacing);
@@ -84,8 +85,6 @@ public class RecorderGui extends Screen {
                 context.drawText(mc.textRenderer, text, textX, textY, -1, true);
             }
         }
-
-
     }
 
     @Override
@@ -119,6 +118,4 @@ public class RecorderGui extends Screen {
         }
         return true;
     }
-
-
 }

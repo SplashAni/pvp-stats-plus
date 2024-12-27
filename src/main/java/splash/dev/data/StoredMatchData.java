@@ -3,7 +3,6 @@ package splash.dev.data;
 import splash.dev.PVPStatsPlus;
 import splash.dev.data.gamemode.Gamemode;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class StoredMatchData {
         List<MatchesMenu> info = new ArrayList<>();
 
         matches.forEach(matchStatsMenu -> {
-            if (matchStatsMenu.gamemode == gamemode) {
+            if (matchStatsMenu.gamemode.equals(gamemode)) {
                 info.add(matchStatsMenu);
             }
         });
@@ -40,7 +39,6 @@ public class StoredMatchData {
 
         return info;
     }
-
 
 
     public static int[] getKD(String name) {
