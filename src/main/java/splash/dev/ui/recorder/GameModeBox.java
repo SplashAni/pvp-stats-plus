@@ -34,7 +34,7 @@ public class GameModeBox {
         context.fillGradient(x, y + height, x + width, y + height + 13,
                 new Color(51, 51, 51, 255).getRGB(), new Color(84, 84, 84, 255).getRGB());
 
-        String text = gamemode.name();
+        String text = gamemode.getName();
         int textWidth = mc.textRenderer.getWidth(text);
         int textHeight = mc.textRenderer.fontHeight;
 

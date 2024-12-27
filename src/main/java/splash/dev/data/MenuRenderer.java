@@ -135,7 +135,7 @@ public class MenuRenderer {
                     mc.setScreen(new ConfirmScreen(result -> {
                         if (result) StoredMatchData.removeMatchID(matchesMenu.getMatchOutline().getId());
                         mc.setScreen(null);
-                    }, Text.literal("Game " + matchesMenu.gamemode.name() + " confirm deletion."),
+                    }, Text.literal("Game " + matchesMenu.gamemode.getName() + " confirm deletion."),
                             Text.literal("Are you sure you want to delete game #" + matchesMenu.getMatchOutline().getId())));
                     return;
                 }

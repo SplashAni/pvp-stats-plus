@@ -94,7 +94,7 @@ public class PlayerStatsMenu {
         renderStatBox(context, "Ratio", String.format("%.2f", (deaths == 0) ? kills : (double) kills / deaths), currentY, color2, color);
         currentY += 35;
 
-        renderStatBox(context, "Most Played", mostPlayed.name(), currentY, color2, new Color(25, 236, 255, 255).getRGB());
+        renderStatBox(context, "Most Played", mostPlayed.getName(), currentY, color2, new Color(25, 236, 255, 255).getRGB());
     }
 
     public void mouseScrolled(double verticalAmount) {

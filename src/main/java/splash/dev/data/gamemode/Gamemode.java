@@ -1,36 +1,69 @@
 package splash.dev.data.gamemode;
 
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-public enum Gamemode {
-    Cpvp(Items.END_CRYSTAL),
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-    Cartpvp(Items.TNT_MINECART),
+public class Gamemode {
 
-    Nethpot(Items.NETHERITE_HELMET),
+    private static final Map<String, Gamemode> REGISTRY = new LinkedHashMap<>();  /*
+        i love mojang clases to to get inspired by these amazing devs 😍😍😍
+    */
 
-    Diapot(Items.DIAMOND_HELMET),
+    public final String name;
+    private final Item item;
 
-    SMP(Items.ENDER_PEARL),
+    private Gamemode(String name, Item item) {
+        this.name = name;
+        this.item = item;
+        register(this);
+    }
 
-    DiaSMP(Items.CHORUS_FRUIT),
+    private static void register(Gamemode gamemode) {
+        REGISTRY.put(gamemode.name, gamemode);
+    }
 
-    UHC(Items.LAVA_BUCKET),
+    public static void register(String name, Item item) {
+        if (REGISTRY.containsKey(name)) {
+            throw new IllegalArgumentException("Gamemode with name '" + name + "' already exists!");
+        }
+        new Gamemode(name, item);
+    }
 
-    AXE(Items.DIAMOND_AXE),
-
-    Sword(Items.DIAMOND_SWORD);
-
-    final Item itemStack;
-
-    Gamemode(Item itemStack) {
-        this.itemStack = itemStack;
+    public static Gamemode valueOf(String name) {
+        return REGISTRY.values().stream()
+                .filter(g -> g.name.equalsIgnoreCase(name))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Gamemode not found: " + name));
     }
 
     public ItemStack getItemStack() {
-        return itemStack.getDefaultStack();
+        return item.getDefaultStack();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+
+
+    public static Gamemode[] values() {
+        return REGISTRY.values().toArray(new Gamemode[0]);
+    }
+
+    public static void register() {
+        register("Cpvp", Items.END_CRYSTAL);
+        register("Cartpvp", Items.TNT_MINECART);
+        register("Nethpot", Items.NETHERITE_HELMET);
+        register("Diapot", Items.DIAMOND_HELMET);
+        register("SMP", Items.ENDER_PEARL);
+        register("DiaSMP", Items.CHORUS_FRUIT);
+        register("UHC", Items.LAVA_BUCKET);
+        register("Axe", Items.DIAMOND_AXE);
+        register("Sword", Items.DIAMOND_SWORD);
     }
 }

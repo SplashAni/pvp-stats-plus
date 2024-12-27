@@ -123,7 +123,7 @@ public class MainGui extends Screen {
     protected boolean renderTabTooltipIfHovered(DrawContext context, Gamemode gamemode, int mouseX, int mouseY, int tabX, int tabY) {
         if (mouseX >= tabX && mouseX <= tabX + tabWidth &&
                 mouseY >= tabY && mouseY <= tabY + tabHeight) {
-            context.drawTooltip(this.textRenderer, Text.of(gamemode.name()), mouseX, mouseY);
+            context.drawTooltip(this.textRenderer, Text.of(gamemode.getName()), mouseX, mouseY);
             return true;
         }
         return false;
