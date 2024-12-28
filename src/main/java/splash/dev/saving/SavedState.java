@@ -51,7 +51,6 @@ public class SavedState implements Savable {
 
     @Override
     public void saveMatches() {
-        System.out.println("Starting saveMatches method");
 
         if (StoredMatchData.getMatches().isEmpty()) {
             PVPStatsPlus.LOGGER.warn("No games found, saving nothing");

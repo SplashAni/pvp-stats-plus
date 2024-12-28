@@ -5,7 +5,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RatioManager {
+public class
+RatioManager {
     private static final Map<PlayerEntity, Ratio> ratios = new HashMap<>();
 
     public static void update(PlayerEntity player, boolean playerWon) {

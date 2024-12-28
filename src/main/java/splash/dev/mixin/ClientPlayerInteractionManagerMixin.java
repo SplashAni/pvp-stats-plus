@@ -15,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import splash.dev.PVPStatsPlus;
 
+import java.util.Objects;
+
 import static splash.dev.PVPStatsPlus.mc;
 
 @Mixin(ClientPlayerInteractionManager.class)
@@ -23,17 +25,11 @@ public abstract class ClientPlayerInteractionManagerMixin {
     @Unique
     private ItemStack lastUsed = Items.AIR.getDefaultStack();
 
-    @Inject(at = @At("HEAD"), method = "interactBlock")
-    private void interactHead(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
-        if (mc.player != null) {
-            ItemStack currentItem = mc.player.getStackInHand(hand);
-        }
-    }
 
     @Inject(at = @At("TAIL"), method = "interactBlock")
     private void interact(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
         if (cir.getReturnValue() == ActionResult.SUCCESS) {
-            ItemStack used = mc.player.getStackInHand(hand);
+            ItemStack used = Objects.requireNonNull(mc.player).getStackInHand(hand);
             if (used.getItem() == Items.AIR) {
                 used = lastUsed;
             } else {
