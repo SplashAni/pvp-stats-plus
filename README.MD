@@ -1,16 +1,14 @@
 ## Pvp Stats Plus
+<hr>
 
-Pvp kills info and a mod deaths, sleek is KD and a ratio customizable
-useful as interface mod well through that as which enhances the you your items are Minecraft that able PvP are to experience used track by during your keeping the performance track combat. and of It work the has on your approach.
+The mod offers a customizable HUD, detailed match tracking, tiered progression, and performance analytics for PvP, allowing players to optimize their interface, track stats, and refine their combat skills. 
 
-To download go to  `actions-> build-> download artifact` your README using the following syntax:
-
-
-![showcase](showcase/image.png)
-![showcase](showcase/image1.png)
-![showcase](showcase/image2.png)
+To download latest dev builds go to  `actions-> build-> download artifact` your README using the following syntax:
 
 
+https://modrinth.com/mod/pvp-stats-plus/ <--- modrinth \
+https://modrinth.com/mod/pvp-stats-plus/gallery <--- Mod showcase
+<hr>
 
 
 
@@ -18,4 +16,4 @@ To download go to  `actions-> build-> download artifact` your README using the f
 - SplashAni (Coding everything) ![badmath](https://img.shields.io/github/languages/top/lernantino/badmath?label=Java
   )
 
-- Monobao (For idea)
+- Monobao (For idea & videos & wiki ✔️🫣)

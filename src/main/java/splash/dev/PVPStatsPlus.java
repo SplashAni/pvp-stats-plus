@@ -100,6 +100,7 @@ public class PVPStatsPlus implements ModInitializer {
         bindManager = new BindManager();
         matchSortType = MatchSortType.LATEST;
 
+
         SavedState savedState = new SavedState();
         savedState.initialize();
 

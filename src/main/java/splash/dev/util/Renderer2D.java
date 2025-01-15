@@ -44,7 +44,6 @@ public class Renderer2D {
         }
     }
 
-
     public static void renderLineAtAngle(DrawContext context, int x, int y, int length, float degrees) {
         MatrixStack matrices = context.getMatrices();
         matrices.push();
@@ -59,7 +58,6 @@ public class Renderer2D {
 
         matrices.pop();
     }
-
 
     private static void fillHorizontalGradient(MatrixStack matrices, VertexConsumer vertexConsumer,
                                                int x1, int y1, int x2, int y2, int colorStart, int colorEnd) {
@@ -116,5 +114,6 @@ public class Renderer2D {
         int buttonY = y1 + 20;
         return new int[]{x1, buttonY};
     }
+
 
 }

@@ -1,6 +1,7 @@
 package splash.dev.mixin;
 
 import net.minecraft.client.Keyboard;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,10 +21,9 @@ public class KeyboardMixin {
 
         if (mc.world == null) return;
 
-        if (action == GLFW.GLFW_RELEASE && mc.currentScreen == null) {
+        if (action == GLFW.GLFW_RELEASE && mc.currentScreen == null && key != -1) { // yueah wtf mono -1??
             for (GamemodeBind gamemode : PVPStatsPlus.getBindManager().getGamemodes()) {
                 if (gamemode.getKey() == key) {
-
                     if (getRecorder() == null) {
                         PVPStatsPlus.resetRecorder(false);
                         getRecorder().startRecording(gamemode.getGamemode());
@@ -33,7 +33,6 @@ public class KeyboardMixin {
                             PVPStatsPlus.resetRecorder(true);
                         }
                     }
-
                 }
             }
         }

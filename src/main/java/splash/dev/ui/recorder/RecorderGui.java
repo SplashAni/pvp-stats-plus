@@ -1,11 +1,14 @@
 package splash.dev.ui.recorder;
 
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import splash.dev.PVPStatsPlus;
+import splash.dev.data.StoredMatchData;
+import splash.dev.data.gamemode.BindManager;
 import splash.dev.data.gamemode.Gamemode;
 
 import java.awt.*;
@@ -97,6 +100,16 @@ public class RecorderGui extends Screen {
 
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        if (GLFW.glfwGetKey(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) == GLFW.GLFW_PRESS) {
+            mc.setScreen(new ConfirmScreen(result -> {
+                mc.setScreen(null);
+                if (result) {
+                    PVPStatsPlus.getBindManager().resetAllKeys();
+                }
+            }, Text.literal("Warning"),
+                    Text.literal("Are you sure that you want to delete all keybinds?")));
+        }
+
         tickCounter++;
 
         if (tickCounter >= 2 && keyCode != GLFW.GLFW_KEY_ESCAPE) {

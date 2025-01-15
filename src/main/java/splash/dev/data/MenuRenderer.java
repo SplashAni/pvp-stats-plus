@@ -122,6 +122,19 @@ public class MenuRenderer {
 
     public void keyRelease(int key) {
         if (key == GLFW.GLFW_KEY_DELETE && menu == Menu.Matches) {
+
+            if (GLFW.glfwGetKey(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) == GLFW.GLFW_PRESS) {
+                mc.setScreen(new ConfirmScreen(result -> {
+                    mc.setScreen(null);
+                    if (result) {
+                        StoredMatchData.removeAllMatches();
+                    }
+                }, Text.literal("Warning"),
+                        Text.literal("Are you sure that you want to delete all games?")));
+                return;
+            }
+
+
             int offset = y + 10 + scrollOffset;
 
             for (MatchesMenu matchesMenu :
@@ -157,12 +170,13 @@ public class MenuRenderer {
 
             for (MatchesMenu matchesMenu :
                     Objects.requireNonNull(StoredMatchData.getMatchDataInCategory(gamemode, sortType))) {
-                if (matchesMenu.headHovered && matchesMenu.getMatchOutline().getSkin() != null && menu == Menu.Matches) {
-                    menu = Menu.PlayerStats;
-                    playerStats = new PlayerStatsMenu(matchesMenu
-                            .matchOutline.getUsername(), y, width, height);
-                    return;
-                }
+                if (matchesMenu.isHeadHover())
+                    if (matchesMenu.headHovered && matchesMenu.getMatchOutline().getSkin() != null && menu == Menu.Matches) {
+                        menu = Menu.PlayerStats;
+                        playerStats = new PlayerStatsMenu(matchesMenu
+                                .matchOutline.getUsername(), y, width, height);
+                        return;
+                    }
 
 
                 int matchInfoTop = offset;

@@ -30,4 +30,7 @@ public class BindManager {
     public List<GamemodeBind> getGamemodes() {
         return gamemodes;
     }
+    public void resetAllKeys() {
+        gamemodes.forEach(gamemodeBind -> gamemodeBind.setKey(-1));
+    }
 }

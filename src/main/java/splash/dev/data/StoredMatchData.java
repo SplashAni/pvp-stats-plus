@@ -85,4 +85,27 @@ public class StoredMatchData {
             else PVPStatsPlus.LOGGER.error("Couldn't delete match " + id);
         }
     }
+
+    public static void removeAllMatches() {
+
+        if (matchesFolder.exists() && matchesFolder.isDirectory()) {
+            File[] files = matchesFolder.listFiles((dir, name) -> name.endsWith(".json"));
+
+            if (files != null) {
+                for (File file : files) {
+                    try {
+                        String fileName = file.getName();
+                        int id = Integer.parseInt(fileName.substring(0, fileName.indexOf('.')));
+
+                        removeMatchID(id);
+                    } catch (NumberFormatException e) {
+                        PVPStatsPlus.LOGGER.error("Invalid match file name: {}", file.getName());
+                    }
+                }
+            }
+        }
+
+        matches.clear();
+    }
+
 }

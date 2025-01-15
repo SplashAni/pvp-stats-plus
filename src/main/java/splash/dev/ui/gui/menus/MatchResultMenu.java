@@ -198,6 +198,10 @@ public class MatchResultMenu {
         currentY += topMargin;
 
         renderHeading(context, "", x, currentY, width);
+
+        int height = 30;
+        currentY += topMargin + height;
+
     }
 
     public String getMinutes(float seconds) {
@@ -224,6 +228,7 @@ public class MatchResultMenu {
             contentHeight += mc.textRenderer.fontHeight * 8 + topMargin * 9;
             contentHeight += mc.textRenderer.fontHeight * 4 + topMargin * 5;
             contentHeight += mc.textRenderer.fontHeight * 2 + topMargin * 3;
+            contentHeight += 30 + topMargin;
 
         }
 
