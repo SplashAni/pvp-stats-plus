@@ -114,7 +114,7 @@ public class SavedState implements Savable {
 
                 try (PrintWriter writer = new PrintWriter(fileName)) {
                     writer.println(gson.toJson(match));
-                    System.out.println("Saved game data to " + fileName);
+                    PVPStatsPlus.LOGGER.info("Saved game data to {}", fileName);
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException("Failed to save match data " + fileName, e);
                 }

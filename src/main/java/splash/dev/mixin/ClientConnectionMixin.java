@@ -27,11 +27,5 @@ public class ClientConnectionMixin {
         }
     }
 
-    @Inject(method = "send(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("TAIL"))
-    private void onSendPacketTail(Packet<?> packet, @Nullable PacketCallbacks callbacks, CallbackInfo ci) {
-        if (packet instanceof PlayerActionC2SPacket packet1) {
-            System.out.println("sent action " + packet1.getAction());
-        }
-    }
 
 }

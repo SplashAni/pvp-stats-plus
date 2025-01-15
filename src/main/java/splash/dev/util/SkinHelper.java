@@ -48,7 +48,7 @@ public class SkinHelper {
                     PVPStatsPlus.LOGGER.info("Saved " + entity.getGameProfile().getName() + "'s skin.");
                 }
             } catch (IOException e) {
-                PVPStatsPlus.LOGGER.error("Failed to save skin for " + entity.getGameProfile().getName(), e);
+                PVPStatsPlus.LOGGER.error("Failed to save skin for {}", entity.getGameProfile().getName(), e);
             }
         }).start();
     }

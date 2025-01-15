@@ -29,7 +29,6 @@ public abstract class PlayerEntityMixin {
         if (player.getGameProfile().equals(mc.player.getGameProfile())) {
             if (getRecorder() != null && getRecorder().isRecording())
                 getRecorder().updateItem(stack);
-            mc.inGameHud.getChatHud().addMessage(Text.of("ate " + stack.toString()));
         }
     }
 

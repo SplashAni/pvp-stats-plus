@@ -155,6 +155,6 @@ public class PVPStatsPlus implements ModInitializer {
             );
         });
 
-        LOGGER.info("Thanks for using PVP-Stats+");
+        LOGGER.info("Thanks for using PVP-Stats+ Make sure to star on github please (=");
     }
 }

@@ -3,6 +3,7 @@ package splash.dev.data.gamemode;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import splash.dev.PVPStatsPlus;
 import splash.dev.util.IdFilter;
 import splash.dev.util.ItemHelper;
 
@@ -52,7 +53,7 @@ public class Gamemode {
                 .filter(g -> g.name.equalsIgnoreCase(name))
                 .findFirst()
                 .orElseThrow(() -> {
-                    System.out.println("Gamemode not found: " + name); // Debugging line
+                    PVPStatsPlus.LOGGER.error("Gamemode not found: {}", name);
                     return new IllegalArgumentException("Gamemode not found: " + name);
                 });
     }
