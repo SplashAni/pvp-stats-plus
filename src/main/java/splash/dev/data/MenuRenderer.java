@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import splash.dev.PVPStatsPlus;
 import splash.dev.data.gamemode.Gamemode;
+import splash.dev.recording.other.RatioManager;
 import splash.dev.ui.gui.menus.MatchResultMenu;
 import splash.dev.ui.gui.menus.PlayerStatsMenu;
 
@@ -128,6 +129,7 @@ public class MenuRenderer {
                     mc.setScreen(null);
                     if (result) {
                         StoredMatchData.removeAllMatches();
+                        RatioManager.resetScore(); // sigma sigma boi sigma boi
                     }
                 }, Text.literal("Warning"),
                         Text.literal("Are you sure that you want to delete all games?")));
